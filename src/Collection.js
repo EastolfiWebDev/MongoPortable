@@ -8,6 +8,7 @@
  */
 
 var Logger = require("./utils/Logger"),
+    EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
     Cursor = require("./Cursor"),
     ObjectId = require('./ObjectId'),
@@ -29,27 +30,40 @@ var Logger = require("./utils/Logger"),
  * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
  * 
  */
-var Collection = function(db, collectionName, options) {
-    if (!(this instanceof Collection)) return new Collection(db, collectionName, options);
-
-    if (_.isNil(db)) throw new Error("db parameter required");
+var database = null;
+class Collection extends EventEmitter {
+// var Collection = function(db, collectionName, options) {
+    constructor(db, collectionName, options) {
+        super();
+        
+        if (!(this instanceof Collection)) return new Collection(db, collectionName, options);
     
-    if (_.isNil(collectionName)) throw new Error("collectionName parameter required");
+        if (_.isNil(db)) throw new Error("db parameter required");
+        
+        if (_.isNil(collectionName)) throw new Error("collectionName parameter required");
+        
+        if (_.isNil(options) || !_.isPlainObject(options)) options = {};
+        
+        Collection.checkCollectionName(collectionName);
     
-    if (_.isNil(options) || !_.isPlainObject(options)) options = {};
+        // this.db = db;
+        database = db;
+        this.name = collectionName;
+        this.fullName = db.databaseName + '.' + this.name;
+        this.docs = [];
+        this.doc_indexes = {};
+        this.snapshots = [];
+        this.opts = {}; // Default options
+        
+        _.merge(this.opts, options);
+        
+        // this.emit = db.emit;
+    }
     
-    Collection.checkCollectionName(collectionName);
-
-    this.db = db;
-    this.name = collectionName;
-    this.fullName = this.db.databaseName + '.' + this.name;
-    this.docs = [];
-    this.doc_indexes = {};
-    this.snapshots = [];
-    this.opts = {}; // Default options
-    
-    _.merge(this.opts, options);
-};
+    emit(name, args, cb) {
+        super.emit(name, args, cb, database._stores);
+    }
+}
 
 // TODO enforce rule that field names can't start with '$' or contain '.'
 // (real mongodb does in fact enforce this)
@@ -105,7 +119,7 @@ Collection.prototype.insert = function (doc, options, callback) {
     this.doc_indexes[_.toString(_doc._id)] = this.docs.length;
     this.docs.push(_doc);
     
-    this.db._emit(
+    this.emit(
         'insert',
         {
             collection: this,
@@ -187,7 +201,7 @@ Collection.prototype.find = function (selection, fields, options, callback) {
     // callback for backward compatibility
     var cursor = new Cursor(this.db, this, selectionCompiled, fieldsCompiled, options);
 
-    this.db._emit(
+    this.emit(
         'find',
         {
             collection: this,
@@ -276,7 +290,7 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
 
     // this.emit('find', selector, cursor, o);
 
-    this.db._emit(
+    this.emit(
         'findOne',
         {
             collection: this,
@@ -488,7 +502,7 @@ Collection.prototype.update = function (selection, update, options, callback) {
             this.docs[idx] = _docUpdate;
         }
         
-        this.db._emit(
+        this.emit(
             'update',
             {
                 collection: this,
@@ -580,7 +594,7 @@ Collection.prototype.remove = function (selection, callback) {
         docs.push(doc);
     });
     
-    this.db._emit(
+    this.emit(
         'remove',
         {
             collection: this,
@@ -1043,8 +1057,10 @@ Collection.prototype.rename = function(newName) {
         if (this.name !== newName) {
             Collection.checkCollectionName(newName);
             
+            var dbName = this.name.split('.').length > 1 ? this.name.split('.')[0] : '';
+            
             this.name = newName;
-            this.fullName = this.db.databaseName + '.' + this.name;
+            this.fullName = dbName + '.' + this.name;
             
             return this;
         }
