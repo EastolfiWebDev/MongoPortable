@@ -1,6 +1,7 @@
 const GENERIC_LEVEL = process.env.NODE_EA_LOGGER || 1;
 
-var Logger = function(level) {
+var logLevel = null;      // Show error by default
+class Logger {
     /**
      * logLevel =>
      *     -1 || 'N' -> no log
@@ -11,43 +12,50 @@ var Logger = function(level) {
      *      5 || 'D' -> debug (and bellow)
      *     99 || 'A' -> all
      */
-    var logLevel = level || GENERIC_LEVEL || 1;      // Show error by default
+    constructor(level) {
+        logLevel = level || GENERIC_LEVEL || 1;
+    }
     
-    this.debug = function(msg) {
+    
+    debug(msg) {
         if (logLevel >= 5) {
             console.log('#DEBUG# - ' + JSON.stringify(msg));
         }
-    };
-    this.log = function(msg) {
+    }
+    
+    log(msg) {
         if (logLevel >= 4) {
             console.log('#LOG# - ' + JSON.stringify(msg));
         }
-    };
-    this.info = function(msg) {
+    }
+    
+    info(msg) {
         if (logLevel >= 3) {
             console.log('#INFO# - ' + JSON.stringify(msg));
         }
-    };
-    this.warn = function(msg) {
+    }
+    
+    warn(msg) {
         if (logLevel >= 2) {
             console.log('#WARNING# - ' + JSON.stringify(msg));
         }
-    };
-    this.error = function(msg) {
+    }
+    
+    error(msg) {
         if (logLevel >= 1) {
             console.log('#ERROR# - ' + JSON.stringify(msg));
         }
-    };
+    }
     
     /**/
-    this.getLogLevel = function() {
+    getLogLevel() {
         return logLevel;
-    };
+    }
     
-    this.setLogLevel = function(level) {
+    setLogLevel(level) {
         return logLevel = level || 1;
-    };
-};
+    }
+}
 
 var LOG = new Logger();
 

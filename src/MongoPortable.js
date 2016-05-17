@@ -7,6 +7,7 @@
  * @license MIT Licensed
  */
 var _ = require('lodash'),
+    EventEmitter = require("./utils/EventEmitter"),
     ObjectId = require('./ObjectId'),
     Collection = require('./Collection'),
     Logger = require("./utils/Logger");
@@ -22,30 +23,35 @@ var _ = require('lodash'),
  * 
  * @param {string} databaseName - Name of the database.
  */
-var MongoPortable = function(databaseName) {
-    if (!(this instanceof MongoPortable)) return new MongoPortable(databaseName);
+class MongoPortable extends EventEmitter {
+    constructor(databaseName) {
+        // Instantiates super constructor
+        super();
+        
+        if (!(this instanceof MongoPortable)) return new MongoPortable(databaseName);
+        
+        // Check ddbb name format
+        _validateDatabaseName(databaseName);
     
-    // Check ddbb name format
-    _validateDatabaseName(databaseName);
-
-    // Initializing variables
-    this._collections = {};
-    this._stores = [];
-
-    if (!MongoPortable.connections) {
-        MongoPortable.connections = {};
+        // Initializing variables
+        this._collections = {};
+        this._stores = [];
+    
+        if (!MongoPortable.connections) {
+            MongoPortable.connections = {};
+        }
+    
+        //Temp patch until I figure out how far I want to take the implementation;
+        // FIXME
+        if (MongoPortable.connections[databaseName]) {
+            throw new Error('db name already in use');
+        }
+    
+        this.databaseName = databaseName;
+    
+        MongoPortable.connections[databaseName] = new ObjectId();
     }
-
-    //Temp patch until I figure out how far I want to take the implementation;
-    // FIXME
-    if (MongoPortable.connections[databaseName]) {
-        throw new Error('db name already in use');
-    }
-
-    this.databaseName = databaseName;
-
-    MongoPortable.connections[databaseName] = new ObjectId();
-};
+}
 
 /**
  * Connection Pool
@@ -66,31 +72,6 @@ MongoPortable.connections = {};
 MongoPortable.version = '0.0.1';
 
 /**
- * Emits an event over all the stores loaded
- * 
- * @method MongoPortable#_emit
- * @private
- * 
- * @param  {String} name - Name of the event to fire
- * @param  {Object} args - Parameters to pass with the event
- * @param {Function} [cb=null] - Callback function to be called at the end with the results
- */
-MongoPortable.prototype._emit = function(name, args, cb) {
-    var self = this;
-    var command = name;
-
-    // Send event to all the stores registered
-    _.forEach(self._stores, function(fn) {
-        if ('function' === typeof fn[command]) {
-            fn[command](args, cb);
-        } else if ('function' === typeof fn.all) {
-            args.name = name;
-            fn.all(args, cb);
-        }
-    });
-};
-
-/**
  * Middleware functions
  * 
  * @param  {String} name - Name of the middleware:
@@ -99,7 +80,6 @@ MongoPortable.prototype._emit = function(name, args, cb) {
  *      </ul>
  * @param  {Function} fn - Function to implement the middleware
  */
-
 MongoPortable.prototype.use = function(name, fn) {
     switch(name) {
         case 'store':
@@ -282,7 +262,7 @@ MongoPortable.prototype.collection = function(collectionName, options, callback)
     
     // Collection already in memory, lets create it
     if (self._collections[collectionName]) {
-        self._emit(
+        self.emit(
             'createCollection',
             {
                 connection: self,
@@ -293,7 +273,7 @@ MongoPortable.prototype.collection = function(collectionName, options, callback)
         existing = true;
     } else {
         self._collections[collectionName] = new Collection(self, collectionName, self.pkFactory, options);
-        self._emit(
+        self.emit(
             'createCollection',
             {
                 connection: self,
@@ -344,7 +324,7 @@ MongoPortable.prototype.dropCollection = function(collectionName, callback) {
 
     if (self._collections[collectionName]) {
         // Drop the collection
-        this._emit(
+        this.emit(
             'dropCollection',
             {
                 conn: this,
@@ -387,7 +367,7 @@ MongoPortable.prototype.renameCollection = function(fromCollection, toCollection
         Collection.checkCollectionName(toCollection);
         
         if (self._collections[fromCollection]) {
-            this._emit(
+            this.emit(
                 'renameCollection',
                 {
                     conn: self,
@@ -542,7 +522,7 @@ MongoPortable.prototype.indexInformation = function(collectionName, options, cal
  */
 MongoPortable.prototype.dropDatabase = function(callback) {
     if (MongoPortable.connections[this.databaseName]) {
-        this._emit(
+        this.emit(
             'dropDatabase',
             {
                 conn: this
