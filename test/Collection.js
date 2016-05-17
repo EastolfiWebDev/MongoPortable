@@ -37,8 +37,8 @@ describe("Collection", function() {
             
             expect(coll).to.exist;
             
-            expect(coll.db.databaseName).to.be.equal(db.databaseName);
             expect(coll.name).to.be.equal(TEST_COLL);
+            expect(coll.fullName).to.be.equal(db.databaseName + '.' + TEST_COLL);
         });
     });
     
