@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                 }
             },
             dist: {
-                files: ['src/*.js'],
+                files: ['src/**/*.js'],
                 tasks: ['build'],
                 options: {
                     spawn: false,
@@ -29,6 +29,7 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     "lib/utils/Logger.js":          "src/utils/Logger.js",
+                    "lib/utils/EventEmitter.js":    "src/utils/EventEmitter.js",
                     "lib/BinaryParserBuffer.js":    "src/BinaryParserBuffer.js",
                     "lib/BinaryParser.js":          "src/BinaryParser.js",
                     "lib/ObjectId.js":              "src/ObjectId.js",
@@ -61,6 +62,24 @@ module.exports = function(grunt) {
                     destination: 'doc'
                 }
             }
+        },
+        
+        jsdoc2md: {
+            oneOutputFile: {
+                src: [//'./README.md',
+                    'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
+                        'src/Selector.js', 'src/ObjectId.js'],
+                dest: 'api/documentation.md'
+            },
+            separateOutputFilePerInput: {
+                files: [
+                    { src: 'src/MongoPortable.js', dest: 'api/MongoPortable.md' },
+                    { src: 'src/Collection.js', dest: 'api/Collection.md' },
+                    { src: 'src/Cursor.js', dest: 'api/Cursor.md' },
+                    { src: 'src/Selector.js', dest: 'api/Selector.md' },
+                    { src: 'src/ObjectId.js', dest: 'api/ObjectId.md' }
+                ]
+            }
         }
     });
 
@@ -68,6 +87,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
     
     grunt.registerTask('build_doc', ['jsdoc:dist']);
     grunt.registerTask('watch_dist', ['watch:dist']);
