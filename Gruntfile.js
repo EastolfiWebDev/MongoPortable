@@ -65,19 +65,16 @@ module.exports = function(grunt) {
         },
         
         jsdoc2md: {
-            oneOutputFile: {
+            fullDoc: {
                 src: [//'./README.md',
-                    'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
-                        'src/Selector.js', 'src/ObjectId.js'],
+                    'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js'],
                 dest: 'api/documentation.md'
             },
-            separateOutputFilePerInput: {
+            apiDoc: {
                 files: [
                     { src: 'src/MongoPortable.js', dest: 'api/MongoPortable.md' },
                     { src: 'src/Collection.js', dest: 'api/Collection.md' },
-                    { src: 'src/Cursor.js', dest: 'api/Cursor.md' },
-                    { src: 'src/Selector.js', dest: 'api/Selector.md' },
-                    { src: 'src/ObjectId.js', dest: 'api/ObjectId.md' }
+                    { src: 'src/Cursor.js', dest: 'api/Cursor.md' }
                 ]
             }
         }
@@ -89,14 +86,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
     
+    // Documentation
     grunt.registerTask('build_doc', ['jsdoc:dist']);
+    grunt.registerTask('build_html', ['jsdoc2md:fullDoc', 'jsdoc2md:apiDoc']);
+    grunt.registerTask('build_full_doc', ['build_doc', 'build_html']);
+    
     grunt.registerTask('watch_dist', ['watch:dist']);
-    grunt.registerTask('build', ['babel:dist']);
+    grunt.registerTask('build_app', ['babel:dist']);
     
     grunt.registerTask('dev_test', ['simplemocha:dev']);
     grunt.registerTask('run_test', ['simplemocha:all']);
     
-    grunt.registerTask('full_build', ['build', 'build_doc', 'run_test']);
+    grunt.registerTask('full_build', ['build_app', 'build_doc', 'run_test']);
     
     grunt.registerTask('default', ['full_build']);
 };
