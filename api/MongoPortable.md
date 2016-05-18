@@ -49,7 +49,7 @@ Middleware functions
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>String</code> | Name of the middleware:      <ul>          <li>"store": Add a custom store</li>      </ul> |
-| fn | <code>function</code> | Function to implement the middleware |
+| fn | <code>Object</code> &#124; <code>function</code> | Function to implement the middleware |
 
 <a name="MongoPortable+addStore"></a>
 
@@ -71,7 +71,7 @@ Returns a cursor to all the collection information.
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
 **Todo**
 
-- [ ] Not implemented yet
+- [ ] Implement
 
 
 | Param | Type | Default | Description |
@@ -176,6 +176,10 @@ Rename a collection.
 Creates an index on the collection.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -200,6 +204,10 @@ Creates an index on the collection.
 Ensures that an index exists, if it does not it creates it
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -224,6 +232,10 @@ Ensures that an index exists, if it does not it creates it
 Drop an index on a collection.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -238,6 +250,10 @@ Reindex all indexes on the collection
 Warning: "reIndex" is a blocking operation (indexes are rebuilt in the foreground) and will be slow for large collections.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -250,6 +266,10 @@ Warning: "reIndex" is a blocking operation (indexes are rebuilt in the foregroun
 Retrieves this collections index info.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |

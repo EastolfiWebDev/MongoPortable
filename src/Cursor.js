@@ -318,7 +318,7 @@ var hasSorting = function(cursor) {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.batchSize = function() {
     // Controls the number of documents MongoDB will return to the client in a single network message.
@@ -326,7 +326,7 @@ Cursor.prototype.batchSize = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.close = function() {
     // Close a cursor and free associated server resources.
@@ -334,7 +334,7 @@ Cursor.prototype.close = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.comment = function() {
     // Attaches a comment to the query to allow for traceability in the logs and the system.profile collection.
@@ -342,15 +342,7 @@ Cursor.prototype.comment = function() {
 };
 
 /**
- * @todo Not yet implemented
- */
-Cursor.prototype.count = function() {
-    // Modifies the cursor to return the number of documents in the result set rather than the documents themselves.
-    throw new Error("Not yet implemented");
-};
-
-/**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.explain = function() {
     // Reports on the query execution plan for a cursor.
@@ -358,7 +350,7 @@ Cursor.prototype.explain = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.hint = function() {
     // Forces MongoDB to use a specific index for a query.
@@ -366,7 +358,7 @@ Cursor.prototype.hint = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.itcount = function() {
     // Computes the total number of documents in the cursor client-side by fetching and iterating the result set.
@@ -374,7 +366,7 @@ Cursor.prototype.itcount = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.maxScan = function() {
     // Specifies the maximum number of items to scan; documents for collection scans, keys for index scans.
@@ -382,7 +374,7 @@ Cursor.prototype.maxScan = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.maxTimeMS = function() {
     // Specifies a cumulative time limit in milliseconds for processing operations on a cursor.
@@ -390,7 +382,7 @@ Cursor.prototype.maxTimeMS = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.max = function() {
     // Specifies an exclusive upper index bound for a cursor. For use with cursor.hint()
@@ -398,7 +390,7 @@ Cursor.prototype.max = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.min = function() {
     // Specifies an inclusive lower index bound for a cursor. For use with cursor.hint()
@@ -406,7 +398,7 @@ Cursor.prototype.min = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.noCursorTimeout = function() {
     // Instructs the server to avoid closing a cursor automatically after a period of inactivity.
@@ -414,7 +406,7 @@ Cursor.prototype.noCursorTimeout = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.objsLeftInBatch = function() {
     // Returns the number of documents left in the current cursor batch.
@@ -422,7 +414,7 @@ Cursor.prototype.objsLeftInBatch = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.pretty = function() {
     // Configures the cursor to display results in an easy-to-read format.
@@ -430,7 +422,7 @@ Cursor.prototype.pretty = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.readConcern = function() {
     // Specifies a read concern for a find() operation.
@@ -438,7 +430,7 @@ Cursor.prototype.readConcern = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.readPref = function() {
     // Specifies a read preference to a cursor to control how the client directs queries to a replica set.
@@ -446,7 +438,7 @@ Cursor.prototype.readPref = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.returnKey = function() {
     // Modifies the cursor to return index keys rather than the documents.
@@ -454,7 +446,7 @@ Cursor.prototype.returnKey = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.showRecordId = function() {
     // Adds an internal storage engine ID field to each document returned by the cursor.
@@ -462,7 +454,7 @@ Cursor.prototype.showRecordId = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.size = function() {
     // Returns a count of the documents in the cursor after applying skip() and limit() methods.
@@ -470,7 +462,7 @@ Cursor.prototype.size = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.snapshot = function() {
     // Forces the cursor to use the index on the _id field. Ensures that the cursor returns each document, 
@@ -479,7 +471,7 @@ Cursor.prototype.snapshot = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.tailable = function() {
     // Marks the cursor as tailable. Only valid for cursors over capped collections.
@@ -487,7 +479,7 @@ Cursor.prototype.tailable = function() {
 };
 
 /**
- * @todo Not yet implemented
+ * @todo Implement
  */
 Cursor.prototype.toArray = function() {
     // Returns an array that contains all documents returned by the cursor.

@@ -23,7 +23,6 @@ Cursor class that maps a MongoDB-like cursor
     * [.batchSize()](#Cursor+batchSize)
     * [.close()](#Cursor+close)
     * [.comment()](#Cursor+comment)
-    * [.count()](#Cursor+count)
     * [.explain()](#Cursor+explain)
     * [.hint()](#Cursor+hint)
     * [.itcount()](#Cursor+itcount)
@@ -169,7 +168,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+close"></a>
 
@@ -177,7 +176,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+comment"></a>
 
@@ -185,15 +184,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
-
-<a name="Cursor+count"></a>
-
-### cursor.count()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+explain"></a>
 
@@ -201,7 +192,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+hint"></a>
 
@@ -209,7 +200,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+itcount"></a>
 
@@ -217,7 +208,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+maxScan"></a>
 
@@ -225,7 +216,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+maxTimeMS"></a>
 
@@ -233,7 +224,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+max"></a>
 
@@ -241,7 +232,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+min"></a>
 
@@ -249,7 +240,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+noCursorTimeout"></a>
 
@@ -257,7 +248,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+objsLeftInBatch"></a>
 
@@ -265,7 +256,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+pretty"></a>
 
@@ -273,7 +264,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+readConcern"></a>
 
@@ -281,7 +272,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+readPref"></a>
 
@@ -289,7 +280,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+returnKey"></a>
 
@@ -297,7 +288,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+showRecordId"></a>
 
@@ -305,7 +296,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+size"></a>
 
@@ -313,7 +304,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+snapshot"></a>
 
@@ -321,7 +312,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+tailable"></a>
 
@@ -329,7 +320,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+toArray"></a>
 
@@ -337,5 +328,5 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
