@@ -10,9 +10,6 @@
 <dt><a href="#Cursor">Cursor</a></dt>
 <dd><p>Cursor class that maps a MongoDB-like cursor</p>
 </dd>
-<dt><a href="#ObjectId">ObjectId</a></dt>
-<dd><p>Represents the BSON ObjectId type</p>
-</dd>
 </dl>
 
 <a name="MongoPortable"></a>
@@ -66,7 +63,7 @@ Middleware functions
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>String</code> | Name of the middleware:      <ul>          <li>"store": Add a custom store</li>      </ul> |
-| fn | <code>function</code> | Function to implement the middleware |
+| fn | <code>Object</code> &#124; <code>function</code> | Function to implement the middleware |
 
 <a name="MongoPortable+addStore"></a>
 
@@ -88,7 +85,7 @@ Returns a cursor to all the collection information.
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
 **Todo**
 
-- [ ] Not implemented yet
+- [ ] Implement
 
 
 | Param | Type | Default | Description |
@@ -193,6 +190,10 @@ Rename a collection.
 Creates an index on the collection.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -217,6 +218,10 @@ Creates an index on the collection.
 Ensures that an index exists, if it does not it creates it
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -241,6 +246,10 @@ Ensures that an index exists, if it does not it creates it
 Drop an index on a collection.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -255,6 +264,10 @@ Reindex all indexes on the collection
 Warning: "reIndex" is a blocking operation (indexes are rebuilt in the foreground) and will be slow for large collections.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -267,6 +280,10 @@ Warning: "reIndex" is a blocking operation (indexes are rebuilt in the foregroun
 Retrieves this collections index info.
 
 **Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
+**Todo**
+
+- [ ] Implement
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -443,7 +460,6 @@ Cursor class that maps a MongoDB-like cursor
     * [.batchSize()](#Cursor+batchSize)
     * [.close()](#Cursor+close)
     * [.comment()](#Cursor+comment)
-    * [.count()](#Cursor+count)
     * [.explain()](#Cursor+explain)
     * [.hint()](#Cursor+hint)
     * [.itcount()](#Cursor+itcount)
@@ -589,7 +605,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+close"></a>
 
@@ -597,7 +613,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+comment"></a>
 
@@ -605,15 +621,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
-
-<a name="Cursor+count"></a>
-
-### cursor.count()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+explain"></a>
 
@@ -621,7 +629,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+hint"></a>
 
@@ -629,7 +637,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+itcount"></a>
 
@@ -637,7 +645,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+maxScan"></a>
 
@@ -645,7 +653,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+maxTimeMS"></a>
 
@@ -653,7 +661,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+max"></a>
 
@@ -661,7 +669,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+min"></a>
 
@@ -669,7 +677,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+noCursorTimeout"></a>
 
@@ -677,7 +685,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+objsLeftInBatch"></a>
 
@@ -685,7 +693,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+pretty"></a>
 
@@ -693,7 +701,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+readConcern"></a>
 
@@ -701,7 +709,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+readPref"></a>
 
@@ -709,7 +717,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+returnKey"></a>
 
@@ -717,7 +725,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+showRecordId"></a>
 
@@ -725,7 +733,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+size"></a>
 
@@ -733,7 +741,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+snapshot"></a>
 
@@ -741,7 +749,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+tailable"></a>
 
@@ -749,7 +757,7 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
+- [ ] Implement
 
 <a name="Cursor+toArray"></a>
 
@@ -757,95 +765,5 @@ Set the max number of document to fetch
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Todo**
 
-- [ ] Not yet implemented
-
-<a name="ObjectId"></a>
-
-## ObjectId
-Represents the BSON ObjectId type
-
-**Kind**: global class  
-**Since**: 0.0.1  
-
-* [ObjectId](#ObjectId)
-    * [new ObjectId(id)](#new_ObjectId_new)
-    * [.toHexString()](#ObjectId+toHexString) ⇒ <code>String</code>
-    * [.equals(otherID)](#ObjectId+equals) ⇒ <code>Boolean</code>
-    * [.getTimestamp()](#ObjectId+getTimestamp) ⇒ <code>Number</code>
-    * [.createPk(time)](#ObjectId+createPk) ⇒ <code>[ObjectId](#ObjectId)</code>
-    * [.createFromTime(time)](#ObjectId+createFromTime) ⇒ <code>[ObjectId](#ObjectId)</code>
-    * [.createFromHexString(hexString)](#ObjectId+createFromHexString) ⇒ <code>[ObjectId](#ObjectId)</code>
-
-<a name="new_ObjectId_new"></a>
-
-### new ObjectId(id)
-ObjectId
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>String</code> &#124; <code>Number</code> | Can be a 24 byte hex string, a 12 byte binary string or a Number. |
-
-<a name="ObjectId+toHexString"></a>
-
-### objectId.toHexString() ⇒ <code>String</code>
-Return the ObjectId id as a 24 byte hex string representation
-
-**Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>String</code> - The 24 byte hex string representation.  
-<a name="ObjectId+equals"></a>
-
-### objectId.equals(otherID) ⇒ <code>Boolean</code>
-Compares the equality of this ObjectId with [otherID].
-
-**Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>Boolean</code> - The result of comparing two ObjectId's  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| otherID | <code>Object</code> | ObjectId instance to compare against. |
-
-<a name="ObjectId+getTimestamp"></a>
-
-### objectId.getTimestamp() ⇒ <code>Number</code>
-Returns the generation time in seconds that this ID was generated.
-
-**Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>Number</code> - Number of seconds in the timestamp part of the 12 byte id.  
-<a name="ObjectId+createPk"></a>
-
-### objectId.createPk(time) ⇒ <code>[ObjectId](#ObjectId)</code>
-Creates an ObjectId from a second based number, with the rest of the ObjectId zeroed out. Used for comparisons or sorting the ObjectId.
-
-**Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>[ObjectId](#ObjectId)</code> - return the created ObjectId  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| time | <code>Number</code> | an integer number representing a number of seconds. |
-
-<a name="ObjectId+createFromTime"></a>
-
-### objectId.createFromTime(time) ⇒ <code>[ObjectId](#ObjectId)</code>
-Creates an ObjectId from a second based number, with the rest of the ObjectId zeroed out. 
-Used for comparisons or sorting the ObjectId.
-
-**Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>[ObjectId](#ObjectId)</code> - The created ObjectId  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| time | <code>Number</code> | A number of seconds. |
-
-<a name="ObjectId+createFromHexString"></a>
-
-### objectId.createFromHexString(hexString) ⇒ <code>[ObjectId](#ObjectId)</code>
-Creates an ObjectId from a hex string representation of an ObjectId.
-
-**Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>[ObjectId](#ObjectId)</code> - The created ObjectId  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| hexString | <code>String</code> | An ObjectId 24 byte hexstring representation. |
+- [ ] Implement
 
