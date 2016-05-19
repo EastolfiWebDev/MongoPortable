@@ -34,19 +34,8 @@ build_full_doc: build
 test: build
 	$(run_test)
 
-# Version Managment #
-
-# release-patch: build test
-# 	npm version patch
-
-# release-minor: build test
-#   npm version minor
-
-# release-major: build test
-#   npm version major
-
 # NPM Publishing #
 
-publish: build build_full_doc test
+build_all: build build_full_doc test
 
-.PHONY: publish
+.PHONY: build_all
