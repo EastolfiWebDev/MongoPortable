@@ -1,14 +1,28 @@
 ## Variables ##
 
-build_app = ./node_modules/.bin/grunt build_app
+# Global Packages #
+grunt = ./node_modules/.bin/grunt
+mocha = ./node_modules/.bin/mocha
+coveralls = ./node_modules/.bin/coveralls
+jscoverage = ./node_modules/.bin/jscoverage
 
-build_web_full = ./node_modules/.bin/grunt build_doc
+# Building #
+build_app = $(grunt) build_app
 
-build_api_full = ./node_modules/.bin/grunt build_html
+build_web_full = $(grunt) build_doc
 
-run_test = ./node_modules/.bin/grunt run_test
+build_api_full = $(grunt) build_html
 
+# Testing #
+run_test = $(grunt) run_test
+
+coveralls = $(grunt) coveralls_dist
+
+# Publishing #
 npm_publish = npm publish
+
+# Cleaning #
+clean_test = 	rm -rf test/coverage && rm -rf test/results && rm -rf lib-cov
 
 ## Actions ##
 
@@ -33,9 +47,23 @@ build_full_doc: build
 
 test: build
 	$(run_test)
-
+	
+do_coverage: test
+	$(clean_test)
+	mkdir test/coverage && mkdir test/results
+	$(jscoverage) --no-highlight lib lib-cov
+	mv lib lib-orig
+	mv lib-cov lib
+	$(mocha) test -R html-cov > test/results/coverage.html
+	$(mocha) test -R mocha-lcov-reporter > test/coverage/coverage-dist.lcov
+	rm -rf lib
+	mv lib-orig lib
+	
+coverage: do_coverage
+	$(coveralls)
+	
 # NPM Publishing #
 
-build_all: build build_full_doc test
+build_all: build build_full_doc test coverage
 
 .PHONY: build_all

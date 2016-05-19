@@ -1,6 +1,9 @@
 # MongoPortable
 Solution for a MongoDB-like portable database.
 
+[![NPM Version][npm-image]][npm-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
+
 It handles the collections and documents in memory, and allow the use of stores for persistence.
 
 # Installation
@@ -172,3 +175,8 @@ Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdow
 
 [Module-FileSystemStore]: https://github.com/eastolfi/FileSystemStore
 [API-FileSystemStore]: https://github.com/eastolfi/FileSystemStore/blob/master/api/FileSystemStore.md
+
+[npm-image]: https://img.shields.io/badge/npm-2.14.20-brightgreen.svg
+[npm-url]: https://www.npmjs.com/package/mongo-portable
+[coveralls-image]: https://coveralls.io/repos/github/eastolfi/MongoPortable/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/eastolfi/MongoPortable?branch=master

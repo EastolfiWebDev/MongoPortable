@@ -1,3 +1,8 @@
 lib_old
 
 npm-debug.log
+
+.coveralls.yml
+
+test/coverage
+test/results

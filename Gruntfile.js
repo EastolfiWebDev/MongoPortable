@@ -77,6 +77,17 @@ module.exports = function(grunt) {
                     { src: 'src/Cursor.js', dest: 'api/Cursor.md' }
                 ]
             }
+        },
+        
+        coveralls: {
+            options: {
+                force: false
+            },
+            
+            dist: {
+                src: ['test/coverage/coverage-dist.lcov'],
+                options: { }
+            }
         }
     });
 
@@ -85,6 +96,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
+    grunt.loadNpmTasks('grunt-coveralls');
     
     // Documentation
     grunt.registerTask('build_doc', ['jsdoc:dist']);
@@ -96,6 +108,7 @@ module.exports = function(grunt) {
     
     grunt.registerTask('dev_test', ['simplemocha:dev']);
     grunt.registerTask('run_test', ['simplemocha:all']);
+    grunt.registerTask('coveralls_dist', ['coveralls:dist']);
     
     grunt.registerTask('full_build', ['build_app', 'build_doc', 'run_test']);
     
