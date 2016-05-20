@@ -1,0 +1,11 @@
+site_name: Mongo Portable
+repo_url: https://github.com/eastolfi/MongoPortable
+site_author: Eduardo Astolfi
+copyright: 2016 - Eduardo Astolfi
+
+docs_dir: api
+
+pages:
+    - 'Mongo Portable': 'MongoPortable.md'
+    - 'Collection': 'Collection.md'
+    - 'Cursor': 'Cursor.md'
