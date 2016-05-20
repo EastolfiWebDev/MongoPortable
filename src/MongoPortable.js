@@ -283,16 +283,12 @@ MongoPortable.prototype.collection = function(collectionName, options, callback)
     }
     
     if (!existing) {
-        // Letting access the collection by MongoPortable.<COL_NAME>
+        // Letting access the collection by <MongoPortable instance>.<COL_NAME>
         Object.defineProperty(MongoPortable.prototype, collectionName, {
             enumerable : true,
             configurable : true,
-            get: function () {
-                return self._collections[collectionName];
-            },
-            set: function (v) {
-                self._collections[collectionName] = v;
-            }
+            writable: false,
+            value: self._collections[collectionName]
         });
     }
     
@@ -629,6 +625,7 @@ Object.defineProperty(
         enumerable : false, // Will not show up in a for-in loop.
         configurable : false, // Cannot be deleted via the delete operator
         value : function (oldName, newName) {
+            // Do nothing if some name is missing or is not an string
             if (!_.isString(oldName) || !_.isString(newName)) {
                 return this;
             }
