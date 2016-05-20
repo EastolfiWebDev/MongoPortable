@@ -1,14 +1,14 @@
 # MongoPortable
 Solution for a MongoDB-like portable database.
 
+[![Package Version][npm-image]][npm-url]
+[![NodeJS Version][node-image]][node-url]
+
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][npm-url]
-
-[![Node Version][node-image]][node-url]
-[![NPM Version][npm-image]][npm-url]
-
+[![Documentation Status][docs-image]][docs-url]
 
 It handles the collections and documents in memory, and allow the use of stores for persistence.
 
@@ -47,11 +47,17 @@ The modules visibles for an application are [MongoPortable](#MongoPortable), [Co
 ## MongoPortable
 Handles the database, collections and connections.
 
+Read the full API documentation [here][API-MongoPortable]
+
 ## Collection
 Handles the list of documents by using cursors.
 
+Read the full API documentation [here][API-Collection]
+
 ## Cursor
 Fetchs and access the documents to return them to the client.
+
+Read the full API documentation [here][API-Cursor]
 
 ----------
 
@@ -169,10 +175,6 @@ Read the full API documentation [here][API-Cursor]
 
 MIT
 
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job.
-There is no need to format nicely because it shouldn't be seen.
-Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
 [mongo-db-command]: https://docs.mongodb.com/manual/reference/command/
 
 [API-MongoPortable]: https://github.com/eastolfi/MongoPortable/blob/master/api/MongoPortable.md
@@ -182,9 +184,9 @@ Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdow
 [Module-FileSystemStore]: https://github.com/eastolfi/FileSystemStore
 [API-FileSystemStore]: https://github.com/eastolfi/FileSystemStore/blob/master/api/FileSystemStore.md
 
-[npm-image]: https://img.shields.io/badge/npm-2.14.20-brightgreen.svg
+[npm-image]: https://img.shields.io/npm/v/mongo-portable.svg?label=Package%20Version
 [npm-url]: https://www.npmjs.com/package/mongo-portable
-[node-image]: https://img.shields.io/badge/node-v4.4.0-brightgreen.svg
+[node-image]: https://img.shields.io/badge/node-v4.4.0-blue.svg?label=Node%20Version
 [node-url]: https://nodejs.org/en/
 [travis-image]: https://img.shields.io/travis/eastolfi/MongoPortable.svg?label=linux
 [travis-url]: https://travis-ci.org/eastolfi/MongoPortable
@@ -193,3 +195,5 @@ Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdow
 [coveralls-image]: https://coveralls.io/repos/github/eastolfi/MongoPortable/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/eastolfi/MongoPortable?branch=master
 [downloads-image]: https://img.shields.io/npm/dt/mongo-portable.svg
+[docs-image]: https://readthedocs.org/projects/mongoportable/badge/?version=latest
+[docs-url]: http://mongoportable.readthedocs.io/en/latest/?badge=latest
