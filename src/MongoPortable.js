@@ -1,6 +1,6 @@
 /**
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
- * @version 0.0.1
+ * @version 1.0.0
  * 
  * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
  * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
@@ -11,6 +11,8 @@ var _ = require('lodash'),
     ObjectId = require('./ObjectId'),
     Collection = require('./Collection'),
     Logger = require("./utils/Logger");
+    
+var logger = null;
     
 /**
  * MongoPortable
@@ -24,14 +26,12 @@ var _ = require('lodash'),
  * @param {string} databaseName - Name of the database.
  */
 class MongoPortable extends EventEmitter {
-    constructor(databaseName) {
-        // Instantiates super constructor
+    constructor(databaseName, options = {}) {
         super();
         
         if (!(this instanceof MongoPortable)) return new MongoPortable(databaseName);
         
-        // Check ddbb name format
-        _validateDatabaseName(databaseName);
+        logger = Logger.getInstance(options.log);
     
         // Initializing variables
         this._collections = {};
@@ -40,11 +40,14 @@ class MongoPortable extends EventEmitter {
         if (!MongoPortable.connections) {
             MongoPortable.connections = {};
         }
+        
+        // Check ddbb name format
+        _validateDatabaseName(databaseName);
     
         //Temp patch until I figure out how far I want to take the implementation;
         // FIXME
         if (MongoPortable.connections[databaseName]) {
-            throw new Error('db name already in use');
+            logger.throw('db name already in use');
         }
     
         this.databaseName = databaseName;
@@ -96,14 +99,14 @@ MongoPortable.prototype.use = function(name, obj) {
  * @returns {MongoPortable} this - The current Instance
  */
 MongoPortable.prototype.addStore = function (store) {
-    if (_.isNil(store)) throw new Error("store must be included");
+    if (_.isNil(store)) logger.throw("store must be included");
     
     if (_.isFunction(store)) {
         this._stores.push(new store());
     } else if (_.isPlainObject(store)) {
         this._stores.push(store);
     } else {
-        throw new Error("store must be a function or object");
+        logger.throw("store must be a function or object");
     }
     
 
@@ -121,7 +124,7 @@ MongoPortable.prototype.addStore = function (store) {
  * @todo Implement
  */
 MongoPortable.prototype.collectionsInfo = function(collectionName, callback) {
-    throw new Error("Not implemented yet");
+    logger.throw("Not implemented yet");
 };
 
 /**
@@ -336,7 +339,7 @@ MongoPortable.prototype.dropCollection = function(collectionName, callback) {
     } else {
         var msg = "No collection found";
         
-        Logger.error(msg);
+        logger.error(msg);
         
         if (callback && _.isFunction(callback)) callback(new Error(msg));
         
@@ -382,7 +385,7 @@ MongoPortable.prototype.renameCollection = function(fromCollection, toCollection
         } else {
             let msg = "No collection found";
             
-            Logger.error(msg);
+            logger.error(msg);
             
             if (callback && _.isFunction(callback)) callback(new Error(msg), null);
             
@@ -391,7 +394,7 @@ MongoPortable.prototype.renameCollection = function(fromCollection, toCollection
     } else {
         let msg = "The params are invalid";
         
-        Logger.error(msg);
+        logger.error(msg);
         
         if (callback && _.isFunction(callback)) callback(new Error(msg), null);
         
@@ -431,7 +434,7 @@ MongoPortable.prototype.renameCollection = function(fromCollection, toCollection
  * @todo Implement
  */
 MongoPortable.prototype.createIndex = function(collectionName, fieldOrSpec, options, callback) {
-    throw new Error('Not implemented yet!');
+    logger.throw('Not implemented yet!');
 };
 
 /**
@@ -465,7 +468,7 @@ MongoPortable.prototype.createIndex = function(collectionName, fieldOrSpec, opti
  * @todo Implement
  */
 MongoPortable.prototype.ensureIndex = function(collectionName, fieldOrSpec, options, callback) {
-    throw new Error('Not implemented yet!');
+    logger.throw('Not implemented yet!');
 };
 
 /**
@@ -480,7 +483,7 @@ MongoPortable.prototype.ensureIndex = function(collectionName, fieldOrSpec, opti
  * @todo Implement
  */
 MongoPortable.prototype.dropIndex = function(collectionName, indexName, callback) {
-    throw new Error('Not implemented yet!');
+    logger.throw('Not implemented yet!');
 };
 
 /**
@@ -495,7 +498,7 @@ MongoPortable.prototype.dropIndex = function(collectionName, indexName, callback
  * @todo Implement
  **/
 MongoPortable.prototype.reIndex = function(collectionName, callback) {
-    throw new Error('Not implemented yet!');
+    logger.throw('Not implemented yet!');
 };
 
 /**
@@ -514,7 +517,7 @@ MongoPortable.prototype.reIndex = function(collectionName, callback) {
  * @todo Implement
  */
 MongoPortable.prototype.indexInformation = function(collectionName, options, callback) {
-    throw new Error('Not implemented yet!');
+    logger.throw('Not implemented yet!');
 };
 
 /**
@@ -546,7 +549,7 @@ MongoPortable.prototype.dropDatabase = function(callback) {
     } else {
         let msg = 'That database no longer exists';
         
-        Logger.error(msg);
+        logger.error(msg);
         
         if (callback && _.isFunction(callback)) callback(new Error(msg), false);
         
@@ -591,14 +594,14 @@ MongoPortable.prototype.dereference = function(dbRef, callback) {
  * @return {Boolean} "true" if the name is valid
  */
 var _validateDatabaseName = function(databaseName) {
-    if (!_.isString(databaseName)) throw new Error("database name must be a string");
+    if (!_.isString(databaseName)) logger.throw("database name must be a string");
 
-    if (databaseName.length === 0) throw new Error("database name cannot be the empty string");
+    if (databaseName.length === 0) logger.throw("database name cannot be the empty string");
 
     var invalidChars = [" ", ".", "$", "/", "\\"];
     for(var i = 0; i < invalidChars.length; i++) {
         if(databaseName.indexOf(invalidChars[i]) != -1) {
-            throw new Error("database names cannot contain the character '" + invalidChars[i] + "'");
+            logger.throw(`database names cannot contain the character "${invalidChars[i]}"`);
         }
     }
     

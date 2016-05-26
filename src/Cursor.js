@@ -1,6 +1,6 @@
 /**
  * @file Cursor.js - based on Monglo#Cursor ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
- * @version 0.0.1
+ * @version 1.0.0
  * 
  * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
  * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
@@ -10,6 +10,8 @@
 var Logger = require("./utils/Logger"),
     _ = require("lodash"),
     Selector = require('./Selector');
+    
+var logger = null;
 
 /**
  * Cursor
@@ -33,23 +35,26 @@ function Cursor(db, collection, selection, fields, options) {
     this.db = db;
     this.collection = collection;
     this.selector = selection;
-    this.fields = fields;
     this.skipValue = options.skip;
     this.limitValue = options.limit;
     this.sortValue = options.sort || null;
     this.sorted = false;
+    
+    logger = Logger.instance;
 
-    if (Selector.isCompiled(this.selector)) {
+    if (Selector.isSelectorCompiled(this.selector)) {
         this.selector_compiled = this.selector;
     } else {
-        this.selector_compiled = Selector._compileSelector(this.selector);
+        this.selector_compiled = new Selector(this.selector, Selector.MATCH_SELECTOR);
     }
     
     if (this.selector_compiled._id) {
         this.selector_id = this.selector_compiled._id;
     }
     
-    this.sort_compiled = Selector._compileSort(this.sortValue);
+    this.fields = new Selector(fields, Selector.FIELD_SELECTOR);
+    
+    this.sort_compiled = new Selector(this.sortValue, Selector.SORT_SELECTOR);
 
     this.db_objects = null;
     this.cursor_pos = 0;
@@ -240,7 +245,7 @@ Cursor.prototype.sort = function(spec) {
     var _sort = this.sort_compiled || null;
     
     if (spec) {
-        _sort = Selector._compileSort(spec);
+        _sort = new Selector(spec, Selector.SORT_SELECTOR);
     }
     
     if (_sort) {

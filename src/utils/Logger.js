@@ -1,70 +1,131 @@
-const GENERIC_LEVEL = process.env.NODE_EA_LOGGER || 1;
+/**
+ * @file Logger.js - Winston based logging class
+ * @version 1.0.0
+ * 
+ * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
+ * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
+ * @license MIT Licensed
+ */
 
-var logLevel = null;      // Show error by default
-class Logger {
+var _ = require("lodash"),
+    winston = require("winston"),
+    winstonLogger = winston.Logger;
+    
+const TRANSPORT_PREFIX = 'EAMP_LOGGER_';
+
+// Singleton instance
+let singleton = Symbol();
+let singletonEnforcer = Symbol();
+
+let defaultOptions = {
+    throwError: true
+};
+
+/**
+ * Logger
+ * 
+ * @module Logger
+ * @constructor
+ * @since 1.0.0
+ * 
+ * @classdesc Logging module singleton which inherits the Winston Logger module.
+ *          By default: 
+ *              <ol>
+ *                  <li>Writes all the HANDLED exceptions under a log file in "logs/handledException.log"</li>
+ *                  <li>Writes in the console all warnings and erros</li>
+ *              </ol>
+ * 
+ * @param {Symbol} enforcer - Enforcer internal object to avoid instanciating as "new Logger()"
+ * @param {Object} [options] - Additional options
+ * 
+ * @param {String|Array} [options.throwError=true] - Whether if throw an exception when logged trought the Logger#throw method
+ */
+class Logger extends winstonLogger {
+    constructor(enforcer, options = defaultOptions) {
+        if(enforcer != singletonEnforcer) throw new Error("Cannot construct singleton");
+        
+        super({
+            transports: [
+                new winston.transports.Console({
+                    name: TRANSPORT_PREFIX + 'debug-console',
+                    level: 'error'
+                })
+            ]
+        });
+        
+        this.options = options;
+        
+        this.logger = new winston.Logger({
+            transports: [
+                new winston.transports.File({
+                    name: TRANSPORT_PREFIX + 'exception-file',
+                    filename: 'logs/handledException.log',
+                    level: 'error',
+                    json: false,
+                    colorize: true
+                })
+            ]
+        });
+    }
+    
     /**
-     * logLevel =>
-     *     -1 || 'N' -> no log
-     *      1 || 'E' -> error
-     *      2 || 'W' -> warn (and bellow)
-     *      3 || 'L' -> log (and bellow)
-     *      4 || 'I' -> info (and bellow)
-     *      5 || 'D' -> debug (and bellow)
-     *     99 || 'A' -> all
+     * Method to throw a controlled exception, logging it to a log file.
+     * 
+     * @param {Error|String} error - The exception or message to be thrown.
+     * @param {Boolean} [throwError=true] - Same as Logger->options->throwError
      */
-    constructor(level) {
-        logLevel = level || GENERIC_LEVEL || 1;
+    throw(error) {
+        if (_.isString(error)) error = new Error(error);
+        
+        this.logger.error(error);
+        
+        if (this.options.throwError) throw error;
     }
     
-    
-    debug(msg) {
-        if (logLevel >= 5) {
-            console.log('#DEBUG# - ' + JSON.stringify(msg));
+    /**
+     * Retrieves the current singleton instance, creating a new one if needed.
+     * 
+     * @static
+     * 
+     * @returns {Logger} this - The singleton Instance
+     */
+    static get instance() {
+        if (_.isNil(this[singleton])) {
+            this[singleton] = new Logger(singletonEnforcer);
         }
+        
+        return this[singleton];
+        
     }
     
-    log(msg) {
-        if (logLevel >= 4) {
-            console.log('#LOG# - ' + JSON.stringify(msg));
+    /**
+     * Retrieves the current singleton instance, creating a new one if needed. 
+     * It allows, when creating the first time, a set of options. Otherwise, it will return the singleton instance
+     * 
+     * @static
+     * 
+     * @param {Object} [options] - Additional options. See {@link Logger#constructor}
+     * 
+     * @returns {Logger} this - The singleton Instance
+     */
+    static getInstance(options) {
+        if (_.isNil(this[singleton])) {
+            this[singleton] = new Logger(singletonEnforcer, options);
+        } else {
+            console.error("Singleton already instanciated. Ignoring options and retrieving current instance.");
         }
+        
+        return Logger.instance;
     }
     
-    info(msg) {
-        if (logLevel >= 3) {
-            console.log('#INFO# - ' + JSON.stringify(msg));
-        }
-    }
-    
-    warn(msg) {
-        if (logLevel >= 2) {
-            console.log('#WARNING# - ' + JSON.stringify(msg));
-        }
-    }
-    
-    error(msg) {
-        if (logLevel >= 1) {
-            console.log('#ERROR# - ' + JSON.stringify(msg));
-        }
-    }
-    
-    /**/
-    getLogLevel() {
-        return logLevel;
-    }
-    
-    setLogLevel(level) {
-        return logLevel = level || 1;
+    /**
+     * Destroy the current singleton instance
+     * 
+     * @static
+     */
+    static __dropInstance() {
+        delete this[singleton];
     }
 }
 
-var LOG = new Logger();
-
-Logger.prototype.none       = function() { LOG.setLogLevel(-1)} ;
-Logger.prototype.error      = function() { LOG.setLogLevel(1)} ;
-Logger.prototype.warn       = function() { LOG.setLogLevel(2)} ;
-Logger.prototype.info       = function() { LOG.setLogLevel(3)} ;
-Logger.prototype.log        = function() { LOG.setLogLevel(4)} ;
-Logger.prototype.debug      = function() { LOG.setLogLevel(5)} ;
-Logger.prototype.all        = function() { LOG.setLogLevel(99)} ;
-
-module.exports = LOG;
+module.exports = Logger;
