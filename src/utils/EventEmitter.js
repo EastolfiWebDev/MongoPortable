@@ -1,9 +1,11 @@
 var Logger = require("./Logger"),
     _ = require("lodash");
     
+var logger = null;
+
 class EventEmitter {
     constructor() {
-        
+        logger = Logger.instance;
     }
     
     emit(name, args, cb, stores) {
@@ -31,8 +33,8 @@ class EventEmitter {
         
         var command = name;
     
-        Logger.info('Emitting store event ' + name);
-        Logger.debug(args);
+        logger.info('Emitting store event ' + name);
+        logger.debug(args);
     
         // Send event to all the stores registered
         _.forEach(this._stores, function (fn) {

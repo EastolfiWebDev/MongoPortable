@@ -1,6 +1,6 @@
 /**
  * @file Collection.js - based on Monglo#Collection ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
- * @version 0.0.1
+ * @version 1.0.0
  * 
  * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
  * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
@@ -11,8 +11,10 @@ var Logger = require("./utils/Logger"),
     EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
     Cursor = require("./Cursor"),
-    ObjectId = require('./ObjectId'),
-    Selector = require("./Selector");
+    ObjectId = require('./ObjectId');
+    // Selector = require("./Selector");
+    
+var logger = null;
     
 /**
  * Collection
@@ -37,10 +39,12 @@ class Collection extends EventEmitter {
         super();
         
         if (!(this instanceof Collection)) return new Collection(db, collectionName, options);
-    
-        if (_.isNil(db)) throw new Error("db parameter required");
         
-        if (_.isNil(collectionName)) throw new Error("collectionName parameter required");
+        logger = Logger.instance;
+    
+        if (_.isNil(db)) logger.throw("db parameter required");
+        
+        if (_.isNil(collectionName)) logger.throw("collectionName parameter required");
         
         if (_.isNil(options) || !_.isPlainObject(options)) options = {};
         
@@ -84,9 +88,9 @@ class Collection extends EventEmitter {
  * @returns {Object|Collection} If "options.chain" set to "true" returns this instance, otherwise returns the inserted document
  */
 Collection.prototype.insert = function (doc, options, callback) {
-    if (_.isNil(doc)) throw new Error("doc parameter required");
+    if (_.isNil(doc)) logger.throw("doc parameter required");
     
-    if (!_.isPlainObject(doc)) throw new Error("doc must be an object");
+    if (!_.isPlainObject(doc)) logger.throw("doc must be an object");
     
     if (_.isNil(options)) options = {};
     
@@ -95,7 +99,7 @@ Collection.prototype.insert = function (doc, options, callback) {
         options = {};
     }
     
-    if (!_.isNil(callback) && !_.isFunction(callback)) throw new Error("callback must be a function");
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
     
     // Creating a safe copy of the document
     var _doc = _.cloneDeep(doc);
@@ -187,26 +191,30 @@ Collection.prototype.find = function (selection, fields, options, callback) {
         };
     }
     
-    if (!_.isNil(callback) && !_.isFunction(callback)) throw new Error("callback must be a function");
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
     
     // Compile selection and fields
-    var selectionCompiled = Selector._compileSelector(selection);
-    var fieldsCompiled = Selector._compileFields(fields);   // TODO
+    // var selectionCompiled = Selector._compileSelector(selection);
+    // var fieldsCompiled = Selector._compileFields(fields);   // TODO
 
     if (options.fields) {
-        // Add warning if fields already passed
-        fieldsCompiled = Selector._compileFields(options.fields);
+        if (_.isNil(fields)) {
+            fields = options.fields;
+        } else {
+            // error
+        }
+        // fieldsCompiled = Selector._compileFields(options.fields);
     }
 
     // callback for backward compatibility
-    var cursor = new Cursor(this.db, this, selectionCompiled, fieldsCompiled, options);
+    var cursor = new Cursor(this.db, this, selection, fields, options);
 
     this.emit(
         'find',
         {
             collection: this,
-            selector: selectionCompiled,
-            fields: fieldsCompiled,
+            selector: selection,
+            fields: fields,
             options: options
         }
     );
@@ -275,18 +283,23 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
         };
     }
     
-    if (!_.isNil(callback) && !_.isFunction(callback)) throw new Error("callback must be a function");
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
     
     // Compile selection and fields
-    var selectionCompiled = Selector._compileSelector(selection);
-    var fieldsCompiled = Selector._compileFields(fields);   // TODO
+    // var selectionCompiled = Selector._compileSelector(selection);
+    // var fieldsCompiled = Selector._compileFields(fields);   // TODO
 
-    if (options.fields) {
+    if (options.fields) {   // FIXME Repeated code
+        if (_.isNil(fields)) {
+            fields = options.fields;
+        } else {
+            // error
+        }
         // Add warning if fields already passed
-        fieldsCompiled = Selector._compileFields(options.fields);
+        // fieldsCompiled = Selector._compileFields(options.fields);
     }
 
-    var cursor = new Cursor(this.db, this, selectionCompiled, fieldsCompiled, options);
+    var cursor = new Cursor(this.db, this, selection, fields, options);
 
     // this.emit('find', selector, cursor, o);
 
@@ -294,8 +307,8 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
         'findOne',
         {
             collection: this,
-            selector: selectionCompiled,
-            fields: fieldsCompiled,
+            selector: selection,
+            fields: fields,
             options: options
         }
     );
@@ -378,7 +391,7 @@ Collection.prototype.update = function (selection, update, options, callback) {
         };
     }
     
-    if (!_.isNil(callback) && !_.isFunction(callback)) throw new Error("callback must be a function");
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
 
     var res = null;
 
@@ -445,9 +458,9 @@ Collection.prototype.update = function (selection, update, options, callback) {
                 }
                 
                 if (options.updateAsMongo) {
-                    if (hasModifier && !modifier) throw new Error("All update fields must be an update operator");
+                    if (hasModifier && !modifier) logger.throw("All update fields must be an update operator");
                     
-                    if (!hasModifier && options.multi) throw new Error("You can not update several documents when no update operators are included");
+                    if (!hasModifier && options.multi) logger.throw("You can not update several documents when no update operators are included");
                     
                     if (hasModifier) override = false;
                     
@@ -466,7 +479,7 @@ Collection.prototype.update = function (selection, update, options, callback) {
                 
                 for (let key in update) {
                     if (key.substr(0, 1) === '$' || /\./g.test(key)) {
-                        Logger.warn(`The field ${key} can not begin with '$' or contain '.'`);
+                        logger.warn(`The field ${key} can not begin with '$' or contain '.'`);
                     } else {
                         delete _docUpdate[key];
                     }
@@ -487,10 +500,10 @@ Collection.prototype.update = function (selection, update, options, callback) {
                             if (key !== '_id') {
                                 _docUpdate[key] = val;
                             } else {
-                                Logger.warn("The field '_id' can not be updated");
+                                logger.warn("The field '_id' can not be updated");
                             }
                         } else {
-                            Logger.warn(`The document does not contains the field ${key}`);
+                            logger.warn(`The document does not contains the field ${key}`);
                         }
                     }
                 }
@@ -535,7 +548,7 @@ var _applyModifier = function(_docUpdate, key, val) {
     var mod = _modifiers[key];
                         
     if (!mod) {
-        throw new Error(`Invalid modifier specified: ${key}`);
+        logger.throw(`Invalid modifier specified: ${key}`);
     }
     
     for (var keypath in val) {
@@ -580,7 +593,7 @@ Collection.prototype.remove = function (selection, callback) {
         };
     }
     
-    if (!_.isNil(callback) && !_.isFunction(callback)) throw new Error("callback must be a function");
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
     
     var cursor = this.find(selection);
     
@@ -628,7 +641,7 @@ Collection.prototype.save = function(obj, fn) {
 */
 Collection.prototype.ensureIndex = function() {
     //TODO Implement EnsureIndex
-    throw new Error('Collection#ensureIndex unimplemented by driver');
+    logger.throw('Collection#ensureIndex unimplemented by driver');
 };
 
 // TODO document (at some point)
@@ -708,13 +721,13 @@ Collection.prototype.restore = function ( backupID, fn ) {
     var snapshotCount = Object.size(this.snapshots);
 
     if (snapshotCount===0) {
-        throw new Error("No current snapshot");
+        logger.throw("No current snapshot");
     }
 
     var backupData = this.snapshots[backupID];
 
     if (!backupData) {
-        throw new Error("Unknown Backup ID "+backupID);
+        logger.throw("Unknown Backup ID "+backupID);
     }
 
     this.docs = backupData;
@@ -752,7 +765,7 @@ Collection._findModTarget = function (doc, keyparts, no_create, forbid_array) {
             if (forbid_array) return null;
 
             if (!numeric) {
-                throw new Error("can't append to array using string field name [" + keypart + "]");
+                logger.throw("can't append to array using string field name [" + keypart + "]");
             }
 
             keypart = _.toNumber(keypart);
@@ -770,7 +783,7 @@ Collection._findModTarget = function (doc, keyparts, no_create, forbid_array) {
                 if (doc.length === keypart) {
                     doc.push({});
                 } else if (typeof doc[keypart] !== "object") {
-                    throw new Error("can't modify field '" + keyparts[i + 1] + "' of list value " + JSON.stringify(doc[keypart]));
+                    logger.throw("can't modify field '" + keyparts[i + 1] + "' of list value " + JSON.stringify(doc[keypart]));
                 }
             }
         } else {
@@ -805,12 +818,12 @@ Collection._noCreateModifiers = {
 var _modifiers = {
     $inc: function (target, field, arg) {
         if (typeof arg !== "number") {
-            throw new Error("Modifier $inc allowed for numbers only");
+            logger.throw("Modifier $inc allowed for numbers only");
         }
 
         if (field in target) {
             if (typeof target[field] !== "number") {
-                throw new Error("Cannot apply $inc modifier to non-number");
+                logger.throw("Cannot apply $inc modifier to non-number");
             }
 
             target[field] += arg;
@@ -841,7 +854,7 @@ var _modifiers = {
         if (x === undefined) {
             target[field] = [arg];
         } else if (!(x instanceof Array)) {
-            throw new Error("Cannot apply $push modifier to non-array");
+            logger.throw("Cannot apply $push modifier to non-array");
         } else {
             x.push(_.cloneDeep(arg));
         }
@@ -849,7 +862,7 @@ var _modifiers = {
 
     $pushAll: function (target, field, arg) {
         if (!(typeof arg === "object" && arg instanceof Array)) {
-            throw new Error("Modifier $pushAll/pullAll allowed for arrays only");
+            logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
         }
 
         var x = target[field];
@@ -857,7 +870,7 @@ var _modifiers = {
         if (x === undefined) {
             target[field] = arg;
         } else if (!(x instanceof Array)) {
-            throw new Error("Cannot apply $pushAll modifier to non-array");
+            logger.throw("Cannot apply $pushAll modifier to non-array");
         } else {
             for (var i = 0; i < arg.length; i++) {
                 x.push(arg[i]);
@@ -871,7 +884,7 @@ var _modifiers = {
         if (x === undefined) {
             target[field] = [arg];
         } else if (!(x instanceof Array)) {
-            throw new Error("Cannot apply $addToSet modifier to non-array");
+            logger.throw("Cannot apply $addToSet modifier to non-array");
         } else {
             var isEach = false;
             if (typeof arg === "object") {
@@ -887,7 +900,7 @@ var _modifiers = {
             var values = isEach ? arg["$each"] : [arg];
             _.forEach(values, function (value) {
                 for (var i = 0; i < x.length; i++) {
-                    if (Selector._f._equal(value, x[i])) return;
+                    // if (Selector._f._equal(value, x[i])) return; //FIXME
                 }
 
                 x.push(value);
@@ -903,7 +916,7 @@ var _modifiers = {
         if (x === undefined) {
             return;
         } else if (!(x instanceof Array)) {
-            throw new Error("Cannot apply $pop modifier to non-array");
+            logger.throw("Cannot apply $pop modifier to non-array");
         } else {
             if (typeof arg === 'number' && arg < 0) {
                 x.splice(0, 1);
@@ -914,6 +927,8 @@ var _modifiers = {
     },
 
     $pull: function (target, field, arg) {
+        logger.throw("Not yet implemented");    // REVIEW
+        
         if (target === undefined) return;
 
         var x = target[field];
@@ -921,7 +936,7 @@ var _modifiers = {
         if (x === undefined) {
             return;
         } else if (!(x instanceof Array)) {
-            throw new Error("Cannot apply $pull/pullAll modifier to non-array");
+            logger.throw("Cannot apply $pull/pullAll modifier to non-array");
         } else {
             var out = [];
             
@@ -935,7 +950,7 @@ var _modifiers = {
                 // to permit stuff like {$pull: {a: {$gt: 4}}}.. something
                 // like {$gt: 4} is not normally a complete selector.
                 // same issue as $elemMatch possibly?
-                var match = Selector._compileSelector(arg);
+                // var match = Selector._compileSelector(arg); // FIXME
 
                 for (var i = 0; i < x.length; i++) {
                     if (!match(x[i])) {
@@ -944,9 +959,9 @@ var _modifiers = {
                 }
             } else {
                 for (var i = 0; i < x.length; i++) {
-                    if (!Selector._f._equal(x[i], arg)) {
-                        out.push(x[i]);
-                    }
+                    // if (!Selector._f._equal(x[i], arg)) {    // FIXME
+                    //     out.push(x[i]);
+                    // }
                 }
             }
 
@@ -955,10 +970,12 @@ var _modifiers = {
     },
 
     $pullAll: function (target, field, arg) {
+        logger.throw("Not yet implemented");    // REVIEW
+        
         if (target === undefined) return;
 
         if (!(typeof arg === "object" && arg instanceof Array)) {
-            throw new Error("Modifier $pushAll/pullAll allowed for arrays only");
+            logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
         }
 
         var x = target[field];
@@ -966,7 +983,7 @@ var _modifiers = {
         if (x === undefined) {
             return;
         } else if (!(x instanceof Array)) {
-            throw new Error("Cannot apply $pull/pullAll modifier to non-array");
+            logger.throw("Cannot apply $pull/pullAll modifier to non-array");
         } else {
             var out = [];
 
@@ -974,11 +991,11 @@ var _modifiers = {
                 var exclude = false;
 
                 for (var j = 0; j < arg.length; j++) {
-                    if (Selector._f._equal(x[i], arg[j])) {
-                        exclude = true;
+                    // if (Selector._f._equal(x[i], arg[j])) { // FIXME
+                    //     exclude = true;
                         
-                        break;
-                    }
+                    //     break;
+                    // }
                 }
 
                 if (!exclude) {
@@ -995,15 +1012,15 @@ var _modifiers = {
         
         if (keypath === arg) {
             // no idea why mongo has this restriction..
-            throw new Error("$rename source must differ from target");
+            logger.throw("$rename source must differ from target");
         }
 
         if (target === null) {
-            throw new Error("$rename source field invalid");
+            logger.throw("$rename source field invalid");
         }
 
         if (typeof arg !== "string") {
-            throw new Error("$rename target must be a string");
+            logger.throw("$rename target must be a string");
         }
 
         var v = target[field];
@@ -1013,7 +1030,7 @@ var _modifiers = {
         var target2 = Collection._findModTarget(doc, keyparts, false, true);
 
         if (target2 === null) {
-            throw new Error("$rename target field invalid");
+            logger.throw("$rename target field invalid");
         }
 
         var field2 = keyparts.pop();
@@ -1024,7 +1041,7 @@ var _modifiers = {
     $bit: function (target, field, arg) {
         // XXX mongo only supports $bit on integers, and we only support
         // native javascript numbers (doubles) so far, so we can't support $bit
-        throw new Error("$bit is not supported");
+        logger.throw("$bit is not supported");
     }
 };
 
@@ -1033,19 +1050,19 @@ var _modifiers = {
 */
 Collection.checkCollectionName = function(collectionName) {
     if (!_.isString(collectionName)) {
-        throw new Error("collection name must be a String");
+        logger.throw("collection name must be a String");
     }
 
     if (!collectionName || collectionName.indexOf('..') !== -1) {
-        throw new Error("collection names cannot be empty");
+        logger.throw("collection names cannot be empty");
     }
 
     if (collectionName.indexOf('$') != -1 && collectionName.match(/((^\$cmd)|(oplog\.\$main))/) === null) {
-        throw new Error("collection names must not contain '$'");
+        logger.throw("collection names must not contain '$'");
     }
 
     if (collectionName.match(/^\.|\.$/) !== null) {
-        throw new Error("collection names must not start or end with '.'");
+        logger.throw("collection names must not start or end with '.'");
     }
 };
 

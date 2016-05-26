@@ -1,6 +1,6 @@
 /**
  * @file BinaryParser.js - based on ({@link http://jsfromhell.com/classes/binary-parser Binary Parser}) by Jonas Raoni Soares Silva
- * @version 0.0.1
+ * @version 1.0.0
  * @ignore
  * 
  * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
@@ -10,6 +10,8 @@
  
 var Logger = require("./utils/Logger"),
     BinaryParserBuffer = require("./BinaryParserBuffer");
+    
+var logger = null;
 
 // Shorcut for String.fromCharCode
 var chr = String.fromCharCode;
@@ -38,14 +40,16 @@ for (var i = 0; i < 64; i++) {
  * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
  * 
  */
-function BinaryParser (bigEndian, allowExceptions) {
-    if (!(this instanceof BinaryParser)) return new BinaryParser(bigEndian, allowExceptions);
-
-    this.bigEndian = bigEndian;
-    this.allowExceptions = allowExceptions;
+class BinaryParser {
+    constructor(bigEndian, allowExceptions) {
+        logger = Logger.instance;
+    
+        this.bigEndian = bigEndian;
+        this.allowExceptions = allowExceptions;
+    }
+    
+    
 }
-
-BinaryParser.Buffer = BinaryParserBuffer;
 
 BinaryParser.warn = function (msg) {
     if (this.allowExceptions) {
@@ -56,7 +60,7 @@ BinaryParser.warn = function (msg) {
 };
 
 BinaryParser.decodeFloat = function (data, precisionBits, exponentBits) {
-    var b = new this.Buffer(this.bigEndian, data);
+    var b = new BinaryParserBuffer(this.bigEndian, data);
 
     b.checkBuffer(precisionBits + exponentBits + 1);
 
@@ -68,38 +72,45 @@ BinaryParser.decodeFloat = function (data, precisionBits, exponentBits) {
         curByte = b.buffer.length + (-precisionBits >> 3) - 1;
 
     do {
-        for (var byteValue = b.buffer[ ++curByte ], startBit = precisionBits % 8 || 8, mask = 1 << startBit; mask >>= 1; ( byteValue & mask ) && ( significand += 1 / divisor ), divisor *= 2 );
+        for (
+            var byteValue = b.buffer[ ++curByte ], startBit = precisionBits % 8 || 8, mask = 1 << startBit;
+            mask >>= 1; 
+            ( byteValue & mask ) && ( significand += 1 / divisor ), divisor *= 2 
+        );
     } while (precisionBits -= startBit);
-
-    // if (exponent == ( bias << 1 ) + 1) {
-    //     if (significand) {
-    //         return NaN;
-    //     } else {
-    //         if (signal) {
-    //             return -Infinity;
-    //         } else {
-    //             return +Infinity;
-    //         }
-    //     }
-    // } else {
-    //     var _a = ( 1 + signal * -2 );
-        
-    //     if (exponent || significand) {
-    //         if (!exponent) {
-    //             return _a * (Math.pow( 2, -bias + 1 ) * significand);
-    //         } else {
-    //             return _a * (Math.pow( 2, exponent - bias ) * ( 1 + significand ));
-    //         }
-    //     } else {
-    //         return _a * 0;
-    //     }
-    // }
     
-    return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
+    
+
+    if ( exponent == ( bias << 1 ) + 1 ) {
+    	if (significand) {
+    		return NaN;
+    	} else {
+    		if (signal) {
+    			return -Infinity;
+    		} else {
+    			return +Infinity;
+    		}
+    	}
+    } else {
+    	var _mod = 0;
+    	
+    	if (exponent || significand) {
+    		if (!exponent) {
+    			_mod = Math.pow( 2, -bias + 1 ) * significand;
+    		} else {
+    			_mod = Math.pow( 2, exponent - bias ) * ( 1 + significand );
+    		}
+    	}
+    	
+    	return ( 1 + signal * -2 ) * (_mod);
+    }
+
+
+    // return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
 };
 
 BinaryParser.decodeInt = function (data, bits, signed, forceBigEndian) {
-    var b = new this.Buffer(this.bigEndian || forceBigEndian, data),
+    var b = new BinaryParserBuffer(this.bigEndian || forceBigEndian, data),
         x = b.readBits(0, bits),
         max = maxBits[bits]; //max = Math.pow( 2, bits );
 
