@@ -14,7 +14,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: ['src/**/*.js'],
-                tasks: ['build'],
+                tasks: ['build_app'],
                 options: {
                     spawn: false,
                 }
@@ -28,16 +28,16 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    "lib/utils/Logger.js":          "src/utils/Logger.js",
-                    "lib/utils/EventEmitter.js":    "src/utils/EventEmitter.js",
-                    "lib/BinaryParserBuffer.js":    "src/BinaryParserBuffer.js",
-                    "lib/BinaryParser.js":          "src/BinaryParser.js",
-                    "lib/ObjectId.js":              "src/ObjectId.js",
-                    "lib/SelectorMatcher.js":       "src/SelectorMatcher.js",
-                    "lib/Selector.js":              "src/Selector.js",
-                    "lib/Cursor.js":                "src/Cursor.js",
-                    "lib/Collection.js":            "src/Collection.js",
-                    "lib/MongoPortable.js":         "src/MongoPortable.js"
+                    "lib/utils/Logger.js":              "src/utils/Logger.js",
+                    "lib/utils/EventEmitter.js":        "src/utils/EventEmitter.js",
+                    "lib/BinaryParserBuffer.js":        "src/BinaryParserBuffer.js",
+                    "lib/BinaryParser.js":              "src/BinaryParser.js",
+                    "lib/ObjectId.js":                  "src/ObjectId.js",
+                    "lib/SelectorMatcher.js":           "src/SelectorMatcher.js",
+                    "lib/Selector.js":                  "src/Selector.js",
+                    "lib/Cursor.js":                    "src/Cursor.js",
+                    "lib/Collection.js":                "src/Collection.js",
+                    "lib/MongoPortable.js":             "src/MongoPortable.js"
                 }
             }
         },
@@ -48,8 +48,9 @@ module.exports = function(grunt) {
             },
             
             all: {
-                src: ['test/ObjectId.js', 'test/Selector.js', 'test/MongoPortable.js',
-                        'test/Cursor.js', 'test/Collection.js']
+                src: ['test/1_Logger.js', 'test/2_ObjectId.js', 'test/3_Selector.js',
+                        'test/4_Cursor.js', 'test/5_Collection.js', 'test/6_MongoPortable.js',
+                        'test/7_Coverage.js']
             }
         },
         
@@ -57,16 +58,17 @@ module.exports = function(grunt) {
             dist : {
                 src: [//'./README.md',
                     'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
-                        'src/Selector.js', 'src/ObjectId.js'],
+                        'src/Selector.js', 'src/ObjectId.js', 'src/utils/Logger.js'],
                 options: {
-                    destination: 'doc'
+                    destination: 'doc',
+                    config: 'jsdoc.conf.json'
                 }
             }
         },
         
         jsdoc2md: {
             fullDoc: {
-                src: [//'./README.md',
+                src: [
                     'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js'],
                 dest: 'api/documentation.md'
             },

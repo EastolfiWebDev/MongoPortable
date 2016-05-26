@@ -169,7 +169,7 @@ describe("MongoPortable", function() {
                 
                 expect(dropped).to.be.true;
                 
-                expect(db.collectionNames()).to.have.eql([]);
+                expect(db.collectionNames()).to.be.eql([]);
                 
                 // Callback way
                 db.dropCollection(TEST_COLL, function(error) {
@@ -514,45 +514,6 @@ describe("MongoPortable", function() {
             } finally {
                 expect(thrown).to.be.true;
             }
-        });
-    });
-    
-    describe("To be implement", function() {
-        before(function() {
-            db = new MongoPortable("TEST_IMPLEMENTED");
-        });
-        
-        after(function() {
-            db.dropDatabase();
-            db = null;
-        });
-        
-        it("should not allow MongoPortable#collectionsInfo", function() {
-            expect(db.collectionsInfo).to.throw(Error);
-        });
-        
-        it("should not allow MongoPortable#fetchCollections ", function() {
-            expect(db.fetchCollections ).to.throw(Error);
-        });
-        
-        it("should not allow MongoPortable#createIndex", function() {
-            expect(db.createIndex).to.throw(Error);
-        });
-        
-        it("should not allow MongoPortable#ensureIndex", function() {
-            expect(db.ensureIndex).to.throw(Error);
-        });
-        
-        it("should not allow MongoPortable#dropIndex", function() {
-            expect(db.dropIndex).to.throw(Error);
-        });
-        
-        it("should not allow MongoPortable#reIndex", function() {
-            expect(db.reIndex).to.throw(Error);
-        });
-        
-        it("should not allow MongoPortable#indexInformation", function() {
-            expect(db.indexInformation).to.throw(Error);
         });
     });
 });

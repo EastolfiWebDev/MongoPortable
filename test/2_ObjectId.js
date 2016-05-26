@@ -47,4 +47,10 @@ describe("ObjectId", function() {
             expect(id.getTimestamp().getTime() / 1000).to.be.equal(id.generationTime);
         });
     });
+    
+    describe("Failures", function() {
+        it("should handle BinaryParserBuffer#checkBuffer failing", function() {
+            // expect(manager.test.bind(manager)).to.throw('Oh no')
+        });
+    });
 });
