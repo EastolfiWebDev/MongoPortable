@@ -141,9 +141,9 @@ class Logger extends winstonLogger {
             this[singleton] = new Logger(singletonEnforcer, options);
         } else {
             console.error("Singleton already instanciated. Ignoring options and retrieving current instance.");
-            
-            return Logger.instance;
         }
+        
+        return Logger.instance;
     }
     
     /**
