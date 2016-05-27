@@ -51,14 +51,6 @@ class BinaryParser {
     
 }
 
-BinaryParser.warn = function (msg) {
-    if (this.allowExceptions) {
-        throw new Error(msg);
-    }
-    
-    return 1;
-};
-
 BinaryParser.decodeFloat = function (data, precisionBits, exponentBits) {
     var b = new BinaryParserBuffer(this.bigEndian, data);
 
@@ -137,8 +129,6 @@ BinaryParser.encodeFloat = function (data, precisionBits, exponentBits) {
         j;
 
 
-    // DAFUCK?
-  
     for (i = len; i; bin[--i] = 0);
     
     for (i = bias + 2; intPart && i; bin[--i] = intPart % 2, intPart = Math.floor(intPart / 2));
@@ -160,12 +150,12 @@ BinaryParser.encodeFloat = function (data, precisionBits, exponentBits) {
     if ((exp = bias + 1 - i) >= minExp && exp <= maxExp) {
         ++i;
     } else if (exp < minExp) {
-        exp != bias + 1 - len && exp < minUnnormExp && this.warn("encodeFloat::float underflow");
+        exp != bias + 1 - len && exp < minUnnormExp && console.warn("encodeFloat::float underflow");    // TODO logger
         i = bias + 1 - (exp = minExp - 1);
     }
     
     if (intPart || status !== 0) {
-        this.warn(intPart ? "encodeFloat::float overflow" : "encodeFloat::" + status);
+        console.warn(intPart ? "encodeFloat::float overflow" : "encodeFloat::" + status);    // TODO logger
         exp = maxExp + 1;
         i = bias + 2;
     
@@ -177,7 +167,9 @@ BinaryParser.encodeFloat = function (data, precisionBits, exponentBits) {
     }
   
     for (n = Math.abs(exp + bias), j = exponentBits + 1, result = ""; --j; result = (n % 2) + result, n = n >>= 1);
-  
+    
+    let r = [];
+    
     for (n = 0, j = 0, i = (result = (signal ? "1" : "0") + result + bin.slice(i, i + precisionBits).join("")).length, r = []; i; j = (j + 1) % 8) {
         n += (1 << j) * result.charAt(--i);
         
@@ -196,7 +188,7 @@ BinaryParser.encodeInt = function (data, bits, signed, forceBigEndian) {
     var max = maxBits[bits];
     
     if (data >= max || data < -(max / 2)) {
-        this.warn("encodeInt::overflow");
+        console.warn("encodeInt::overflow");    // TODO logger
         data = 0;
     }
     
