@@ -18,7 +18,7 @@ class SelectorMatcher {
 		if (_.isNil(document)) {
 			logger.debug('document -> null');
 			
-			throw Error("Parameter 'document' required");
+			logger.throw("Parameter 'document' required");
 		}
 		
 		logger.debug('document -> not null');
@@ -29,18 +29,26 @@ class SelectorMatcher {
 			if (clause.kind === 'function') {
 				logger.debug('clause -> function');
 				
-				_match = clause.value.call(document);
+				_match = clause.value.call(null, document);
 			} else if (clause.kind === 'plain') {
-				logger.debug('clause -> plain on field "' + clause.key + '" and value = ' + clause.value);
+				logger.debug(`clause -> plain on field "${clause.key}" and value = ${JSON.stringify(clause.value)}`);
 				
 				_match = _testClause(clause, document[clause.key]);
 				
 				logger.debug('clause result -> ' + _match);
 			} else if (clause.kind === 'object') {
-				logger.debug('clause -> object on field "' + (clause.key.join('.')) + '" and value = ' + clause.value);
+				logger.debug(`clause -> object on field "${clause.key.join('.')}" and value = ${JSON.stringify(clause.value)}`);
 				
 				_match = _testObjectClause(clause, document, _.clone(clause.key).reverse());
 				
+				logger.debug('clause result -> ' + _match);
+			} else if (clause.kind === 'operator') {
+			    logger.debug(`clause -> operator '${clause.key}'`);
+			    
+		        let _matcher = new SelectorMatcher({ clauses: clause.value });
+		        
+		        _match = _matcher.test(document);
+		        
 				logger.debug('clause result -> ' + _match);
 			}
 			
@@ -92,7 +100,7 @@ class SelectorMatcher {
     }
 	
 	static in(array, value) {
-        if (typeof array !== "object") {
+        if (!_.isObject(array)) {
             // optimization: use scalar equality (fast)
             for (var i = 0; i < value.length; i++) {
                 if (array === value[i]) {
@@ -117,16 +125,16 @@ class SelectorMatcher {
 	static equal(array, qval) {
         var match = function (a, b) {
             // scalars
-            if (typeof a === 'number' || typeof a === 'string' || typeof a === 'boolean' || a === undefined || a === null) return a === b;
+            if (_.isNumber(a) || _.isString(a) || _.isBoolean(a) || _.isNil(a)) return a === b;
 
-            if (typeof a === 'function') return false;
+            if (_.isFunction(a)) return false;  // Not allowed yet
 
             // OK, typeof a === 'object'
-            if (typeof b !== 'object') return false;
+            if (!_.isObject(b)) return false;
 
             // arrays
-            if (a instanceof Array) {
-                if (!(b instanceof Array)) return false;
+            if (_.isArray(a)) {
+                if (!_.isArray(b)) return false;
 
                 if (a.length !== b.length) return false;
 
@@ -141,11 +149,11 @@ class SelectorMatcher {
             /*
             var unmatched_b_keys = 0;
             for (var x in b)
-            unmatched_b_keys++;
+                unmatched_b_keys++;
             for (var x in a) {
-            if (!(x in b) || !match(a[x], b[x]))
-            return false;
-            unmatched_b_keys--;
+                if (!(x in b) || !match(a[x], b[x]))
+                    return false;
+                unmatched_b_keys--;
             }
             return unmatched_b_keys === 0;
             */
@@ -199,15 +207,16 @@ class SelectorMatcher {
     // this is the way mongo value comparisons usually work, like {x:
     // 4}, {x: [4]}, or {x: {$in: [1,2,3]}}.
     static matches_plus(value, func) {
-        if (_.isArray(value)) {
-            for (var i = 0; i < value.length; i++) {
-                if (func(value[i])) return true;
-            }
+        // if (_.isArray(value)) {
+        //     for (var i = 0; i < value.length; i++) {
+        //         if (func(value[i])) return true;
+        //     }
 
-            // fall through!
-        }
+        //     // fall through!
+        // }
 
-        return func(value);
+        // return func(value);
+        return SelectorMatcher.matches(value, func) || func(value);
     }
 	
 	// compare two values of unknown type according to BSON ordering
@@ -224,10 +233,13 @@ class SelectorMatcher {
 
         if (aType.order !== bType.order) return aType.order < bType.order ? -1 : 1;
 
+        // Same sort order, but distinct value type
         if (aType.number !== bType.number) {
-            // TODO need to implement this once we implement Symbol or
-            // integers, or once we implement both Date and Timestamp
-            throw Error("Missing type coercion logic in _cmp");
+            // Currently, Symbols can not be sortered in JS, so we are setting the Symbol as greater
+            if (_.isSymbol(a)) return 1;
+            if (_.isSymbol(b)) return -1;
+            
+            // TODO Integer, Date and Timestamp
         }
         
         if (_.isNumber(a)) return a - b;
@@ -335,6 +347,10 @@ class SelectorMatcher {
 
         // 13: javascript code
         // 14: symbol
+        if (_.isSymbol(a)) {
+            // Currently, Symbols can not be sortered in JS, so we are returning an equality
+            return 0;
+        }
         // 15: javascript code with scope
         // 16: 32-bit integer
         // 17: timestamp
@@ -375,7 +391,7 @@ var _testClause = function(clause, val) {
             case 'literal_object':
                 logger.debug('test Literal Object equality');
                 
-                return SelectorMatcher.equal(_value, JSON.stringify(clause.value));
+                return SelectorMatcher.equal(_value, clause.value);
             case 'operator_object':
                 logger.debug('test Operator Object equality');
                 
@@ -392,6 +408,27 @@ var _testClause = function(clause, val) {
                 logger.debug('test Boolean equality');
                 
                 return (_.isBoolean(_value) && _.isBoolean(clause.value) && (_value === clause.value));
+            case 'array':
+                logger.debug('test Boolean equality');
+                
+                // Check type
+                if (_.isArray(_value) && _.isArray(clause.value)) {
+                    // Check length
+                    if (_value.length === clause.value.length) {
+                        // Check items
+                        for (let i = 0; i < _value.length; i++) {
+                            if (clause.value.indexOf(_value[i]) === -1) {
+                                return false;
+                            }
+                        }
+                        
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
             case 'function':
                 logger.debug('test Function equality');
                 
@@ -430,17 +467,13 @@ var _testObjectClause = function(clause, doc, key) {
 var _testOperatorClause = function(clause, value) {
     logger.debug('Called _testOperatorClause');
     
-    if (_.isRegExp(value)) {
-        return _testOperatorClause(clause, {$regex: clause.value});
-    } else {
-        for (var key in clause.value) {
-            if (!_testOperatorConstraint(key, clause.value[key], clause.value, value, clause)) {
-                return false;
-            }
+    for (var key in clause.value) {
+        if (!_testOperatorConstraint(key, clause.value[key], clause.value, value, clause)) {
+            return false;
         }
-        
-        return true;
     }
+    
+    return true;
 };
 
 var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal, clause) {
@@ -497,7 +530,7 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             return !(_testClause(_clause, docVal));
             */
             // TODO implement
-            throw Error("$text unimplemented");
+            throw Error("$not unimplemented");
         // Element Query Operators
         case '$exists':
             logger.debug('testing operator $exists');
@@ -525,11 +558,11 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
         case '$regex':
             logger.debug('testing operator $regex');
             
-            var _opt = '';
+            var _opt = null;
             if (_.hasIn(clauseValue, '$options')) {
                 _opt = clauseValue['$options'];
                 
-                if (/^gim/.test(_opt)) {
+                if (/[xs]/.test(_opt)) {
                     //g, i, m, x, s
                     // TODO mongo uses PCRE and supports some additional flags: 'x' and
                     // 's'. javascript doesn't support them. so this is a divergence
@@ -542,10 +575,13 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             
             // Review flags -> g & m
             var regexp = operatorValue;
-            if (_.isRegExp(regexp)) {
-                regexp = new RegExp(regexp.source, _opt);
+            
+            if (_.isRegExp(regexp) && _.isNil(_opt)) {
+                return regexp.test(docVal);
+            } else if (_.isNil(_opt)) {
+                regexp = new RegExp(regexp);
             } else {
-                regexp = new RegExp(regexp, _opt);
+                regexp = new RegExp(regexp.source, _opt);
             }
             
             return regexp.test(docVal);
@@ -567,7 +603,7 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             
             return SelectorMatcher.all(operatorValue, docVal) > 0;
         case '$elemMatch':
-            logger.debug('testing operator $gt');
+            logger.debug('testing operator $elemMatch');
             
             // TODO implement
             throw Error("$elemMatch unimplemented");
@@ -592,8 +628,8 @@ var BsonTypes = {
 		{ alias: 'long', number: 18, order: 3, isType: _.isNumber },
 		{ alias: 'double', number: 1, order: 3, isType: _.isNumber },
 		{ alias: 'number', number: null, order: 3, isType: _.isNumber },
-		{ alias: 'symbol', number: 14, order: 4, isType: null },
 		{ alias: 'string', number: 2, order: 4, isType: _.isString },
+		{ alias: 'symbol', number: 14, order: 4, isType: _.isSymbol },
 		{ alias: 'object', number: 3, order: 5, isType: _.isPlainObject },
 		{ alias: 'array', number: 4, order: 6, isType: _.isArray },
 		{ alias: 'binData', number: 5, order: 7, isType: null },
@@ -611,19 +647,10 @@ var BsonTypes = {
 // 		function
 	],
 	
-	getByNumber: function(num) {
-		for (var i = 0; i < this._types.length; i++) {
-			if (this._types[i].number === num) return this._types[i];
-		}
-		
-		throw Error("Unaccepted BSON type number");
-	},
 	getByAlias: function(alias) {
 		for (var i = 0; i < this._types.length; i++) {
 			if (this._types[i].alias === alias) return this._types[i];
 		}
-		
-		throw Error("Unaccepted BSON type alias");
 	},
 	getByValue: function(val) {
 	    if (_.isNumber(val)) return this.getByAlias("double");
@@ -640,9 +667,9 @@ var BsonTypes = {
         
         if (_.isPlainObject(val)) return this.getByAlias("object");
         
-        throw Error("Unaccepted BSON type");
+        if (_.isSymbol(val)) return this.getByAlias("symbol");
         
-        // if (_.isFunction(val)) return this.getByAlias("double");
+        throw Error("Unaccepted BSON type");
 	}
 };
 
