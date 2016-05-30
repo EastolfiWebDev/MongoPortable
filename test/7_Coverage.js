@@ -5,6 +5,8 @@ var expect = require("chai").expect,
     BinaryParser = require("../lib/BinaryParser"),
     BinaryParserBuffer = require("../lib/BinaryParserBuffer"),
     ObjectId = require("../lib/ObjectId"),
+    Selector = require("../lib/Selector"),
+    SelectorMatcher = require("../lib/SelectorMatcher"),
     MongoPortable = require("../lib/MongoPortable");
 
 var db = null;
@@ -46,6 +48,130 @@ describe("To be implement", function() {
         
         it("should not allow MongoPortable#indexInformation", function() {
             expect(db.indexInformation).to.throw(Error);
+        });
+    });
+    
+    describe("Selector", function() {
+        it("should fail when matching on a function value", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField1: function() { return 1 + 2; }
+                }).test({ operatorField1: 3 });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when instantiating with an unexpected selector type", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    field: Symbol()
+                }).test({ field: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail matching with $elemMatch", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField1: {
+                        $elemMatch: true
+                    }
+                }).test({ operatorField1: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail matching with $where", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField1: {
+                        $where: true
+                    }
+                }).test({ operatorField1: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail matching with $text", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField1: {
+                        $text: true
+                    }
+                }).test({ operatorField1: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail matching with $type", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField1: {
+                        $type: true
+                    }
+                }).test({ operatorField1: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail matching with $not", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField1: {
+                        $not: true
+                    }
+                }).test({ operatorField1: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
         });
     });
 });
@@ -234,6 +360,32 @@ describe("Instances", function() {
             }
         });
     });
+    
+    describe("Selector", function() {
+        it("should fail when instantiating as a function (without 'new')", function() {
+            expect(Selector).to.throw(Error);
+        });
+        
+        it("should fail when instantiating with an invalid selector type", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({}, 'GROUP_SELECTOR');
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+    });
+    
+    describe("SelectorMatcher", function() {
+        it("should fail when instantiating as a function (without 'new')", function() {
+            expect(SelectorMatcher).to.throw(Error);
+        });
+    });
 });
 
 describe("Failures", function() {
@@ -248,6 +400,207 @@ describe("Failures", function() {
             var buffer = new BinaryParserBuffer(true, "A<ë");
 
             expect(buffer.readBits(0, 0)).to.be.equal(0);
+        });
+    });
+    
+    describe("Selector", function() {
+        it("should fail when matching unknown operators", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    $soo: {
+                        operatorField1: 5,
+                        operatorField2: 3
+                    }
+                });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                new Selector({
+                    operatorField1: {
+                        $fail: true
+                    }
+                }).test({ operatorField1: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when testing no documents", function() {
+            // var selector = new Selector({});
+            
+            // expect(selector.test).to.throw(Error);
+            
+            var thrown = false;
+            
+            try {
+                (new Selector({})).test();
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("it should fail when matching with $all and a non-array selector", function() {
+            var doc = {
+                operatorField: [1, 3, 5]
+            };
+            
+            expect(new Selector({
+                operatorField: {
+                    $all: "1, 3, 5"
+                }
+            }).test(doc)).to.be.false;
+        });
+        
+        it("it should fail when matching with an invalid RegExp", function() {
+            var thrown = false;
+            
+            try {
+                new Selector({
+                    operatorField: {
+                        $regex: /^[Noop]/,
+                        $options: 'gs'
+                    }
+                }).test({ operatorField: false });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when sorting with a bad specification", function() {
+            var thrown = false;
+            
+            try {
+                new Selector("asc desc", Selector.SORT_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when sorting with a number only", function() {
+            var thrown = false;
+            
+            try {
+                new Selector(-1, Selector.SORT_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when passing fields badly", function() {
+            var thrown = false;
+            
+            try {
+                new Selector("-1 1", Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                new Selector(false, Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when including and excluding fields", function() {
+            var thrown = false;
+            
+            try {
+                new Selector("field1 1, field2 -1", Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                new Selector("field1 true, field2 false", Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+    });
+    
+    describe("SelectorMatcher", function() {
+        it("should fail when not founding a BsonType", function() {
+            var thrown = false;
+            
+            try {
+                SelectorMatcher.cmp(function() {}, function() {});
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                new Selector("field1 true, field2 false", Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                new Selector("field1 true, field2 false", Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
         });
     });
 });

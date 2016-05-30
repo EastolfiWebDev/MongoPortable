@@ -22,11 +22,7 @@ class Selector {
     }
     
     test(doc) {
-        if (this.selector_compiled) {
-            return this.selector_compiled.test(doc);
-        } else {
-            logger.throw("Selector is not compiled");
-        }
+        return this.selector_compiled.test(doc);
     }
     
     compile(selector) {
@@ -37,22 +33,12 @@ class Selector {
 		} else {
 			logger.debug('selector -> not null');
 			
-			if (!selector || _.hasIn(selector, '_id')) {
+			if (!selector || (_.hasIn(selector, '_id') && !selector._id)) {
 				logger.debug('selector -> false value || { _id: false value }');
 				
-				if (!selector._id) {
-					logger.debug('selector -> false value');
-					
-					selector = {
-						_id: false
-					};
-				} else {
-					logger.debug('selector -> { _id: false value }');
-					
-					selector = {
-						_id: _.toString(selector)
-					};
-				}
+				selector = {
+					_id: false
+				};
 			}
 		}
 		
@@ -60,10 +46,10 @@ class Selector {
 			logger.debug('selector -> function(doc) { ... }');
 			
 			//_initFunction.call(matcher, selector);
-			this.clauses.push({
+			this.clauses = [{
 				kind: 'function',
 				value: selector
-			});
+			}];
 			
 			logger.debug('clauses created: ' + JSON.stringify(this.clauses));
 		} else if (_.isString(selector) || _.isNumber(selector)) {
@@ -175,12 +161,6 @@ class Selector {
             throw Error("Bad sort specification: ", JSON.stringify(spec));
         }
     
-        if (keys.length === 0) {
-            return function () {
-                return 0;
-            };
-        }
-        
         // return {keys: keys, asc: asc};
         return function(a, b) {
             var x = 0;
@@ -280,7 +260,7 @@ class Selector {
             // Join the array with spaces, and treat it as a spaced-separated string
             return this.compileFields(spec.join(' '));
         } else if (_.isPlainObject(spec)) {
-            // TODO Nested path -> .sort({ "field1.field12": "asc" })
+            // TODO Nested path -> .find({}, { "field1.field12": "asc" })
             var _spec = [];
             for (var key in spec) {
                 if (_.hasIn(spec, key)) {
@@ -291,7 +271,7 @@ class Selector {
             
             return this.compileFields(_spec);
         } else {
-            throw Error("Bad sort specification: ", JSON.stringify(spec));
+            throw Error("Bad fields specification: ", JSON.stringify(spec));
         }
         
         return projection;
@@ -299,7 +279,10 @@ class Selector {
 	
 	/* STATIC METHODS */
 	static isSelectorCompiled(selector) {
-		if (!_.isNil(selector) && selector instanceof SelectorMatcher) {
+		if (!_.isNil(selector) && (
+		    selector instanceof SelectorMatcher || (selector instanceof Selector && 
+		                                            selector.selector_compiled instanceof SelectorMatcher)
+	    )) {
 			return true;
 		} else {
 			return false;
@@ -338,13 +321,9 @@ var _buildDocumentSelector = function(key, value) {
     
     switch (key) {
         case '$or':
-            clause.key = 'or';
-            // The rest will be handled by '_operator_'
         case '$and':
-            clause.key = 'and';
-            // The rest will be handled by '_operator_'
         case '$nor':
-            clause.key = 'nor';
+            clause.key = key.replace(/\$/, '');
             // The rest will be handled by '_operator_'
         case '_operator_':
             // Generic handler for operators ($or, $and, $nor)
@@ -352,13 +331,7 @@ var _buildDocumentSelector = function(key, value) {
             clause.kind = 'operator';
             clause.type = 'array';
             
-            var clauses = [];
-            
-            _.forEach(value, function(_val) {
-                clauses.push(_buildSelector(_val));
-            });
-            
-            clause.value = clauses;
+            clause.value = _buildSelector(value);
             
             break;
         default:
@@ -385,8 +358,18 @@ var _buildKeypathSelector = function (keypath, value) {
         clause.type = 'null';
     } else if (_.isRegExp(value)) {
         logger.debug('clause of type RegExp');
-        
+
         clause.type = 'regexp';
+        
+        var source = value.toString().split('/');
+
+        clause.value = {
+            $regex: source[1]   // The first item splitted is an empty string
+        };
+        
+        if (source[2] != "") {
+            clause.value["$options"] = source[2];
+        }
     } else if (_.isArray(value)) {
         logger.debug('clause of type Array');
         
@@ -406,7 +389,7 @@ var _buildKeypathSelector = function (keypath, value) {
     } else if (_.isFunction(value)) {
         logger.debug('clause of type Function');
         
-        throw Error("Bad value type in query");
+        clause.type = 'function';
     } else if (_.isPlainObject(value)) {
         var literalObject = true;
         for (var key in value) {
@@ -425,6 +408,8 @@ var _buildKeypathSelector = function (keypath, value) {
             
             clause.type = 'operator_object';
         }
+    } else {
+        clause.type = '__invalid__';
     }
     
     var parts = keypath.split('.');
