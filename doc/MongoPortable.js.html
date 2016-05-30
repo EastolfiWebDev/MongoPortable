@@ -59,7 +59,11 @@ class MongoPortable extends EventEmitter {
         
         if (!(this instanceof MongoPortable)) return new MongoPortable(databaseName);
         
-        logger = Logger.getInstance(options.log);
+        if (options.log) {
+            logger = Logger.getInstance(options.log);
+        } else {
+            logger = Logger.instance;
+        }
     
         // Initializing variables
         this._collections = {};
