@@ -87,11 +87,7 @@ BinaryParser.decodeFloat = function (data, precisionBits, exponentBits) {
     	var _mod = 0;
     	
     	if (exponent || significand) {
-    		if (!exponent) {
-    			_mod = Math.pow( 2, -bias + 1 ) * significand;
-    		} else {
-    			_mod = Math.pow( 2, exponent - bias ) * ( 1 + significand );
-    		}
+    	    _mod = exponent ? Math.pow( 2, exponent - bias ) * ( 1 + significand ) : Math.pow( 2, -bias + 1 ) * significand;
     	}
     	
     	return ( 1 + signal * -2 ) * (_mod);
@@ -355,6 +351,8 @@ BinaryParser.hprint = function (s) {
     }
     
     process.stdout.write("\n\n");
+    
+    return number;
 };
 
 BinaryParser.ilprint = function (s) {
@@ -363,10 +361,18 @@ BinaryParser.ilprint = function (s) {
     for (var i = 0, len = s.length; i < len; i++) {
         if (s.charCodeAt(i) < 32) {
             number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
+            
+            process.stdout.write(number + " ");
         } else {
             number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
+            
+            process.stdout.write(number + " ");
         }
     }
+    
+    process.stdout.write("\n\n");
+    
+    return number;
 };
 
 BinaryParser.hlprint = function (s) {
@@ -375,10 +381,18 @@ BinaryParser.hlprint = function (s) {
     for (var i = 0, len = s.length; i < len; i++) {
         if (s.charCodeAt(i) < 32) {
             number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
+            
+            process.stdout.write(number + " ");
         } else {
             number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
+            
+            process.stdout.write(number + " ");
         }
     }
+    
+    process.stdout.write("\n\n");
+    
+    return number;
 };
 
 module.exports = BinaryParser;
