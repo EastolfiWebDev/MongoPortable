@@ -40,9 +40,6 @@ class EventEmitter {
         _.forEach(this._stores, function (fn) {
             if (_.isFunction(fn[command])) {
                 fn[command](args, cb);
-            } else if (_.isFunction(fn.all)) {
-                args.name = name;
-                fn.all(args, cb);
             }
         });
     }

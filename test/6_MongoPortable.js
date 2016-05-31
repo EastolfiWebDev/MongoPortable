@@ -347,6 +347,32 @@ describe("MongoPortable", function() {
             });
         });
         
+        describe("- Events", function() {
+            it("should be able fire custom events", function(done) {
+                db.addStore({
+                    test1: function(params) {
+                        expect(params).to.exist;
+                        expect(params).to.be.eql({});
+                    },
+                    
+                    test2: function(params, cb) {
+                        expect(params).to.exist;
+                        expect(params).to.be.eql({});
+                        
+                        cb(true);
+                    }
+                });
+                
+                db.emit('test1');
+                
+                db.emit('test2', function(success) {
+                    expect(success).to.be.true;
+                    
+                    done();
+                });
+            });
+        });
+        
         describe("- Drop", function() {
             it("should be able to drop the database", function(done) {
                 var dropped = db.dropDatabase();
