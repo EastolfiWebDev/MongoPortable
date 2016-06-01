@@ -1,6 +1,7 @@
 var expect = require("chai").expect,
     MongoPortable = require("../lib/MongoPortable"),
-    Cursor = require("../lib/Cursor");
+    Cursor = require("../lib/Cursor"),
+    Selector = require("../lib/Selector");
 
 var TEST_DDBB = "test_database";
 var TEST_COLL = "test_collection";
@@ -24,7 +25,33 @@ describe("Cursor", function() {
     describe("#Constructor", function() {
         it("should have the dependencies ready", function() {
             expect(Cursor).to.exist;
+        });
+        
+        it("should be able to create a new instance", function() {
+            var selector = new Selector({ field1: { $gte: 3 } });
             
+            expect(selector).to.exist;
+            
+            var c = new Cursor(null, null, selector, ["field1, field2"], { sort: { field2: -1 } });
+            
+            expect(c).to.exist;
+            
+            expect(c.db).to.not.exist;
+            expect(c.collection).to.not.exist;
+            expect(c.selector).to.exist;
+            expect(c.fields).to.exist;
+            expect(c.skipValue).to.be.equal(0);     // Default Value
+            expect(c.limitValue).to.be.equal(15);   // Default Value
+            expect(c.sortValue).to.exist;
+            
+            c.skip(2);
+            c.limit(3);
+            
+            expect(c.skipValue).to.be.equal(2);
+            expect(c.limitValue).to.be.equal(3);
+        });
+        
+        it("should be able to create a new instance from a compiled selector", function() {
             var c = new Cursor(null, null, { field1: { $gte: 3 } }, ["field1, field2"], { sort: { field2: -1 } });
             
             expect(c).to.exist;
@@ -33,8 +60,8 @@ describe("Cursor", function() {
             expect(c.collection).to.not.exist;
             expect(c.selector).to.exist;
             expect(c.fields).to.exist;
-            expect(c.skipValue).to.not.exist;
-            expect(c.limitValue).to.not.exist;
+            expect(c.skipValue).to.be.equal(0);     // Default Value
+            expect(c.limitValue).to.be.equal(15);   // Default Value
             expect(c.sortValue).to.exist;
             
             c.skip(2);
@@ -59,6 +86,19 @@ describe("Cursor", function() {
             expect(inserted.numberField).to.be.equal(TEST_DOC.numberField);
             expect(coll.docs).to.have.length(3);
             
+        });
+        
+        it("should be able to count the documents", function() {
+            var coll = db.collection(TEST_COLL);
+            
+            var cursor = coll.find({stringField: "yes"}, {numberField: 1});
+            
+            expect(cursor).to.exist;
+            
+            var count = cursor.count();
+            
+            expect(count).to.exist;
+            expect(count).to.be.equal(1);
         });
         
         it("should be able to get one document", function() {
@@ -159,7 +199,7 @@ describe("Cursor", function() {
             var cursor = coll.find();
             cursor.sort({ numberField: -1 });
             
-            var docs = cursor.fetchAll();
+            var docs = cursor.fetch();
             
             expect(docs).be.instanceof(Array);
             expect(docs).be.have.length(3);

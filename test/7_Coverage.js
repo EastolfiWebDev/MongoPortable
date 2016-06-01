@@ -8,7 +8,11 @@ var expect = require("chai").expect,
     ObjectId = require("../lib/ObjectId"),
     Selector = require("../lib/Selector"),
     SelectorMatcher = require("../lib/SelectorMatcher"),
+    Cursor = require("../lib/Cursor"),
+    Collection = require("../lib/Collection"),
     MongoPortable = require("../lib/MongoPortable");
+
+var TEST_COLL = "TEST_COLL";
 
 var db = null;
 
@@ -173,6 +177,92 @@ describe("To be implement", function() {
             } finally {
                 expect(thrown).to.be.true;
             }
+        });
+        
+        describe("Cursor", function() {
+            it("should not allow Cursor#batchSize", function() {
+                expect(new Cursor().batchSize).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#close", function() {
+                expect(new Cursor().close).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#comment", function() {
+                expect(new Cursor().comment).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#explain", function() {
+                expect(new Cursor().explain).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#hint", function() {
+                expect(new Cursor().hint).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#itcount", function() {
+                expect(new Cursor().itcount).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#maxScan", function() {
+                expect(new Cursor().maxScan).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#maxTimeMS", function() {
+                expect(new Cursor().maxTimeMS).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#max", function() {
+                expect(new Cursor().max).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#min", function() {
+                expect(new Cursor().min).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#noCursorTimeout", function() {
+                expect(new Cursor().noCursorTimeout).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#objsLeftInBatch", function() {
+                expect(new Cursor().objsLeftInBatch).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#pretty", function() {
+                expect(new Cursor().pretty).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#readConcern", function() {
+                expect(new Cursor().readConcern).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#readPref", function() {
+                expect(new Cursor().readPref).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#returnKey", function() {
+                expect(new Cursor().returnKey).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#showRecordId", function() {
+                expect(new Cursor().showRecordId).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#size", function() {
+                expect(new Cursor().size).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#snapshot", function() {
+                expect(new Cursor().snapshot).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#tailable", function() {
+                expect(new Cursor().tailable).to.throw(Error);
+            });
+            
+            it("should not allow Cursor#toArray", function() {
+                expect(new Cursor().toArray).to.throw(Error);
+            });
         });
     });
 });
@@ -573,6 +663,18 @@ describe("Instances", function() {
             expect(SelectorMatcher).to.throw(Error);
         });
     });
+    
+    describe("Cursor", function() {
+        it("should fail when instantiating as a function (without 'new')", function() {
+            expect(Cursor).to.throw(Error);
+        });
+    });
+    
+    describe("Collection", function() {
+        it("should fail when instantiating as a function (without 'new')", function() {
+            expect(Collection).to.throw(Error);
+        });
+    });
 });
 
 describe("Failures", function() {
@@ -787,6 +889,44 @@ describe("Failures", function() {
             thrown = false;
             try {
                 new Selector("field1 true, field2 false", Selector.FIELD_SELECTOR);
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+    });
+    
+    describe("Collection", function() {
+        before(function() {
+            db = new MongoPortable("TEST_FAILURES");
+            
+            var coll = db.collection(TEST_COLL);
+            
+            coll.insert({ stringField: "yes", numberField: 5 });
+        });
+        
+        it("should fail if passing a non function callback when finding", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).find({}, {}, null, 'myFunction');
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail if passing a non existing modifier when updating", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update({ stringField: "yes" }, { $fail: true });
             } catch(error) {
                 expect(error).to.be.instanceof(Error);
                 

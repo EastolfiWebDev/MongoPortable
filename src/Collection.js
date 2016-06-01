@@ -109,10 +109,7 @@ Collection.prototype.insert = function (doc, options, callback) {
         _doc._id = _.toString(_doc._id);
     }
 
-    // Remove every non-number character
-    _doc._id = (_doc._id || '').replace(/\D/g, '');
-
-    if (_.isNil(_doc._id) || !_doc._id.length) {
+    if (_.isNil(_doc._id) || (!_doc._id instanceof ObjectId && (!_.isString(_doc._id) || !_doc._id.length))) {
         _doc._id = new ObjectId();
     }
 
@@ -150,62 +147,25 @@ Collection.prototype.insert = function (doc, options, callback) {
  * @param {Number} [options.skip] - Number of documents to be skipped
  * @param {Number} [options.limit] - Max number of documents to display
  * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
- * @param {Boolean} [options.chain=false] - If set to "true" returns this instance, so it can be chained with other methods
- * @param {Boolean} [options.forceFetch=false] - If set to "true" returns the array of documents already fetched
+ * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns't"e;array of documents already fetched
  * 
  * @param {Function} [callback=null] - Callback function to be called at the end with the results
  * 
- * @returns {Array|Collection|Cursor} If "options.chain" set to "true" returns this instance, if "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
+ * @returns {Array|Cursor} If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
  */
 Collection.prototype.find = function (selection, fields, options, callback) {
-    if (_.isNil(selection)) selection = {};
+    let params = _ensureFindParams({
+        selection: selection, 
+        fields: fields,
+        options: options, 
+        callback: callback
+    });
     
-    if (_.isNil(fields)) fields = [];
+    selection = params.selection;
+    fields = params.fields;
+    options = params.options;
+    callback = params.callback;
     
-    if (_.isNil(options)) {
-        options = {
-            skip: 0,
-            limit: 15   // for no limit pass [options.limit = -1]
-        };
-    }
-    
-    if (_.isFunction(selection)) {
-        callback = selection;
-        selection = {};
-    }
-    
-    if (_.isFunction(fields)) {
-        callback = fields;
-        fields = [];
-    }
-    
-    if (_.isFunction(options)) {
-        callback = options;
-        options = {};
-    }
-    
-    // Check special case where we are using an objectId
-    if(selection instanceof ObjectId) {
-        selection = {
-            _id: selection
-        };
-    }
-    
-    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
-    
-    // Compile selection and fields
-    // var selectionCompiled = Selector._compileSelector(selection);
-    // var fieldsCompiled = Selector._compileFields(fields);   // TODO
-
-    if (options.fields) {
-        if (_.isNil(fields)) {
-            fields = options.fields;
-        } else {
-            // error
-        }
-        // fieldsCompiled = Selector._compileFields(options.fields);
-    }
-
     // callback for backward compatibility
     var cursor = new Cursor(this.db, this, selection, fields, options);
 
@@ -223,9 +183,7 @@ Collection.prototype.find = function (selection, fields, options, callback) {
     // Add [options.noFetchCallback = true]
     if (callback) callback(null, cursor.fetch());
 
-    if (options.chain) {
-        return this;
-    } else if (options.forceFetch) {
+    if (options.forceFetch) {
         return cursor.fetch();
     } else {
         return cursor;
@@ -250,55 +208,18 @@ Collection.prototype.find = function (selection, fields, options, callback) {
  * @returns {Object} Returns the first matching document of the collection
  */
 Collection.prototype.findOne = function (selection, fields, options, callback) {
-    if (_.isNil(selection)) selection = {};
+    let params = _ensureFindParams({
+        selection: selection, 
+        fields: fields,
+        options: options, 
+        callback: callback
+    });
     
-    if (_.isNil(fields)) fields = [];
+    selection = params.selection;
+    fields = params.fields;
+    options = params.options;
+    callback = params.callback;
     
-    if (_.isNil(options)) {
-        options = {
-            skip: 0,
-            limit: 15   // for no limit pass [options.limit = -1] -> manage with cursor
-        };
-    }
-    
-    if (_.isFunction(selection)) {
-        callback = selection;
-        selection = {};
-    }
-    
-    if (_.isFunction(fields)) {
-        callback = fields;
-        fields = [];
-    }
-    
-    if (_.isFunction(options)) {
-        callback = options;
-        options = {};
-    }
-    
-    // Check special case where we are using an objectId
-    if(selection instanceof ObjectId) {
-        selection = {
-            _id: selection
-        };
-    }
-    
-    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
-    
-    // Compile selection and fields
-    // var selectionCompiled = Selector._compileSelector(selection);
-    // var fieldsCompiled = Selector._compileFields(fields);   // TODO
-
-    if (options.fields) {   // FIXME Repeated code
-        if (_.isNil(fields)) {
-            fields = options.fields;
-        } else {
-            // error
-        }
-        // Add warning if fields already passed
-        // fieldsCompiled = Selector._compileFields(options.fields);
-    }
-
     var cursor = new Cursor(this.db, this, selection, fields, options);
 
     // this.emit('find', selector, cursor, o);
@@ -360,7 +281,7 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
 Collection.prototype.update = function (selection, update, options, callback) {
     if (_.isNil(selection)) selection = {};
     
-    if (_.isNil(update)) update = [];
+    if (_.isNil(update)) logger.throw("You must specify the update operation");
     
     if (_.isNil(options)) {
         options = {
@@ -369,15 +290,9 @@ Collection.prototype.update = function (selection, update, options, callback) {
         };
     }
     
-    if (_.isFunction(selection)) {
-        callback = selection;
-        selection = {};
-    }
+    if (_.isFunction(selection)) logger.throw("You must specify the update operation");
     
-    if (_.isFunction(update)) {
-        callback = update;
-        update = [];
-    }
+    if (_.isFunction(update)) logger.throw("You must specify the update operation");
     
     if (_.isFunction(options)) {
         callback = options;
@@ -420,7 +335,7 @@ Collection.prototype.update = function (selection, update, options, callback) {
                     count: 0
                 },
                 inserted: {
-                    documents: inserted,
+                    documents: [inserted],
                     count: 1
                 }
             };
@@ -472,21 +387,20 @@ Collection.prototype.update = function (selection, update, options, callback) {
             
             var _docUpdate = null;
             
-            // Override the document except for the "_id"
             if (override) {
-                // Must ignore fields starting with '$', '.'...
-                _docUpdate = _.cloneDeep(update);
+                // Overrides the document except for the "_id"
+                _docUpdate = {
+                    _id: doc._id
+                };
                 
+                // Must ignore fields starting with '$', '.'...
                 for (let key in update) {
                     if (key.substr(0, 1) === '$' || /\./g.test(key)) {
                         logger.warn(`The field ${key} can not begin with '$' or contain '.'`);
                     } else {
-                        delete _docUpdate[key];
+                        _docUpdate[key] = update[key];
                     }
                 }
-                
-                // Do not override the "_id"
-                _docUpdate._id = doc._id;
             } else {
                 _docUpdate = _.cloneDeep(doc);
                 
@@ -1108,4 +1022,59 @@ Object.size = function(obj) {
     }
     
     return size;
+};
+
+var _ensureFindParams = function(params) {
+    // selection, fields, options, callback
+    if (_.isNil(params.selection)) params.selection = {};
+
+    if (_.isNil(params.selection)) params.selection = {};
+
+    if (_.isNil(params.fields)) params.fields = [];
+
+    if (_.isNil(params.options)) {
+        params.options = {
+            skip: 0,
+            limit: 15 // for no limit pass [options.limit = -1]
+        };
+    }
+
+    // callback as first parameter
+    if (_.isFunction(params.selection)) {
+        params.callback = params.selection;
+        params.selection = {};
+    }
+
+    // callback as second parameter
+    if (_.isFunction(params.fields)) {
+        params.callback = params.fields;
+        params.fields = [];
+    }
+
+    // callback as third parameter
+    if (_.isFunction(params.options)) {
+        params.callback = params.options;
+        params.options = {};
+    }
+
+    // Check special case where we are using an objectId
+    if (params.selection instanceof ObjectId) {
+        params.selection = {
+            _id: params.selection
+        };
+    }
+
+    if (!_.isNil(params.callback) && !_.isFunction(params.callback)) {
+        logger.throw("callback must be a function");
+    }
+
+    if (params.options.fields) {
+        if (_.isNil(params.fields) || params.fields.length === 0) {
+            params.fields = params.options.fields;
+        } else {
+            logger.warn("Fields already present. Ignoring 'options.fields'.");
+        }
+    }
+    
+    return params;
 };
