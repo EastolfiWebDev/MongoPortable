@@ -203,6 +203,8 @@ class Selector {
     compileFields(spec) {
         var projection = {};
         
+        if (_.isNil(spec)) return projection;
+        
         if (_.isString(spec)) {
             spec = spec.replace(/( )+/ig, ' ').trim();
             
@@ -224,11 +226,13 @@ class Selector {
                         
                         if (next === '-1' || next === '1') {
                             if (next === '-1') {
-                                if (field === '_id') {
-                                    projection[field] = -1;
-                                } else {
-                                    throw new Error("A projection cannot contain both include and exclude specifications");
+                                for (let _key in projection) {
+                                    if (field !== '_id' && projection[_key] === 1) {
+                                        throw new Error("A projection cannot contain both include and exclude specifications");
+                                    }
                                 }
+                                
+                                projection[field] = -1;
                             } else {
                                 projection[field] = 1;
                             }
