@@ -492,13 +492,23 @@ var _applyModifier = function(_docUpdate, key, val) {
  * 
  * @returns {Object} Object with the deleted documents
  */
-Collection.prototype.remove = function (selection, callback) {
+Collection.prototype.remove = function (selection, options, callback) {
     if (_.isNil(selection)) selection = {};
     
     if (_.isFunction(selection)) {
         callback = selection;
         selection = {};
     }
+    
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    }
+    
+    if (_.isNil(options)) options = { justOne: false };
+    
+    // If we are not passing a selection and we are not removing just one, is the same as a drop
+    if (Object.size(selection) === 0 && !options.justOne) return this.drop(options, callback);
     
     // Check special case where we are using an objectId
     if(selection instanceof ObjectId) {
@@ -536,17 +546,80 @@ Collection.prototype.remove = function (selection, callback) {
 };
 
 /**
-* @ignore
-*/
-Collection.prototype.save = function(obj, fn) {
-    var self = this;
+ * Drops a collection
+ * 
+ * @method Collection#drop
+ * 
+ * @param {Object} [options] - Additional options
+ * 
+ * @param {Number} [options.dropIndexes=false] - True if we want to drop the indexes too
+ * @param {Object} [options.writeConcern=null] - An object expressing the write concern
+ * 
+ * @param {Function} [callback=null] - Callback function to be called at the end with the results
+ * 
+ * @returns {Object} True when the collection is dropped
+ */
+Collection.prototype.drop = function(options, callback) {
+    if (_.isNil(options)) options = {};
+    
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    }
+    
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
+    
+    this.doc_indexes = {};
+    this.docs = [];
+    
+    if (options.dropIndexes) {} // TODO
+    
+    this.emit(
+        'dropCollection',
+        {
+            collection: this,
+            indexes: !!options.dropIndexes
+        }
+    );
+    
+    if (callback) callback(null, true);
+    
+    return true;
+};
 
-    var callback = fn || function(){};
+/**
+ * Insert or update a document. If the document has an "_id" is an update (with upsert), if not is an insert.
+ * 
+ * @method Collection#save
+ * 
+ * @param {Object} doc - Document to be inserted/updated
+ * 
+ * @param {Number} [options.dropIndexes=false] - True if we want to drop the indexes too
+ * @param {Object} [options.writeConcern=null] - An object expressing the write concern
+ * 
+ * @param {Function} [callback=null] - Callback function to be called at the end with the results
+ * 
+ * @returns {Object} True when the collection is dropped
+ */
+Collection.prototype.save = function(doc, options, callback) {
+    if (_.isNil(doc) || _.isFunction(doc)) logger.throw("You must pass a document");
+    
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    }
 
-    if (self.docs[obj._id]) {
-        self.update({_id: obj._id}, callback);
+    if (_.hasIn(doc, '_id')) {
+        options.upsert = true;
+        
+        return this.update(
+            { _id: doc._id },
+            doc,
+            options,
+            callback
+        );
     } else {
-        self.insert(obj,callback);
+        return this.insert(doc, options, callback);
     }
 };
 
@@ -564,65 +637,79 @@ Collection.prototype.ensureIndex = function() {
 /**
 * @ignore
 */
-Collection.prototype.backup = function (backupID, fn) {
-    if ('function' === typeof backupID) {
-        fn = backupID;
-        backupID = new ObjectId();
+Collection.prototype.backup = function (backupID, callback) {
+    if (_.isFunction(backupID)) {
+        callback = backupID;
+        backupID = new ObjectId().toString();
     }
+    
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
 
-    var callback = fn||function(){};
-    var snapID = backupID;
-
-    this.snapshots[snapID] = this.docs;
+    this.snapshots[backupID] = _.cloneDeep(this.docs);
     this.emit(
         'snapshot',
         {
-            _id : this.docs,
-            data : this.docs 
+            collection: this,
+            backupID: backupID,
+            documents: this.snapshots[backupID] 
         }
     );
 
-    callback(null, this.snapshots[snapID]);
+    var result = {
+        backupID: backupID,
+        documents: this.snapshots[backupID]
+    };
+    
+    if (callback) callback(null, result);
 
-    return this;
+    return result;
 };
 
 // Lists available Backups
 /**
 * @ignore
 */
-Collection.prototype.backups = function (fn) {
-    var callback = fn || function(){};
-    var keys = [];
-    var backups = this.snapshots;
+Collection.prototype.backups = function (callback) {
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
+    
+    var backups = [];
 
-    for (var id in backups) {
-        keys.push({id: id, data: backups[id]});
+    for (let id in this.snapshots) {
+        backups.push({id: id, documents: this.snapshots[id]});
     }
 
-    callback(keys);
+    if (callback) callback(null, backups);
 
-    return this;
+    return backups;
 };
 
 // Lists available Backups
 /**
 * @ignore
 */
-Collection.prototype.removeBackup = function (backupID, fn) {
-    if (!backupID || 'function' === typeof backupID) {
-        fn = backupID;
-        this.snapshots = {};
+Collection.prototype.removeBackup = function (backupID, callback) {
+    if (_.isFunction(backupID)) {
+        callback = backupID;
+        backupID = null;
+    }
+    
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
+    
+    let result = false;
+    
+    if (backupID) {
+        delete this.snapshots[_.toString(backupID)];
+        
+        result = backupID;
     } else {
-        var id = String(backupID);
-        delete this.snapshots[id];
+        this.snapshots = {};
+        
+        result = true;
     }
+    
+    if (callback) callback(null, result);
 
-    var callback = fn || function(){};
-
-    callback(null);
-
-    return this;
+    return result;
 };
 
 
@@ -630,24 +717,48 @@ Collection.prototype.removeBackup = function (backupID, fn) {
 /**
 * @ignore
 */
-Collection.prototype.restore = function ( backupID, fn ) {
-    var callback = fn || function(){};
-    var snapshotCount = Object.size(this.snapshots);
-
-    if (snapshotCount===0) {
-        logger.throw("No current snapshot");
+Collection.prototype.restore = function (backupID, callback) {
+    if (_.isFunction(backupID)) {
+        callback = backupID;
+        backupID = null;
     }
+    
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
+    
+    var snapshotCount = Object.size(this.snapshots);
+    var backupData = null;
 
-    var backupData = this.snapshots[backupID];
-
+    if (snapshotCount === 0) {
+        logger.throw("There is no snapshots");
+    } else {
+        if (!backupID) {
+            if (snapshotCount === 1) {
+                logger.info("No backupID passed. Restoring the only snapshot");
+                
+                // Retrieve the only snapshot
+                for (let key in this.snapshots) backupID = key;
+            } else {
+                logger.throw("The are several snapshots. Please specify one backupID");
+            }
+        }
+    }
+    
+    backupData = this.snapshots[backupID];
+            
     if (!backupData) {
-        logger.throw("Unknown Backup ID "+backupID);
+        logger.throw(`Unknown Backup ID: ${backupID}`);
     }
 
     this.docs = backupData;
-    this.emit('restore');
+    this.emit(
+        'restore',
+        {
+            collection: this,
+            backupID: backupID
+        }
+    );
 
-    callback(null);
+    if (callback) callback(null);
 
     return this;
 };
@@ -971,10 +1082,14 @@ Collection.checkCollectionName = function(collectionName) {
         logger.throw("collection names cannot be empty");
     }
 
-    if (collectionName.indexOf('$') != -1 && collectionName.match(/((^\$cmd)|(oplog\.\$main))/) === null) {
+    if (collectionName.indexOf('$') !== -1 && collectionName.match(/((^\$cmd)|(oplog\.\$main))/) === null) {
         logger.throw("collection names must not contain '$'");
     }
 
+    if (collectionName.match(/^system\./) !== null) {
+        logger.throw("collection names must not start with 'system.' (reserved for internal use)");
+    }
+    
     if (collectionName.match(/^\.|\.$/) !== null) {
         logger.throw("collection names must not start or end with '.'");
     }

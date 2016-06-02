@@ -580,8 +580,10 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
                 return regexp.test(docVal);
             } else if (_.isNil(_opt)) {
                 regexp = new RegExp(regexp);
-            } else {
+            } else if (_.isRegExp(regexp)) {
                 regexp = new RegExp(regexp.source, _opt);
+            } else {
+                regexp = new RegExp(regexp, _opt);
             }
             
             return regexp.test(docVal);

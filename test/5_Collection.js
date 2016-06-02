@@ -85,6 +85,43 @@ describe("Collection", function() {
                 
                 expect(coll.docs).to.have.length(2);
             });
+            
+            it("should be able to save a document", function(done) {
+                var coll = db.collection(TEST_COLL);
+                
+                // new document
+                var inserted = coll.save({
+                    stringField: "save",
+                    numberField: 3
+                });
+                
+                expect(inserted).to.exist;
+                
+                expect(inserted._id).to.exist;
+                expect(inserted.stringField).to.be.equal("save");
+                expect(inserted.numberField).to.be.equal(3);
+                
+                // update / upsert
+                
+                coll.save({ _id: 12345, stringField: "save" }, function(error, updatedInfo) {
+                    expect(updatedInfo).to.exist;
+                    expect(updatedInfo.updated).to.exist;
+                    expect(updatedInfo.inserted).to.exist;
+                    
+                    expect(updatedInfo.updated.documents).to.not.exist;
+                    expect(updatedInfo.updated.count).to.be.equal(0);
+                    
+                    expect(updatedInfo.inserted.documents).to.be.instanceof(Array);
+                    expect(updatedInfo.inserted.count).to.be.equal(1);
+                    
+                    var inserted = updatedInfo.inserted.documents[0];
+                    
+                    expect(inserted._id).to.be.equal("12345");
+                    expect(inserted.stringField).to.be.equal("save");
+                    
+                    done();
+                });
+            });
         });
         
         describe(" - Read", function() {
@@ -168,7 +205,7 @@ describe("Collection", function() {
                     expect(error).to.not.exist;
                     expect(docs).to.exist;
                     
-                    expect(docs).to.have.length(1);
+                    expect(docs).to.have.length(3);
                     
                     var doc = docs[0];
                     
@@ -228,6 +265,7 @@ describe("Collection", function() {
                 });
             });
         });
+        
         describe(" - Update", function() {
             it("should be able to update a document", function() {
                 var coll = db.collection(TEST_COLL);
@@ -493,8 +531,9 @@ describe("Collection", function() {
                 expect(doc.numberField).to.be.equal(3);
             });
         });
+        
         describe(" - Delete", function() {
-            it("should be able to insert a document", function() {
+            it("should be able to remove a document", function(done) {
                 var coll = db.collection(TEST_COLL);
                 
                 var removed = coll.remove({stringField: "yes"});
@@ -508,6 +547,168 @@ describe("Collection", function() {
                 var doc = coll.findOne({stringField: "yes"});
                 
                 expect(doc).to.not.exist;
+                
+                // Remove by _id
+                coll.remove(TEST_DOC._id, function(error, removed) {
+                    expect(error).to.not.exist;
+                    expect(removed).to.exist;
+                    
+                    expect(removed).to.be.instanceof(Array);
+                    
+                    expect(removed).to.be.have.length(0);
+                    
+                    done();
+                });
+            });
+            
+            it("should be able to remove all documents", function(done) {
+                var coll = db.collection(TEST_COLL);
+                
+                coll.remove(function (error, removed) {
+                    expect(error).to.not.exist;
+                    expect(removed).to.exist;
+                    
+                    expect(removed).to.be.true;
+                    
+                    var doc = coll.findOne({stringField: "yes"});
+                    
+                    expect(doc).to.not.exist;
+                    
+                    done();
+                });
+            });
+            
+            it("should be able to drop the collection", function(done) {
+                var coll = db.collection(TEST_COLL);
+                
+                coll.drop(function (error, removed) {
+                    expect(error).to.not.exist;
+                    expect(removed).to.exist;
+                    
+                    expect(removed).to.be.true;
+                    
+                    var doc = coll.findOne({stringField: "yes"});
+                    
+                    expect(doc).to.not.exist;
+                    
+                    done();
+                });
+            });
+        });
+    });
+    
+    describe("#Backups", function() {
+        var ID = null;
+        
+        before(function() {
+            if (db) db.dropDatabase();
+            
+            db = new MongoPortable("BACKUPS");
+            
+            db.collection("pruebas")
+                .insert({ stringField: "first" }, { chain: true })
+                .insert({ stringField: "second" }, { chain: true })
+                .insert({ stringField: "third" }, { chain: true })
+                .insert({ stringField: "fourth" });
+        });
+        
+        describe("#Backups", function() {
+            it("should create a new backup", function(done) {
+                var coll = db.collection("pruebas");
+                
+                var snapshot = coll.backup("FIRST");
+                
+                expect(snapshot).to.exist;
+                
+                expect(snapshot.backupID).to.exist;
+                expect(snapshot.documents).to.exist;
+                
+                expect(snapshot.backupID).to.be.equal("FIRST");
+                expect(snapshot.documents).to.be.instanceof(Array);
+                expect(snapshot.documents).to.have.length(4);
+                
+                coll.insert({ stringField: "new" });
+                
+                coll.backup(function(error, snapshot) {
+                    expect(snapshot.backupID).to.exist;
+                    expect(snapshot.documents).to.exist;
+                    
+                    expect(snapshot.documents).to.be.instanceof(Array);
+                    expect(snapshot.documents).to.have.length(5);
+                    
+                    ID = snapshot.backupID;
+                    
+                    done();
+                });
+            });
+            
+            it("should retrieve all backups", function() {
+                var coll = db.collection("pruebas");
+                
+                var snapshots = coll.backups();
+                
+                expect(snapshots).to.exist;
+                
+                expect(snapshots).to.be.instanceof(Array);
+                expect(snapshots).to.have.length(2);
+                
+                expect(snapshots[0].id).to.be.equal("FIRST");
+                expect(snapshots[0].documents).to.be.instanceof(Array);
+                expect(snapshots[0].documents).to.have.length(4);
+                
+                expect(snapshots[1].documents).to.be.instanceof(Array);
+                expect(snapshots[1].documents).to.have.length(5);
+            });
+            
+            it("should restore a backup", function() {
+                var coll = db.collection("pruebas");
+                
+                expect(coll.find().count()).to.be.equal(5);
+                
+                // By backupID
+                var cursor = coll.restore("FIRST").find();
+                
+                expect(cursor.count()).to.be.equal(4);
+            });
+            
+            it("should remove a backup", function() {
+                var coll = db.collection("pruebas");
+                
+                var removed = coll.removeBackup(ID);
+                
+                expect(removed).to.exist;
+                expect(removed).to.be.equal(ID);
+                
+                var snapshots = coll.backups();
+                
+                expect(snapshots).to.exist;
+                
+                expect(snapshots).to.be.instanceof(Array);
+                expect(snapshots).to.have.length(1);
+            });
+            
+            it("should restore the only backup", function() {
+                var coll = db.collection("pruebas");
+                
+                expect(coll.find().count()).to.be.equal(4);
+                
+                // By backupID
+                var cursor = coll.restore(function(error) {
+                    expect(error).to.not.exist;
+                }).find();
+                
+                expect(cursor.count()).to.be.equal(4);
+            });
+            
+            it("should drop all the backups", function(done) {
+                var coll = db.collection("pruebas");
+                
+                coll.removeBackup(function(error, removed) {
+                    expect(error).to.not.exist;
+                    expect(removed).to.be.true;
+                    
+                    done();
+                });
             });
         });
     });

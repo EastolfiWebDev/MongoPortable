@@ -477,7 +477,7 @@ describe("Selector", function() {
                         }).test(doc)).to.be.true;
                         
                         expect(new Selector({
-                            operatorField1: /^[yes]/m
+                            operatorField3: /^[yes]/m
                         }).test(doc)).to.be.true;
                     });
                     

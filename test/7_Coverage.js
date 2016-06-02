@@ -264,6 +264,12 @@ describe("To be implement", function() {
                 expect(new Cursor().toArray).to.throw(Error);
             });
         });
+        
+        describe("Collection", function() {
+            it("should not allow Collection#ensureIndex", function() {
+                expect(new Collection(new MongoPortable("DB"), "NEW").ensureIndex).to.throw(Error);
+            });
+        });
     });
 });
 
@@ -927,6 +933,73 @@ describe("Failures", function() {
             
             try {
                 db.collection(TEST_COLL).update({ stringField: "yes" }, { $fail: true });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail if passing a non function callback when finding", function() {
+            // Only string
+            expect(Collection.checkCollectionName.bind(null, 999)).to.throw(Error);
+            
+            // Not empty or having '..'
+            expect(Collection.checkCollectionName.bind(null)).to.throw(Error);
+            expect(Collection.checkCollectionName.bind(null, "../test")).to.throw(Error);
+            
+            // Not having '$' (except for '[...]oplog.$main[...]' and '$cmd[...]')
+            expect(Collection.checkCollectionName.bind(null, "new$coll")).to.throw(Error);
+            expect(Collection.checkCollectionName.bind(null, "$cmd_coll")).to.not.throw(Error);
+            expect(Collection.checkCollectionName.bind(null, "my_oplog.$main_coll")).to.not.throw(Error);
+            
+            // Not starting with 'ststem.'
+            expect(Collection.checkCollectionName.bind(null, "system.mycoll")).to.throw(Error);
+            
+            // Not starting or ending with '.'
+            expect(Collection.checkCollectionName.bind(null, '.mycoll')).to.throw(Error);
+            expect(Collection.checkCollectionName.bind(null, "yourcoll.")).to.throw(Error);
+        });
+        
+        it("should fail if restoring a backup without having one", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).restore(function () {} );
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail if restoring a non existing backup", function() {
+            var thrown = false;
+            
+            db.collection(TEST_COLL).backup("SAVED");
+            
+            try {
+                db.collection(TEST_COLL).restore("UNSAVED");
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail if restoring a backup without knowing wich", function() {
+            var thrown = false;
+            
+            db.collection(TEST_COLL).backup("SAVED2");
+            
+            try {
+                db.collection(TEST_COLL).restore();
             } catch(error) {
                 expect(error).to.be.instanceof(Error);
                 
