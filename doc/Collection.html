@@ -339,7 +339,325 @@
 
     
 
-    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">(selection<span class="signature-attributes">opt</span>, fields<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array|<a href="Collection.html">Collection</a>|<a href="Cursor.html">Cursor</a>}</span></h4>
+    <h4 class="name" id="drop"><span class="type-signature"></span>drop<span class="signature">(options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Object.html">Object</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Drops a collection
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Additional options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dropIndexes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">True if we want to drop the indexes too</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>writeConcern</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">An object expressing the write concern</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Callback function to be called at the end with the results</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line548">line 548</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True when the collection is dropped
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">(selection<span class="signature-attributes">opt</span>, fields<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array|<a href="Cursor.html">Cursor</a>}</span></h4>
 
     
 
@@ -653,45 +971,6 @@
 
         <tr>
             
-                <td class="name"><code>chain</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last">If set to "true" returns this instance, so it can be chained with other methods</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>forceFetch</code></td>
             
 
@@ -724,7 +1003,7 @@
                 </td>
             
 
-            <td class="description last">If set to "true" returns the array of documents already fetched</td>
+            <td class="description last">If set to'"true" returns't"e;array of documents already fetched</td>
         </tr>
 
     
@@ -811,7 +1090,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line141">line 141</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -838,7 +1117,7 @@
 
         
 <div class="param-desc">
-    If "options.chain" set to "true" returns this instance, if "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
+    If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
 </div>
 
 
@@ -850,9 +1129,6 @@
     <dd>
         
 <span class="param-type">Array</span>
-|
-
-<span class="param-type"><a href="Collection.html">Collection</a></span>
 |
 
 <span class="param-type"><a href="Cursor.html">Cursor</a></span>
@@ -1250,7 +1526,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line235">line 235</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -1930,7 +2206,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line566">line 566</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line480">line 480</a>
     </li></ul></dd>
     
 
@@ -1958,6 +2234,292 @@
         
 <div class="param-desc">
     Object with the deleted documents
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="save"><span class="type-signature"></span>save<span class="signature">(doc, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Object.html">Object</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Insert or update a document. If the document has an "_id" is an update (with upsert), if not is an insert.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>doc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Document to be inserted/updated</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.dropIndexes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">True if we want to drop the indexes too</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.writeConcern</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">An object expressing the write concern</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Callback function to be called at the end with the results</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line590">line 590</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True when the collection is dropped
 </div>
 
 
@@ -2459,7 +3021,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line330">line 330</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line251">line 251</a>
     </li></ul></dd>
     
 

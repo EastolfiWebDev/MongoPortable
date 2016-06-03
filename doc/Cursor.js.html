@@ -59,33 +59,37 @@ var logger = null;
  * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
  * 
  */
-function Cursor(db, collection, selection, fields, options) {
-    this.db = db;
-    this.collection = collection;
-    this.selector = selection;
-    this.skipValue = options.skip;
-    this.limitValue = options.limit;
-    this.sortValue = options.sort || null;
-    this.sorted = false;
+class Cursor {
+    constructor(db, collection, selection, fields, options = {}) {
+        this.db = db;
+        this.collection = collection;
+        this.selector = selection;
+        this.skipValue = options.skip || 0;
+        this.limitValue = options.limit || 15;
+        this.sortValue = options.sort || null;
+        this.sorted = false;
+        
+        logger = Logger.instance;
     
-    logger = Logger.instance;
-
-    if (Selector.isSelectorCompiled(this.selector)) {
-        this.selector_compiled = this.selector;
-    } else {
-        this.selector_compiled = new Selector(this.selector, Selector.MATCH_SELECTOR);
+        if (Selector.isSelectorCompiled(this.selector)) {
+            this.selector_compiled = this.selector;
+        } else {
+            this.selector_compiled = new Selector(this.selector, Selector.MATCH_SELECTOR);
+        }
+        
+        for (let i = 0; i &lt; this.selector_compiled.clauses.length; i++) {
+            if (this.selector_compiled.clauses[i].key === '_id') {
+                this.selector_id = this.selector_compiled.clauses[i].value;
+            }
+        }
+        
+        this.fields = new Selector(fields, Selector.FIELD_SELECTOR);
+        
+        this.sort_compiled = new Selector(this.sortValue, Selector.SORT_SELECTOR);
+    
+        this.db_objects = null;
+        this.cursor_pos = 0;
     }
-    
-    if (this.selector_compiled._id) {
-        this.selector_id = this.selector_compiled._id;
-    }
-    
-    this.fields = new Selector(fields, Selector.FIELD_SELECTOR);
-    
-    this.sort_compiled = new Selector(this.sortValue, Selector.SORT_SELECTOR);
-
-    this.db_objects = null;
-    this.cursor_pos = 0;
 }
 
 /**
@@ -169,7 +173,7 @@ Cursor.prototype.fetch = function() {
  * @returns {Array} All the documents contained in the cursor
  */
 Cursor.prototype.fetchAll = function() {
-    return _getDocuments(this, false);
+    return _getDocuments(this, false) || [];
 };
 
 /**
@@ -183,6 +187,57 @@ Cursor.prototype.fetchOne = function() {
     return _getDocuments(this, true);
 };
 
+var _mapFields = function(doc, fields) {
+    var _doc = _.cloneDeep(doc);
+
+    if (!_.isNil(fields) &amp;&amp; _.isPlainObject(fields) &amp;&amp; !_.isEqual(fields, {})) {
+        var showId = true,
+            showing = null;
+
+        // Whether if we showing the _id field
+        if (_.hasIn(fields, '_id') &amp;&amp; fields._id === -1) {
+            showId = false;
+        }
+
+        var tmp = null;
+
+        for (var field in fields) {
+            // Whether if we are showing or hidding fields
+            if (field !== '_id' &amp;&amp; showing === null) {
+                showing = fields[field] === 1 ? true : false;
+            }
+
+            if (showing != null) {
+                if (tmp === null) {
+                    if (showing) {
+                        tmp = {};
+                    } else {
+                        tmp = _.cloneDeep(doc);
+                    }
+                }
+        
+                // Add or remove the field
+                if (showing) {
+                    tmp[field] = doc[field];
+                } else {
+                    delete tmp[field];
+                }
+            }
+        }
+
+        // Add or remove the _id field
+        if (showId) {
+            tmp._id = doc._id;
+        } else {
+            delete tmp._id;
+        }
+
+        _doc = tmp;
+    }
+
+    return _doc;
+};
+
 /**
  * Retrieves one or all the documents in the cursor
  * 
@@ -194,15 +249,19 @@ Cursor.prototype.fetchOne = function() {
  * 
  * @returns {Array|Object} If [justOne=true] returns the next document, otherwise returns all the documents
  */
-var _getDocuments = function(cursor, justOne) {
-    if (cursor.selector_id &amp;&amp; _.hasIn(cursor.collection.doc_indexes, cursor.selector_id)) {
-        let idx = cursor.collection.doc_indexes[_.toString(cursor.selector_id)];
-        
-        return cursor.collection.docs[idx];
-    }
-    
-    if (_.isNil(justOne)) {
-        justOne = false;
+var _getDocuments = function(cursor, justOne = false) {
+    if (cursor.selector_id) {
+        if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selector_id))) {
+            let idx = cursor.collection.doc_indexes[_.toString(cursor.selector_id)];
+            
+            return _mapFields(cursor.collection.docs[idx], cursor.fields);
+        } else {
+            if (justOne) {
+                return null;
+            } else {
+                return [];
+            }
+        }
     }
     
     // TODO add warning when sort/skip/limit and fetching one
@@ -215,21 +274,7 @@ var _getDocuments = function(cursor, justOne) {
         if (cursor.selector_compiled.test(_doc)) {
             if (_.isNil(cursor.db_objects)) cursor.db_objects = [];
             
-            if (!_.isNil(cursor.fields) &amp;&amp; _.isPlainObject(cursor.fields) &amp;&amp; !_.isEqual(cursor.fields, {})) {
-                let tmp = {};
-                
-                if (!_.hasIn(cursor.fields, '_id') || cursor.fields._id !== -1) {
-                    tmp._id = _doc._id;
-                }
-                
-                for (let field in cursor.fields) {
-                    if (cursor.fields[field] !== -1) {
-                        tmp[field] = _doc[field];
-                    }
-                }
-                
-                _doc = tmp;
-            }
+            _doc = _mapFields(_doc, cursor.fields);
             
             cursor.db_objects.push(_doc);
             
@@ -239,6 +284,8 @@ var _getDocuments = function(cursor, justOne) {
             }
         }
     }
+    
+    if (_.isNil(cursor.db_objects)) return null;
     
     if (!cursor.sorted &amp;&amp; hasSorting(cursor)) cursor.sort();
     
@@ -282,15 +329,11 @@ Cursor.prototype.sort = function(spec) {
             this.sort_compiled = _sort;
         } else {
             // If no spec, do sort
-            if (_.isNil(this.db_objects) || !_.isArray(this.db_objects)) {
-                throw new Error("You need to fetch the data in order to sort it");
-            } else {
+            if (!_.isNil(this.db_objects) &amp;&amp; _.isArray(this.db_objects)) {
                 this.db_objects = this.db_objects.sort(_sort);
                 this.sorted = true;
             }
         }
-    } else {
-        throw new Error("You need to specify a sort order");
     }
     
     return this;
@@ -342,10 +385,6 @@ Cursor.prototype.limit = function(limit) {
  */
 var hasSorting = function(cursor) {
     if (_.isNil(cursor.sortValue)) return false;
-    
-    if (_.isNil(cursor.sort_compiled)) {
-        return false;
-    }
     
     return true;
 };
