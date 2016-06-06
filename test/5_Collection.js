@@ -270,6 +270,38 @@ describe("Collection", function() {
             it("should be able to update a document", function() {
                 var coll = db.collection(TEST_COLL);
                 
+                /**/
+                // coll.insert({
+                //     _id: "TESTING",
+                // 	objectField1: {
+                // 		arrayField1: [1, 2, "3"],
+                // 		arrayField2: [{
+                // 			subField1: "test1"
+                // 		}, {
+                // 			subField1: "test2"
+                // 		}]
+                // 	},
+                // 	arrayField1: [1, 2, "3"],
+                // 	arrayField2: [{
+                // 		subField1: "test1"
+                // 	}, {
+                // 		subField1: "test2"
+                // 	}]
+                // });
+                
+                // coll.update(
+                //     {
+                //         _id: "TESTING"
+                //     }, {
+                //     $set: {
+                // 		"objectField1.arrayField1.1": "setted",
+                // 		"objectField1.arrayField2.1.subField1": "setted",
+                // 		"arrayField1.1": "setted",
+                // 		"arrayField2.1.subField1": "setted"
+                // 	}
+                // });
+                /**/
+                
                 // By _id
                 var updatedInfo = coll.update(
                     TEST_DOC._id,
@@ -343,35 +375,418 @@ describe("Collection", function() {
                 expect(updatedInfo.inserted.count).to.be.equal(0);
             });
             
-            it("should be able to use update operators", function(done) {
-                var coll = db.collection(TEST_COLL);
+            describe("should be able to use update operators", function() {
                 
-                coll.update({stringField: "yes"}, {$inc: { numberField: 2 }}, function(error, updatedInfo) {
+                var expectUpdateInfo = function(error, updatedInfo, nUpdated, nInserted) {
+                    expect(error).to.not.exist;
                     expect(updatedInfo).to.exist;
+                    
                     expect(updatedInfo.updated).to.exist;
                     expect(updatedInfo.inserted).to.exist;
                     
-                    expect(updatedInfo.updated.documents).to.be.instanceof(Array);
-                    expect(updatedInfo.updated.count).to.be.equal(1);
+                    if (nUpdated > 0) {
+                        expect(updatedInfo.updated.documents).to.be.instanceof(Array);
+                        expect(updatedInfo.updated.count).to.be.equal(nUpdated);
+                    } else {
+                        expect(updatedInfo.updated.documents).to.not.exist;
+                        expect(updatedInfo.updated.count).to.be.equal(0);
+                    }
                     
-                    expect(updatedInfo.inserted.documents).to.not.exist;
-                    expect(updatedInfo.inserted.count).to.be.equal(0);
+                    if (nInserted > 0) {
+                        expect(updatedInfo.inserted.documents).to.be.instanceof(Array);
+                        expect(updatedInfo.inserted.count).to.be.equal(nInserted);
+                    } else {
+                        expect(updatedInfo.inserted.documents).to.not.exist;
+                        expect(updatedInfo.inserted.count).to.be.equal(0);
+                    }
+                };
+                
+                before(function() {
+                    db.collection("FIELD_OP")
+                        .insert({ stringField: "field_op", numberField: 3 }, { chain: true })
+                        .insert({ stringField: "array_op", arrayField: ["first", "inside", "other", "last"] }, { chain: true })
+                        .insert({ stringField: "yep6", numberField: 7 }, { chain: true })
+                        .insert({ stringField: "yep8", numberField: 9 });
+                });
+                
+                describe("- Field Update Operators", function() {
+                    it("should update with the $inc operator", function(done) {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        coll.update(
+                        {
+                            stringField: "field_op"
+                        }, {
+                            $inc: {
+                                numberField: 2,
+                                otherNumberField: 3
+                            }
+                        }, 
+                        function(error, updatedInfo) {
+                            expectUpdateInfo(error, updatedInfo, 1, 0);
+                            
+                            var doc = coll.findOne({stringField: "field_op"});
+                            
+                            expect(doc).to.exist;
+                            
+                            expect(doc.stringField).to.be.equal("field_op");
+                            expect(doc.numberField).to.be.equal(5);
+                            expect(doc.otherNumberField).to.be.equal(3);
+                            
+                            done();
+                        }
+                        );
+                    });
                     
-                    var updated = updatedInfo.updated.documents[0];
+                    it.skip("should update with the $mul operator", function() {
+                        
+                    });
                     
-                    expect(updated).to.exist;
+                    it("should update with the $rename operator", function(done) {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "field_op"
+                        };
+                        var update = {
+                            $rename: {
+                                numberField: 'numericField'
+                            }
+                        };
+                        
+                        coll.update(selector, update, function(error, updatedInfo) {
+                                
+                            expectUpdateInfo(error, updatedInfo, 1, 0);
+                            
+                            var doc = coll.findOne({stringField: "field_op"});
+                            
+                            expect(doc).to.exist;
+                            
+                            expect(doc.stringField).to.be.equal("field_op");
+                            expect(doc.numberField).to.not.exist;
+                            expect(doc.numericField).to.be.equal(5);
+                            
+                            done();
+                        });
+                    });
                     
-                    expect(updated.stringField).to.be.equal("yes");
-                    expect(updated.numberField).to.be.equal(3);
+                    it.skip("should update with the $setOnInsert operator", function() {
+                        
+                    });
                     
-                    var doc = coll.findOne({stringField: "yes"});
+                    it("should update with the $set operator", function(done) {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "field_op"
+                        };
+                        var update = {
+                            $set: {
+                                booleanField: true,
+                                "objectField.field": ["yes!", "noo"],
+                                newField: "ok",
+                                "newArray.1": "second"
+                            }
+                        };
+                        
+                        coll.update(selector, update, function(error, updatedInfo) {
+                            expectUpdateInfo(error, updatedInfo, 1, 0);
+                            
+                            var doc = coll.findOne({stringField: "field_op"});
+                            
+                            expect(doc).to.exist;
+                            
+                            expect(doc.stringField).to.be.equal("field_op");
+                            expect(doc.numberField).to.not.exist;
+                            expect(doc.numericField).to.be.equal(5);
+                            expect(doc.booleanField).to.be.true;
+                            expect(doc.objectField).to.be.eql({ field: ["yes!", "noo"] });
+                            expect(doc.newField).to.be.equal("ok");
+                            
+                            expect(doc.newArray).to.exist;
+                            expect(doc.newArray).to.be.instanceof(Array);
+                            expect(doc.newArray).to.have.length(2);
+                            expect(doc.newArray[1]).to.be.equal("second");
+                            
+                            done();
+                        });
+                    });
                     
-                    expect(doc).to.exist;
+                    it("should update with the $unset operator", function() {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "field_op",
+                            "objectField.field.1": "noo"
+                        };
+                        var update = {
+                            $unset: {
+                                booleanField: "does not matter",
+                                "newArray.1": "neither does this"   // TODO
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+                        
+                        var doc = coll.findOne({stringField: "field_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("field_op");
+                        expect(doc.numberField).to.not.exist;
+                        expect(doc.numericField).to.be.equal(5);
+                        expect(doc.booleanField).to.not.exist;
+                        expect(doc.objectField).to.be.eql({ field: ["yes!", "noo"] });
+                        expect(doc.newArray).to.exist;
+                        expect(doc.newArray).to.have.length(2);
+                        expect(doc.newArray[1]).to.be.equal(null);
+                    });
                     
-                    expect(doc.stringField).to.be.equal("yes");
-                    expect(doc.numberField).to.be.equal(3);
+                    it.skip("should update with the $min operator", function() {
+                        
+                    });
                     
-                    done();
+                    it.skip("should update with the $max operator", function() {
+                        
+                    });
+                    
+                    it.skip("should update with the $currentDate operator", function() {
+                        
+                    });
+                });
+                
+                describe("- Array Update Operators", function() {
+                    it("should update with the $addToSet operator", function() {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "array_op"
+                        };
+                        var update = {
+                            $addToSet: {
+                                arrayField: "newly",
+                                unexistingArray: "first"
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+                        
+                        var doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField).to.have.length(5);
+                        expect(doc.arrayField[1]).to.be.equal("inside");
+                        expect(doc.arrayField[4]).to.be.equal("newly");
+                        expect(doc.unexistingArray).to.exist;
+                        expect(doc.unexistingArray).to.have.length(1);
+                        expect(doc.unexistingArray[0]).to.be.equal("first");
+                        
+                        // operator $each
+                        update = {
+                            $addToSet: {
+                                unexistingArray: {
+                                    $each: ["first", "second"]
+                                }
+                            }
+                        };
+                        
+                        updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+                        
+                        doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField).to.have.length(5);
+                        expect(doc.arrayField[1]).to.be.equal("inside");
+                        expect(doc.arrayField[4]).to.be.equal("newly");
+                        expect(doc.unexistingArray).to.exist;
+                        expect(doc.unexistingArray).to.have.length(2);
+                        expect(doc.unexistingArray[1]).to.be.equal("second");
+                        
+                    });
+                    
+                    it("should update with the $pop operator", function() {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "array_op"
+                        };
+                        var update = {
+                            $pop: {
+                                arrayField: 1
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+
+                        update['$pop'].arrayField = -1;
+                        updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+                        
+                        var doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField).to.have.length(3);
+                        expect(doc.arrayField[0]).to.not.be.equal("first");
+                        expect(doc.arrayField[2]).to.be.equal("last");
+                    });
+                    
+                    it("should update with the $push operator", function() {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "array_op"
+                        };
+                        var update = {
+                            $push: {
+                                arrayField: "added",
+                                arrayField2: "first"
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+
+                        var doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField).to.have.length(4);
+                        expect(doc.arrayField[3]).to.be.equal("added");
+                        expect(doc.arrayField2).to.exist;
+                        expect(doc.arrayField2).to.have.length(1);
+                        expect(doc.arrayField2[0]).to.be.equal("first");
+                    });
+                    
+                    it("should update with the $pushAll operator", function() {    // TODO Change, as is deprecated in MongoDB 2.4+
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "array_op"
+                        };
+                        var update = {
+                            $pushAll: {
+                                arrayField2: ["second", "third", "ot99her", "some99thing", "last"],
+                                addedArray: ["new"]
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+
+                        var doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField2).to.exist;
+                        expect(doc.arrayField2).to.have.length(6);
+                        expect(doc.arrayField2[0]).to.be.equal("first");
+                        expect(doc.arrayField2[1]).to.be.equal("second");
+                        expect(doc.arrayField2[2]).to.be.equal("third");
+                        expect(doc.arrayField2[5]).to.be.equal("last");
+                        expect(doc.addedArray).to.exist;
+                        expect(doc.addedArray).to.have.length(1);
+                        expect(doc.addedArray[0]).to.be.equal("new");
+                    });
+                    
+                    it("should update with the $pull operator", function() {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "array_op"
+                        };
+                        var update = {
+                            $pull: {
+                                arrayField: "first",
+                                arrayField2: {
+                                    $regex: /^[\D][a-z]+[\d]+[a-z]+$/,
+                                    $options: 'ig'
+                                }
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+
+                        var doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField).to.have.length(4);
+                        expect(doc.arrayField2).to.exist;
+                        expect(doc.arrayField2).to.have.length(4);
+                        expect(doc.arrayField2[0]).to.be.equal("first");
+                        expect(doc.arrayField2[1]).to.be.equal("second");
+                        expect(doc.arrayField2[2]).to.be.equal("third");
+                        expect(doc.arrayField2[3]).to.be.equal("last");
+                    });
+                    
+                    it("should update with the $pullAll operator", function() {
+                        var coll = db.collection("FIELD_OP");
+                        
+                        var selector = {
+                            stringField: "array_op"
+                        };
+                        var update = {
+                            $pullAll: {
+                                arrayField2: ["first", "last"]
+                            }
+                        };
+
+                        var updatedInfo = coll.update(selector, update);
+                        
+                        expectUpdateInfo(null, updatedInfo, 1, 0);
+
+                        var doc = coll.findOne({stringField: "array_op"});
+                        
+                        expect(doc).to.exist;
+                        
+                        expect(doc.stringField).to.be.equal("array_op");
+                        expect(doc.arrayField).to.exist;
+                        expect(doc.arrayField).to.have.length(4);
+                        expect(doc.arrayField2).to.exist;
+                        expect(doc.arrayField2).to.have.length(2);
+                        expect(doc.arrayField2[0]).to.not.be.equal("first");
+                        expect(doc.arrayField2[1]).to.not.be.equal("last");
+                    });
+                });
+                
+                describe.skip("- Bitwise Update Operators", function() {
+                    it("should update with the $bit operator", function() {
+                        
+                    });
+                });
+                
+                describe.skip("- Isolation Update Operators", function() {
+                    it("should update with the $isolated operator", function() {
+                        
+                    });
                 });
             });
             

@@ -9,10 +9,12 @@ Collection class that maps a MongoDB-like collection
 * [Collection](#Collection)
     * [new Collection(db, collectionName, [options])](#new_Collection_new)
     * [.insert(doc, [options], [callback])](#Collection+insert) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
-    * [.find([selection], [fields], [options], [callback])](#Collection+find) ⇒ <code>Array</code> &#124; <code>[Collection](#Collection)</code> &#124; <code>Cursor</code>
+    * [.find([selection], [fields], [options], [callback])](#Collection+find) ⇒ <code>Array</code> &#124; <code>Cursor</code>
     * [.findOne([selection], [fields], [options], [callback])](#Collection+findOne) ⇒ <code>Object</code>
     * [.update([selection], [update], [options], [callback])](#Collection+update) ⇒ <code>Object</code>
     * [.remove([selection], [options], [callback])](#Collection+remove) ⇒ <code>Object</code>
+    * [.drop([options], [callback])](#Collection+drop) ⇒ <code>Object</code>
+    * [.save(doc, [callback])](#Collection+save) ⇒ <code>Object</code>
 
 <a name="new_Collection_new"></a>
 
@@ -44,11 +46,11 @@ Inserts a document into the collection
 
 <a name="Collection+find"></a>
 
-### collection.find([selection], [fields], [options], [callback]) ⇒ <code>Array</code> &#124; <code>[Collection](#Collection)</code> &#124; <code>Cursor</code>
+### collection.find([selection], [fields], [options], [callback]) ⇒ <code>Array</code> &#124; <code>Cursor</code>
 Finds all matching documents
 
 **Kind**: instance method of <code>[Collection](#Collection)</code>  
-**Returns**: <code>Array</code> &#124; <code>[Collection](#Collection)</code> &#124; <code>Cursor</code> - If "options.chain" set to "true" returns this instance, if "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor  
+**Returns**: <code>Array</code> &#124; <code>Cursor</code> - If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -58,8 +60,7 @@ Finds all matching documents
 | [options.skip] | <code>Number</code> |  | Number of documents to be skipped |
 | [options.limit] | <code>Number</code> |  | Max number of documents to display |
 | [options.fields] | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> |  | Same as "fields" parameter (if both passed, "options.fields" will be ignored) |
-| [options.chain] | <code>Boolean</code> | <code>false</code> | If set to "true" returns this instance, so it can be chained with other methods |
-| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to "true" returns the array of documents already fetched |
+| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns't"e;array of documents already fetched |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
 <a name="Collection+findOne"></a>
@@ -113,6 +114,36 @@ Removes one or many documents
 | [selection] | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> | <code>{}</code> | The selection for matching documents |
 | [options] | <code>Object</code> |  | Additional options |
 | [options.justOne] | <code>Number</code> | <code>false</code> | Deletes the first occurrence of the selection |
+| [options.writeConcern] | <code>Object</code> | <code></code> | An object expressing the write concern |
+| [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
+
+<a name="Collection+drop"></a>
+
+### collection.drop([options], [callback]) ⇒ <code>Object</code>
+Drops a collection
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+**Returns**: <code>Object</code> - True when the collection is dropped  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | <code>Object</code> |  | Additional options |
+| [options.dropIndexes] | <code>Number</code> | <code>false</code> | True if we want to drop the indexes too |
+| [options.writeConcern] | <code>Object</code> | <code></code> | An object expressing the write concern |
+| [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
+
+<a name="Collection+save"></a>
+
+### collection.save(doc, [callback]) ⇒ <code>Object</code>
+Insert or update a document. If the document has an "_id" is an update (with upsert), if not is an insert.
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+**Returns**: <code>Object</code> - True when the collection is dropped  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| doc | <code>Object</code> |  | Document to be inserted/updated |
+| [options.dropIndexes] | <code>Number</code> | <code>false</code> | True if we want to drop the indexes too |
 | [options.writeConcern] | <code>Object</code> | <code></code> | An object expressing the write concern |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 

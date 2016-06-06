@@ -269,6 +269,30 @@ describe("To be implement", function() {
             it("should not allow Collection#ensureIndex", function() {
                 expect(new Collection(new MongoPortable("DB"), "NEW").ensureIndex).to.throw(Error);
             });
+            
+            it("should not allow the $bit operator", function() {
+                var thrown = false;
+            
+                try {
+                    var db = new MongoPortable("NOT_IMPLEMENTED");
+                    db.collection("NOT_IMPLEMENTED").insert({ stringField: "yes" });
+                    
+                    db.collection("NOT_IMPLEMENTED").update(
+                        {
+                            stringField: "yes"
+                        }, {
+                            $bit: {
+                                stringField: "elem"
+                            }
+                        });
+                } catch(error) {
+                    expect(error).to.be.instanceof(Error);
+                    
+                    thrown = true;
+                } finally {
+                    expect(thrown).to.be.true;
+                }
+            });
         });
     });
 });
@@ -911,7 +935,7 @@ describe("Failures", function() {
             
             var coll = db.collection(TEST_COLL);
             
-            coll.insert({ stringField: "yes", numberField: 5 });
+            coll.insert({ stringField: "yes", numberField: 5, arrayField: [1, 2, 3] });
         });
         
         it("should fail if passing a non function callback when finding", function() {
@@ -1000,6 +1024,267 @@ describe("Failures", function() {
             
             try {
                 db.collection(TEST_COLL).restore();
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when renaming an unexisting field", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $rename: {
+                            unexistingField: "thrownField"
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when renaming with invalid name params", function() {
+            var thrown = false;
+            
+            try {
+                // same name
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $rename: {
+                            stringField: "stringField"
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                // non string
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $rename: {
+                            stringField: false
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                // empty string
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $rename: {
+                            stringField: ""
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when accessing a non-numeric field on a array", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $set: {
+                            "arrayField.errorField": "thrownField"
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when incrementing a non-numeric field", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $inc: {
+                            stringField: 2
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $inc: {
+                            numberField: "not-a-number"
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when pushing on a non-array field", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $push: {
+                            stringField: "elem"
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $pushAll: {
+                            stringField: ["elem"]
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when pulling on a non-array field", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $pull: {
+                            stringField: "elem"
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+            
+            thrown = false;
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $pullAll: {
+                            stringField: ["elem"]
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when poping of a non-array field", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $pop: {
+                            stringField: 3
+                        }
+                    });
+            } catch(error) {
+                expect(error).to.be.instanceof(Error);
+                
+                thrown = true;
+            } finally {
+                expect(thrown).to.be.true;
+            }
+        });
+        
+        it("should fail when adding to a non-array set", function() {
+            var thrown = false;
+            
+            try {
+                db.collection(TEST_COLL).update(
+                    {
+                        stringField: "yes"
+                    }, {
+                        $addToSet: {
+                            stringField: "elem"
+                        }
+                    });
             } catch(error) {
                 expect(error).to.be.instanceof(Error);
                 
