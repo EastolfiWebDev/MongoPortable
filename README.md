@@ -14,7 +14,7 @@ It handles the collections and documents in memory, and allow the use of stores 
 
 # Installation
 ```shell
-npm install --save MongoPortable
+npm install --save mongo-portable
 ```
 # Usage
 ```javascript
