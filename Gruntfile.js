@@ -5,13 +5,6 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
     
         watch: {
-            test: {
-                files: ['test_src/*.js'],
-                tasks: ['babel'],
-                options: {
-                    spawn: false,
-                }
-            },
             dist: {
                 files: ['src/**/*.js'],
                 tasks: ['build_app'],
@@ -43,10 +36,6 @@ module.exports = function(grunt) {
         },
     
         simplemocha: {
-            dev: {
-                src: ['test/Collection.js']
-            },
-            
             all: {
                 src: ['test/1_Logger.js', 'test/2_ObjectId.js', 'test/3_Selector.js',
                         'test/4_Cursor.js', 'test/5_Collection.js', 'test/6_MongoPortable.js',
@@ -56,8 +45,7 @@ module.exports = function(grunt) {
         
         jsdoc : {
             dist : {
-                src: [//'./README.md',
-                    'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
+                src: ['src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
                         'src/Selector.js', 'src/ObjectId.js', 'src/utils/Logger.js'],
                 options: {
                     destination: 'doc',
@@ -68,8 +56,7 @@ module.exports = function(grunt) {
         
         jsdoc2md: {
             fullDoc: {
-                src: [
-                    'src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js'],
+                src: ['src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js'],
                 dest: 'api/documentation.md'
             },
             apiDoc: {

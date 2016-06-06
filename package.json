@@ -46,11 +46,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eastolfi/MongoPortable.git"
+    "url": "git+https://github.com/EastolfiWebDev/MongoPortable.git"
   },
-  "homepage": "https://github.com/eastolfi/MongoPortable#readme",
+  "homepage": "https://github.com/EastolfiWebDev/MongoPortable#readme",
   "bugs": {
-    "url": "https://github.com/eastolfi/MongoPortable/issues"
+    "url": "https://github.com/EastolfiWebDev/MongoPortable/issues"
   },
   "license": "MIT"
 }
