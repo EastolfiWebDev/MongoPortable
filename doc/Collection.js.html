@@ -39,8 +39,9 @@ var Logger = require("./utils/Logger"),
     EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
     Cursor = require("./Cursor"),
-    ObjectId = require('./ObjectId');
-    // Selector = require("./Selector");
+    ObjectId = require('./ObjectId'),
+    Selector = require("./Selector"),
+    SelectorMatcher = require("./SelectorMatcher");
     
 var logger = null;
     
@@ -436,7 +437,7 @@ Collection.prototype.update = function (selection, update, options, callback) {
                     let val = update[key];
                     
                     if (key.substr(0, 1) === '$') {
-                        _applyModifier(_docUpdate, key, val);
+                        _docUpdate = _applyModifier(_docUpdate, key, val);
                     } else {
                         if (!_.isNil(_docUpdate[key])) {
                             if (key !== '_id') {
@@ -487,21 +488,76 @@ Collection.prototype.update = function (selection, update, options, callback) {
 };
 
 var _applyModifier = function(_docUpdate, key, val) {
-    var mod = _modifiers[key];
+    var doc = _.cloneDeep(_docUpdate);
+    // var mod = _modifiers[key];
                         
-    if (!mod) {
+    if (!_modifiers[key]) {
         logger.throw(`Invalid modifier specified: ${key}`);
     }
     
     for (var keypath in val) {
-        var arg = val[keypath];
+        var value = val[keypath];
         var keyparts = keypath.split('.');
-        var no_create = !!Collection._noCreateModifiers[key];
-        var forbid_array = (key === "$rename");
-        var target = Collection._findModTarget(_docUpdate, keyparts, no_create, forbid_array);
-        var field = keyparts.pop();
+        
+        _modify(doc, keyparts, value, key);
+        
+        // var no_create = !!Collection._noCreateModifiers[key];
+        // var forbid_array = (key === "$rename");
+        // var target = Collection._findModTarget(_docUpdate, keyparts, no_create, forbid_array);
+        // var field = keyparts.pop();
 
-        mod(target, field, arg, keypath, _docUpdate);
+        // mod(target, field, value, keypath, _docUpdate);
+    }
+    
+    return doc;
+};
+
+var _modify = function(document, keyparts, value, key, level = 0) {
+    for (let i = level; i &lt; keyparts.length; i++) {
+        let path = keyparts[i];
+        let isNumeric = /^[0-9]+$/.test(path);
+        let target = document[path];
+        
+        var create = _.hasIn(Collection._noCreateModifiers, key) ? false : true;
+        if (!create &amp;&amp; (!_.isObject(document) || _.isNil(target))) {
+            logger.throw(`The element "${path}" must exists in "${JSON.stringify(document)}"`);
+        }
+        
+        if (_.isArray(document)) {
+            // Do not allow $rename on arrays
+            if (key === "$rename") return null;
+            
+            // Only let the use of "arrayfield.&lt;numeric_index>.subfield"
+            if (isNumeric) {
+                path = _.toNumber(path);
+            } else {
+                logger.throw(`The field "${path}" can not be appended to an array`);
+            }
+            
+            // Fill the array to the desired length
+            while (document.length &lt; path) {
+                document.push(null);
+            }
+        }
+        
+        if (i &lt; keyparts.length - 1) {
+            if (_.isNil(target)) {
+                // If we are accessing with "arrayField.&lt;numeric_index>"
+                if (_.isFinite(_.toNumber(keyparts[i + 1]))) {  //  || keyparts[i + 1] === '$'  // TODO "arrayField.$"
+                    target = [];
+                } else {
+                    target = {};
+                }
+            }
+            
+            document[path] = _modify(target, keyparts, value, key, level + 1);
+
+            return document;
+        } else {
+            _modifiers[key](document, path, value);
+            
+            return document;
+        }
     }
 };
 
@@ -791,69 +847,6 @@ Collection.prototype.restore = function (backupID, callback) {
     return this;
 };
 
-// for a.b.c.2.d.e, keyparts should be ['a', 'b', 'c', '2', 'd', 'e'],
-// and then you would operate on the 'e' property of the returned
-// object. if no_create is falsey, creates intermediate levels of
-// structure as necessary, like mkdir -p (and raises an exception if
-// that would mean giving a non-numeric property to an array.) if
-// no_create is true, return undefined instead. may modify the last
-// element of keyparts to signal to the caller that it needs to use a
-// different value to index into the returned object (for example,
-// ['a', '01'] -> ['a', 1]). if forbid_array is true, return null if
-// the keypath goes through an array.
-/**
-* @ignore
-*/
-Collection._findModTarget = function (doc, keyparts, no_create, forbid_array) {
-    for (var i = 0; i &lt; keyparts.length; i++) {
-        var last = (i === keyparts.length - 1);
-        var keypart = keyparts[i];
-        var numeric = /^[0-9]+$/.test(keypart);
-
-        if (no_create &amp;&amp; (!(typeof doc === "object") || !(keypart in doc))) {
-            return undefined;
-        }
-
-        if (doc instanceof Array) {
-            if (forbid_array) return null;
-
-            if (!numeric) {
-                logger.throw("can't append to array using string field name [" + keypart + "]");
-            }
-
-            keypart = _.toNumber(keypart);
-
-            if (last) {
-                // handle 'a.01'
-                keyparts[i] = keypart;
-            }
-
-            while (doc.length &lt; keypart) {
-                doc.push(null);
-            }
-
-            if (!last) {
-                if (doc.length === keypart) {
-                    doc.push({});
-                } else if (typeof doc[keypart] !== "object") {
-                    logger.throw("can't modify field '" + keyparts[i + 1] + "' of list value " + JSON.stringify(doc[keypart]));
-                }
-            }
-        } else {
-            // XXX check valid fieldname (no $ at start, no .)
-            if (!last &amp;&amp; !(keypart in doc)) {
-                doc[keypart] = {};
-            }
-        }
-
-        if (last) return doc;
-
-        doc = doc[keypart];
-    }
-
-    // notreached
-};
-
 /**
 * @ignore
 */
@@ -870,12 +863,12 @@ Collection._noCreateModifiers = {
 */
 var _modifiers = {
     $inc: function (target, field, arg) {
-        if (typeof arg !== "number") {
+        if (!_.isNumber(arg)) {
             logger.throw("Modifier $inc allowed for numbers only");
         }
 
         if (field in target) {
-            if (typeof target[field] !== "number") {
+            if (!_.isNumber(target[field])) {
                 logger.throw("Cannot apply $inc modifier to non-number");
             }
 
@@ -890,8 +883,8 @@ var _modifiers = {
     },
 
     $unset: function (target, field, arg) {
-        if (target !== undefined) {
-            if (target instanceof Array) {
+        if (!_.isNil(target)) {
+            if (_.isArray(target)) {
                 if (field in target) {
                     target[field] = null;
                 }
@@ -904,9 +897,9 @@ var _modifiers = {
     $push: function (target, field, arg) {
         var x = target[field];
 
-        if (x === undefined) {
+        if (_.isNil(x)) {
             target[field] = [arg];
-        } else if (!(x instanceof Array)) {
+        } else if (!_.isArray(x)) {
             logger.throw("Cannot apply $push modifier to non-array");
         } else {
             x.push(_.cloneDeep(arg));
@@ -914,16 +907,12 @@ var _modifiers = {
     },
 
     $pushAll: function (target, field, arg) {
-        if (!(typeof arg === "object" &amp;&amp; arg instanceof Array)) {
-            logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
-        }
-
         var x = target[field];
 
-        if (x === undefined) {
+        if (_.isNil(x)) {
             target[field] = arg;
-        } else if (!(x instanceof Array)) {
-            logger.throw("Cannot apply $pushAll modifier to non-array");
+        } else if (!_.isArray(x)) {
+            logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
         } else {
             for (var i = 0; i &lt; arg.length; i++) {
                 x.push(arg[i]);
@@ -934,14 +923,14 @@ var _modifiers = {
     $addToSet: function (target, field, arg) {
         var x = target[field];
 
-        if (x === undefined) {
+        if (_.isNil(x)) {
             target[field] = [arg];
-        } else if (!(x instanceof Array)) {
+        } else if (!_.isArray(x)) {
             logger.throw("Cannot apply $addToSet modifier to non-array");
         } else {
-            var isEach = false;
-            if (typeof arg === "object") {
-                for (var k in arg) {
+            let isEach = false;
+            if (_.isPlainObject(arg)) {
+                for (let k in arg) {
                     if (k === "$each") {
                         isEach = true;
                     }
@@ -950,10 +939,10 @@ var _modifiers = {
                 }
             }
 
-            var values = isEach ? arg["$each"] : [arg];
+            let values = isEach ? arg["$each"] : [arg];
             _.forEach(values, function (value) {
-                for (var i = 0; i &lt; x.length; i++) {
-                    // if (Selector._f._equal(value, x[i])) return; //FIXME
+                for (let i = 0; i &lt; x.length; i++) {
+                    if (SelectorMatcher.equal(value, x[i])) return;
                 }
 
                 x.push(value);
@@ -962,16 +951,14 @@ var _modifiers = {
     },
 
     $pop: function (target, field, arg) {
-        if (target === undefined) return;
+        if (_.isNil(target) || _.isNil(target[field])) return;
 
         var x = target[field];
 
-        if (x === undefined) {
-            return;
-        } else if (!(x instanceof Array)) {
+        if (!_.isArray(x)) {
             logger.throw("Cannot apply $pop modifier to non-array");
         } else {
-            if (typeof arg === 'number' &amp;&amp; arg &lt; 0) {
+            if (_.isNumber(arg) &amp;&amp; arg &lt; 0) {
                 x.splice(0, 1);
             } else {
                 x.pop();
@@ -980,15 +967,11 @@ var _modifiers = {
     },
 
     $pull: function (target, field, arg) {
-        logger.throw("Not yet implemented");    // REVIEW
-        
-        if (target === undefined) return;
+        if (_.isNil(target) || _.isNil(target[field])) return;
 
         var x = target[field];
 
-        if (x === undefined) {
-            return;
-        } else if (!(x instanceof Array)) {
+        if (!_.isArray(x)) {
             logger.throw("Cannot apply $pull/pullAll modifier to non-array");
         } else {
             var out = [];
@@ -1002,19 +985,22 @@ var _modifiers = {
                 // XXX _compileSelector isn't up for the job, because we need
                 // to permit stuff like {$pull: {a: {$gt: 4}}}.. something
                 // like {$gt: 4} is not normally a complete selector.
-                // same issue as $elemMatch possibly?
-                // var match = Selector._compileSelector(arg); // FIXME
-
+                var match = new Selector({
+                    "__matching__": arg
+                });
                 for (var i = 0; i &lt; x.length; i++) {
-                    if (!match(x[i])) {
+                    var _doc_ = {
+                        __matching__: x[i]
+                    };
+                    if (!match.test(_doc_)) {
                         out.push(x[i]);
                     }
                 }
             } else {
                 for (var i = 0; i &lt; x.length; i++) {
-                    // if (!Selector._f._equal(x[i], arg)) {    // FIXME
-                    //     out.push(x[i]);
-                    // }
+                    if (!SelectorMatcher.equal(x[i], arg)) {
+                        out.push(x[i]);
+                    }
                 }
             }
 
@@ -1023,32 +1009,24 @@ var _modifiers = {
     },
 
     $pullAll: function (target, field, arg) {
-        logger.throw("Not yet implemented");    // REVIEW
-        
-        if (target === undefined) return;
-
-        if (!(typeof arg === "object" &amp;&amp; arg instanceof Array)) {
-            logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
-        }
+        if (_.isNil(target) || _.isNil(target[field])) return;
 
         var x = target[field];
 
-        if (x === undefined) {
-            return;
-        } else if (!(x instanceof Array)) {
-            logger.throw("Cannot apply $pull/pullAll modifier to non-array");
-        } else {
+        if (!_.isNil(x) &amp;&amp; !_.isArray(x)) {
+            logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
+        } else if (!_.isNil(x)) {
             var out = [];
 
             for (var i = 0; i &lt; x.length; i++) {
                 var exclude = false;
 
                 for (var j = 0; j &lt; arg.length; j++) {
-                    // if (Selector._f._equal(x[i], arg[j])) { // FIXME
-                    //     exclude = true;
+                    if (SelectorMatcher.equal(x[i], arg[j])) {
+                        exclude = true;
                         
-                    //     break;
-                    // }
+                        break;
+                    }
                 }
 
                 if (!exclude) {
@@ -1060,35 +1038,18 @@ var _modifiers = {
         }
     },
 
-    $rename: function (target, field, arg, keypath, doc) {
-        if (target === undefined) return;
-        
-        if (keypath === arg) {
+    $rename: function (target, field, value) {
+        if (field === value) {
             // no idea why mongo has this restriction..
-            logger.throw("$rename source must differ from target");
+            logger.throw("The new field name must be different");
         }
 
-        if (target === null) {
-            logger.throw("$rename source field invalid");
+        if (!_.isString(value) || value.trim() === '') {
+            logger.throw("The new name must be a non-empty string");
         }
 
-        if (typeof arg !== "string") {
-            logger.throw("$rename target must be a string");
-        }
-
-        var v = target[field];
+        target[value] = target[field];
         delete target[field];
-
-        var keyparts = arg.split('.');
-        var target2 = Collection._findModTarget(doc, keyparts, false, true);
-
-        if (target2 === null) {
-            logger.throw("$rename target field invalid");
-        }
-
-        var field2 = keyparts.pop();
-        
-        target2[field2] = v;
     },
 
     $bit: function (target, field, arg) {
