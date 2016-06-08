@@ -190,10 +190,10 @@ MIT
 [node-url]: https://nodejs.org/en/
 [travis-image]: https://img.shields.io/travis/EastolfiWebDev/MongoPortable.svg?label=linux
 [travis-url]: https://travis-ci.org/EastolfiWebDev/MongoPortable
-[appveyor-image]: https://img.shields.io/appveyor/ci/EastolfiWebDev/MongoPortable/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/EastolfiWebDev/mongoportable
-[coveralls-image]: https://coveralls.io/repos/github/EastolfiWebDev/MongoPortable/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/EastolfiWebDev/MongoPortable?branch=master
+[appveyor-image]: https://img.shields.io/appveyor/ci/eastolfi/MongoPortable/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/eastolfi/mongoportable
+[coveralls-image]: https://coveralls.io/repos/github/eastolfi/MongoPortable/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/eastolfi/MongoPortable?branch=master
 [downloads-image]: https://img.shields.io/npm/dt/mongo-portable.svg
 [docs-image]: https://readthedocs.org/projects/mongoportable/badge/?version=latest
 [docs-url]: http://mongoportable.readthedocs.io/en/latest/?badge=latest
