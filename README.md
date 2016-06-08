@@ -19,7 +19,7 @@ npm install --save mongo-portable
 # Usage
 ```javascript
 // Declaring the module dependency
-var MongoPortable = require("MongoPortable");
+var MongoPortable = require("mongo-portable");
 
 // Instantiates a new ddbb object by passing a ddbb name
 var db = new MongoPortable("TEST");
@@ -65,16 +65,16 @@ Read the full API documentation [here][API-Cursor]
 ## File System Store
 It is located in a separated module, so install it by:
 ```shell
-npm install --save FileSystemStore
+npm install --save file-system-store
 ```
 And then use it in your application by adding it in your MongoPortable instance:
 ```javascript
-var FileSystemStore = require("FileSystemStore");
+var FileSystemStore = require("file-system-store");
 db.addStore(FileSystemStore);
 ```
 or as a middleware:
 ```javascript
-var FileSystemStore = require("FileSystemStore");
+var FileSystemStore = require("file-system-store");
 db.use("store", FileSystemStore);
 ```
 
@@ -192,8 +192,8 @@ MIT
 [travis-url]: https://travis-ci.org/EastolfiWebDev/MongoPortable
 [appveyor-image]: https://img.shields.io/appveyor/ci/eastolfi/MongoPortable/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/eastolfi/mongoportable
-[coveralls-image]: https://coveralls.io/repos/github/eastolfi/MongoPortable/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/eastolfi/MongoPortable?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/EastolfiWebDev/MongoPortable/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/EastolfiWebDev/MongoPortable?branch=master
 [downloads-image]: https://img.shields.io/npm/dt/mongo-portable.svg
 [docs-image]: https://readthedocs.org/projects/mongoportable/badge/?version=latest
 [docs-url]: http://mongoportable.readthedocs.io/en/latest/?badge=latest

@@ -332,6 +332,8 @@ Collection class that maps a MongoDB-like collection
     * [.findOne([selection], [fields], [options], [callback])](#Collection+findOne) ⇒ <code>Object</code>
     * [.update([selection], [update], [options], [callback])](#Collection+update) ⇒ <code>Object</code>
     * [.remove([selection], [options], [callback])](#Collection+remove) ⇒ <code>Object</code>
+    * [.delete()](#Collection+delete)
+    * [.destroy()](#Collection+destroy)
     * [.drop([options], [callback])](#Collection+drop) ⇒ <code>Object</code>
     * [.save(doc, [callback])](#Collection+save) ⇒ <code>Object</code>
 
@@ -436,6 +438,18 @@ Removes one or many documents
 | [options.writeConcern] | <code>Object</code> | <code></code> | An object expressing the write concern |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
+<a name="Collection+delete"></a>
+
+### collection.delete()
+Alias for [remove](#Collection+remove)
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+<a name="Collection+destroy"></a>
+
+### collection.destroy()
+Alias for [remove](#Collection+remove)
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
 <a name="Collection+drop"></a>
 
 ### collection.drop([options], [callback]) ⇒ <code>Object</code>

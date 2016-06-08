@@ -54,7 +54,8 @@ class Collection extends EventEmitter {
         // this.db = db;
         database = db;
         this.name = collectionName;
-        this.fullName = db.databaseName + '.' + this.name;
+        this.databaseName = db.databaseName;
+        this.fullName = this.databaseName + '.' + this.name;
         this.docs = [];
         this.doc_indexes = {};
         this.snapshots = [];

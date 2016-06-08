@@ -41,8 +41,8 @@
   "scripts": {
     "test": "grunt run_test",
     "preversion": "npm test",
-    "version": "make build_all && git add -A lib && git add -A doc",
-    "postversion": "git push -u origin && git push --follow-tags -u origin"
+    "version": "make build_all && git add -A lib && git add -A doc && git add -A api",
+    "postversion": "git push -u origin && git push --follow-tags -u origin && npm publish"
   },
   "repository": {
     "type": "git",
