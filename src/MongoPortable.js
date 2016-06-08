@@ -107,7 +107,7 @@ MongoPortable.prototype.addStore = function (store) {
     
     if (_.isFunction(store)) {
         this._stores.push(new store());
-    } else if (_.isPlainObject(store)) {
+    } else if (_.isObject(store)) {
         this._stores.push(store);
     } else {
         logger.throw("store must be a function or object");
