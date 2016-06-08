@@ -964,7 +964,7 @@ describe("Collection", function() {
                 expect(doc).to.not.exist;
                 
                 // Remove by _id
-                coll.remove(TEST_DOC._id, function(error, removed) {
+                coll.delete(TEST_DOC._id, function(error, removed) {
                     expect(error).to.not.exist;
                     expect(removed).to.exist;
                     
@@ -979,7 +979,7 @@ describe("Collection", function() {
             it("should be able to remove all documents", function(done) {
                 var coll = db.collection(TEST_COLL);
                 
-                coll.remove(function (error, removed) {
+                coll.destroy(function (error, removed) {
                     expect(error).to.not.exist;
                     expect(removed).to.exist;
                     

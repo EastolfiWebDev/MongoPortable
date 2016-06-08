@@ -602,6 +602,24 @@ Collection.prototype.remove = function (selection, options, callback) {
 };
 
 /**
+ * Alias for {@link Collection#remove}
+ * 
+ * @method Collection#delete
+ */
+Collection.prototype.delete = function (selection, options, callback) {
+    return this.remove(selection, options, callback);
+};
+ 
+ /**
+ * Alias for {@link Collection#remove}
+ * 
+ * @method Collection#destroy
+ */
+Collection.prototype.destroy = function (selection, options, callback) {
+    return this.remove(selection, options, callback);
+};
+
+/**
  * Drops a collection
  * 
  * @method Collection#drop
