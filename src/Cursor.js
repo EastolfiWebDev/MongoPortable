@@ -7,7 +7,7 @@
  * @license MIT Licensed
  */
 
-var Logger = require("./utils/Logger"),
+var Logger = require("jsw-logger"),
     _ = require("lodash"),
     Selector = require('./Selector');
     

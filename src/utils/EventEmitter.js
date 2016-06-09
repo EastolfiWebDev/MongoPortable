@@ -1,4 +1,4 @@
-var Logger = require("./Logger"),
+var Logger = require("jsw-logger"),
     _ = require("lodash");
     
 var logger = null;

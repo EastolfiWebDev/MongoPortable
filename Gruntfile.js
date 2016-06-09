@@ -21,7 +21,6 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    "lib/utils/Logger.js":              "src/utils/Logger.js",
                     "lib/utils/EventEmitter.js":        "src/utils/EventEmitter.js",
                     "lib/BinaryParserBuffer.js":        "src/BinaryParserBuffer.js",
                     "lib/BinaryParser.js":              "src/BinaryParser.js",
@@ -37,16 +36,16 @@ module.exports = function(grunt) {
     
         simplemocha: {
             all: {
-                src: ['test/1_Logger.js', 'test/2_ObjectId.js', 'test/3_Selector.js',
-                        'test/4_Cursor.js', 'test/5_Collection.js', 'test/6_MongoPortable.js',
-                        'test/7_Coverage.js']
+                src: ['test/1_ObjectId.js', 'test/2_Selector.js',
+                        'test/3_Cursor.js', 'test/4_Collection.js',
+                        'test/5_MongoPortable.js', 'test/6_Coverage.js']
             }
         },
         
         jsdoc : {
             dist : {
                 src: ['src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
-                        'src/Selector.js', 'src/ObjectId.js', 'src/utils/Logger.js'],
+                        'src/Selector.js', 'src/ObjectId.js'],
                 options: {
                     destination: 'doc',
                     config: 'jsdoc.conf.json'

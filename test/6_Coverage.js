@@ -1,7 +1,6 @@
 /* Special test case for reaching 100% coverage, due to babel.js transforming */
 
 var expect = require("chai").expect,
-    Logger = require("../lib/utils/Logger"),
     EventEmitter = require("../lib/utils/EventEmitter"),
     BinaryParser = require("../lib/BinaryParser"),
     BinaryParserBuffer = require("../lib/BinaryParserBuffer"),
@@ -298,12 +297,6 @@ describe("To be implement", function() {
 });
 
 describe("Instances", function() {
-    describe("Logger", function() {
-        it("should fail when instantiating as a function (without 'new')", function() {
-            expect(Logger).to.throw(Error);
-        });
-    });
-    
     describe("EventEmitter", function() {
         it("should fail when instantiating as a function (without 'new')", function() {
             expect(EventEmitter).to.throw(Error);

@@ -3,12 +3,12 @@
  * @version 1.0.0
  * @ignore
  * 
- * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
- * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
+ * @author Eduardo Astolfi <eastolfi91@gmail.com>
+ * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
  
-var Logger = require("./utils/Logger"),
+var Logger = require("jsw-logger"),
     BinaryParserBuffer = require("./BinaryParserBuffer");
     
 var logger = null;

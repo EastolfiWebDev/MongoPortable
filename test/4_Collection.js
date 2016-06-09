@@ -63,7 +63,6 @@ describe("Collection", function() {
             it("should be able to insert a document", function(done) {
                 var coll = db.collection(TEST_COLL);
                 
-                // Build the doc for first time -> avoid calling on Logger.instance
                 buildDoc();
                 
                 coll.insert(TEST_DOC, function(error, inserted) {
