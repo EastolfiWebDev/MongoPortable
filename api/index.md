@@ -5,12 +5,12 @@ It handles the collections and documents in memory, and allow the use of stores 
 
 # Installation
 ```shell
-npm install --save MongoPortable
+npm install --save mongo-portable
 ```
 # Usage
 ```javascript
 // Declaring the module dependency
-var MongoPortable = require("MongoPortable");
+var MongoPortable = require("mongo-portable");
 
 // Instantiates a new ddbb object by passing a ddbb name
 var db = new MongoPortable("TEST");
@@ -56,16 +56,16 @@ Read the full API documentation [here][API-Cursor]
 ## File System Store
 It is located in a separated module, so install it by:
 ```shell
-npm install --save FileSystemStore
+npm install --save file-system-store
 ```
 And then use it in your application by adding it in your MongoPortable instance:
 ```javascript
-var FileSystemStore = require("FileSystemStore");
+var FileSystemStore = require("file-system-store");
 db.addStore(FileSystemStore);
 ```
 or as a middleware:
 ```javascript
-var FileSystemStore = require("FileSystemStore");
+var FileSystemStore = require("file-system-store");
 db.use("store", FileSystemStore);
 ```
 
@@ -168,9 +168,9 @@ MIT
 
 [mongo-db-command]: https://docs.mongodb.com/manual/reference/command/
 
-[API-MongoPortable]: https://github.com/eastolfi/MongoPortable/blob/master/api/MongoPortable.md
-[API-Collection]: https://github.com/eastolfi/MongoPortable/blob/master/api/Collection.md
-[API-Cursor]: https://github.com/eastolfi/MongoPortable/blob/master/api/Cursor.md
+[API-MongoPortable]: https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/MongoPortable.md
+[API-Collection]: https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Collection.md
+[API-Cursor]: https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Cursor.md
 
-[Module-FileSystemStore]: https://github.com/eastolfi/FileSystemStore
-[API-FileSystemStore]: https://github.com/eastolfi/FileSystemStore/blob/master/api/FileSystemStore.md
+[Module-FileSystemStore]: https://github.com/EastolfiWebDev/FileSystemStore
+[API-FileSystemStore]: https://github.com/EastolfiWebDev/FileSystemStore/blob/master/api/FileSystemStore.md

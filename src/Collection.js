@@ -2,12 +2,12 @@
  * @file Collection.js - based on Monglo#Collection ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  * 
- * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
- * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
+ * @author Eduardo Astolfi <eastolfi91@gmail.com>
+ * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
 
-var Logger = require("./utils/Logger"),
+var Logger = require("jsw-logger"),
     EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
     Cursor = require("./Cursor"),
@@ -122,6 +122,14 @@ Collection.prototype.insert = function (doc, options, callback) {
     this.doc_indexes[_.toString(_doc._id)] = this.docs.length;
     this.docs.push(_doc);
     
+    /**
+     * "insert" event.
+     *
+     * @event MongoPortable~insert
+     * 
+     * @param {Object} collection - Information about the collection
+     * @param {Object} doc - Information about the document inserted
+     */
     this.emit(
         'insert',
         {
@@ -171,13 +179,21 @@ Collection.prototype.find = function (selection, fields, options, callback) {
     // callback for backward compatibility
     var cursor = new Cursor(this.db, this, selection, fields, options);
 
+    /**
+     * "find" event.
+     *
+     * @event MongoPortable~find
+     * 
+     * @property {Object} collection - Information about the collection
+     * @property {Object} selector - The selection of the query
+     * @property {Object} fields - The fields showed in the query
+     */
     this.emit(
         'find',
         {
             collection: this,
             selector: selection,
-            fields: fields,
-            options: options
+            fields: fields
         }
     );
     
@@ -224,15 +240,21 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
     
     var cursor = new Cursor(this.db, this, selection, fields, options);
 
-    // this.emit('find', selector, cursor, o);
-
+    /**
+     * "findOne" event.
+     *
+     * @event MongoPortable~findOne
+     * 
+     * @property {Object} collection - Information about the collection
+     * @property {Object} selector - The selection of the query
+     * @property {Object} fields - The fields showed in the query
+     */
     this.emit(
         'findOne',
         {
             collection: this,
             selector: selection,
-            fields: fields,
-            options: options
+            fields: fields
         }
     );
     
@@ -431,13 +453,22 @@ Collection.prototype.update = function (selection, update, options, callback) {
             this.docs[idx] = _docUpdate;
         }
         
+        /**
+         * "update" event.
+         *
+         * @event MongoPortable~update
+         * 
+         * @property {Object} collection - Information about the collection
+         * @property {Object} selector - The selection of the query
+         * @property {Object} modifier - The modifier used in the query
+         * @property {Object} docs - The updated/inserted documents information
+         */
         this.emit(
             'update',
             {
                 collection: this,
                 selector: selection,
                 modifier: update,
-                options: options,
                 docs: updatedDocs
             }
         );
@@ -588,6 +619,15 @@ Collection.prototype.remove = function (selection, options, callback) {
         docs.push(doc);
     });
     
+    /**
+     * "remove" event.
+     *
+     * @event MongoPortable~remove
+     * 
+     * @property {Object} collection - Information about the collection
+     * @property {Object} selector - The selection of the query
+     * @property {Object} docs - The deleted documents information
+     */
     this.emit(
         'remove',
         {

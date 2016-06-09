@@ -2,13 +2,13 @@
  * @file ObjectId.js - based on Monglo#ObjectId ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  * 
- * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
- * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
+ * @author Eduardo Astolfi <eastolfi91@gmail.com>
+ * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
 
 var _ = require("lodash"),
-    Logger = require("./utils/Logger"),
+    Logger = require("jsw-logger"),
     BinaryParser = require("./BinaryParser");
     
 var logger = null;

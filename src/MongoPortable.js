@@ -2,15 +2,15 @@
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  * 
- * @author Eduardo Astolfi <eduardo.astolfi91@gmail.com>
- * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
+ * @author Eduardo Astolfi <eastolfi91@gmail.com>
+ * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
 var _ = require('lodash'),
     EventEmitter = require("./utils/EventEmitter"),
     ObjectId = require('./ObjectId'),
     Collection = require('./Collection'),
-    Logger = require("./utils/Logger");
+    Logger = require("jsw-logger");
     
 var logger = null;
     
@@ -269,6 +269,14 @@ MongoPortable.prototype.collection = function(collectionName, options, callback)
     
     // Collection already in memory, lets create it
     if (self._collections[collectionName]) {
+        /**
+         * "createCollection" event.
+         *
+         * @event MongoPortable~createCollection
+         * 
+         * @property {Object} connection - Information about the current database connection
+         * @property {Object} collection - Information about the collection created
+         */
         self.emit(
             'createCollection',
             {
@@ -280,6 +288,14 @@ MongoPortable.prototype.collection = function(collectionName, options, callback)
         existing = true;
     } else {
         self._collections[collectionName] = new Collection(self, collectionName, self.pkFactory, options);
+        /**
+         * "createCollection" event.
+         *
+         * @event MongoPortable~createCollection
+         * 
+         * @property {Object} connection - Information about the current database connection
+         * @property {Object} collection - Information about the collection created
+         */
         self.emit(
             'createCollection',
             {

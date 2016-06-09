@@ -1,4 +1,4 @@
-var Logger = require("./utils/Logger"),
+var Logger = require("jsw-logger"),
     _ = require("lodash"),
     SelectorMatcher = require("./SelectorMatcher");
     
