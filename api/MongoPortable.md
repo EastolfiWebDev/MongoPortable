@@ -28,6 +28,9 @@ Portable database with persistence and MongoDB-like API
     * _static_
         * [.connections](#MongoPortable.connections)
         * [.version](#MongoPortable.version)
+    * _inner_
+        * ["createCollection"](#MongoPortable..event_createCollection)
+        * ["createCollection"](#MongoPortable..event_createCollection)
 
 <a name="new_MongoPortable_new"></a>
 
@@ -303,3 +306,29 @@ Connection Pool
 Version Number
 
 **Kind**: static property of <code>[MongoPortable](#MongoPortable)</code>  
+<a name="MongoPortable..event_createCollection"></a>
+
+### "createCollection"
+"createCollection" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| connection | <code>Object</code> | Information about the current database connection |
+| collection | <code>Object</code> | Information about the collection created |
+
+<a name="MongoPortable..event_createCollection"></a>
+
+### "createCollection"
+"createCollection" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| connection | <code>Object</code> | Information about the current database connection |
+| collection | <code>Object</code> | Information about the collection created |
+

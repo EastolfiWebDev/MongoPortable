@@ -42,6 +42,14 @@ Portable database with persistence and MongoDB-like API
     * _static_
         * [.connections](#MongoPortable.connections)
         * [.version](#MongoPortable.version)
+    * _inner_
+        * ["createCollection"](#MongoPortable..event_createCollection)
+        * ["createCollection"](#MongoPortable..event_createCollection)
+        * ["insert" (collection, doc)](#MongoPortable..event_insert)
+        * ["find"](#MongoPortable..event_find)
+        * ["findOne"](#MongoPortable..event_findOne)
+        * ["update"](#MongoPortable..event_update)
+        * ["remove"](#MongoPortable..event_remove)
 
 <a name="new_MongoPortable_new"></a>
 
@@ -317,6 +325,101 @@ Connection Pool
 Version Number
 
 **Kind**: static property of <code>[MongoPortable](#MongoPortable)</code>  
+<a name="MongoPortable..event_createCollection"></a>
+
+### "createCollection"
+"createCollection" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| connection | <code>Object</code> | Information about the current database connection |
+| collection | <code>Object</code> | Information about the collection created |
+
+<a name="MongoPortable..event_createCollection"></a>
+
+### "createCollection"
+"createCollection" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| connection | <code>Object</code> | Information about the current database connection |
+| collection | <code>Object</code> | Information about the collection created |
+
+<a name="MongoPortable..event_insert"></a>
+
+### "insert" (collection, doc)
+"insert" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| collection | <code>Object</code> | Information about the collection |
+| doc | <code>Object</code> | Information about the document inserted |
+
+<a name="MongoPortable..event_find"></a>
+
+### "find"
+"find" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| collection | <code>Object</code> | Information about the collection |
+| selector | <code>Object</code> | The selection of the query |
+| fields | <code>Object</code> | The fields showed in the query |
+
+<a name="MongoPortable..event_findOne"></a>
+
+### "findOne"
+"findOne" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| collection | <code>Object</code> | Information about the collection |
+| selector | <code>Object</code> | The selection of the query |
+| fields | <code>Object</code> | The fields showed in the query |
+
+<a name="MongoPortable..event_update"></a>
+
+### "update"
+"update" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| collection | <code>Object</code> | Information about the collection |
+| selector | <code>Object</code> | The selection of the query |
+| modifier | <code>Object</code> | The modifier used in the query |
+| docs | <code>Object</code> | The updated/inserted documents information |
+
+<a name="MongoPortable..event_remove"></a>
+
+### "remove"
+"remove" event.
+
+**Kind**: event emitted by <code>[MongoPortable](#MongoPortable)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| collection | <code>Object</code> | Information about the collection |
+| selector | <code>Object</code> | The selection of the query |
+| docs | <code>Object</code> | The deleted documents information |
+
 <a name="Collection"></a>
 
 ## Collection

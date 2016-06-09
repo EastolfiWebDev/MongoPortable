@@ -30,12 +30,12 @@
  * @file Collection.js - based on Monglo#Collection ({@link https://github.com/Monglo}) by Christian Sullivan &lt;cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  * 
- * @author Eduardo Astolfi &lt;eduardo.astolfi91@gmail.com>
- * @copyright 2016 Eduardo Astolfi &lt;eduardo.astolfi91@gmail.com>
+ * @author Eduardo Astolfi &lt;eastolfi91@gmail.com>
+ * @copyright 2016 Eduardo Astolfi &lt;eastolfi91@gmail.com>
  * @license MIT Licensed
  */
 
-var Logger = require("./utils/Logger"),
+var Logger = require("jsw-logger"),
     EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
     Cursor = require("./Cursor"),
@@ -82,7 +82,8 @@ class Collection extends EventEmitter {
         // this.db = db;
         database = db;
         this.name = collectionName;
-        this.fullName = db.databaseName + '.' + this.name;
+        this.databaseName = db.databaseName;
+        this.fullName = this.databaseName + '.' + this.name;
         this.docs = [];
         this.doc_indexes = {};
         this.snapshots = [];
@@ -149,6 +150,14 @@ Collection.prototype.insert = function (doc, options, callback) {
     this.doc_indexes[_.toString(_doc._id)] = this.docs.length;
     this.docs.push(_doc);
     
+    /**
+     * "insert" event.
+     *
+     * @event MongoPortable~insert
+     * 
+     * @param {Object} collection - Information about the collection
+     * @param {Object} doc - Information about the document inserted
+     */
     this.emit(
         'insert',
         {
@@ -198,13 +207,21 @@ Collection.prototype.find = function (selection, fields, options, callback) {
     // callback for backward compatibility
     var cursor = new Cursor(this.db, this, selection, fields, options);
 
+    /**
+     * "find" event.
+     *
+     * @event MongoPortable~find
+     * 
+     * @property {Object} collection - Information about the collection
+     * @property {Object} selector - The selection of the query
+     * @property {Object} fields - The fields showed in the query
+     */
     this.emit(
         'find',
         {
             collection: this,
             selector: selection,
-            fields: fields,
-            options: options
+            fields: fields
         }
     );
     
@@ -251,15 +268,21 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
     
     var cursor = new Cursor(this.db, this, selection, fields, options);
 
-    // this.emit('find', selector, cursor, o);
-
+    /**
+     * "findOne" event.
+     *
+     * @event MongoPortable~findOne
+     * 
+     * @property {Object} collection - Information about the collection
+     * @property {Object} selector - The selection of the query
+     * @property {Object} fields - The fields showed in the query
+     */
     this.emit(
         'findOne',
         {
             collection: this,
             selector: selection,
-            fields: fields,
-            options: options
+            fields: fields
         }
     );
     
@@ -458,13 +481,22 @@ Collection.prototype.update = function (selection, update, options, callback) {
             this.docs[idx] = _docUpdate;
         }
         
+        /**
+         * "update" event.
+         *
+         * @event MongoPortable~update
+         * 
+         * @property {Object} collection - Information about the collection
+         * @property {Object} selector - The selection of the query
+         * @property {Object} modifier - The modifier used in the query
+         * @property {Object} docs - The updated/inserted documents information
+         */
         this.emit(
             'update',
             {
                 collection: this,
                 selector: selection,
                 modifier: update,
-                options: options,
                 docs: updatedDocs
             }
         );
@@ -615,6 +647,15 @@ Collection.prototype.remove = function (selection, options, callback) {
         docs.push(doc);
     });
     
+    /**
+     * "remove" event.
+     *
+     * @event MongoPortable~remove
+     * 
+     * @property {Object} collection - Information about the collection
+     * @property {Object} selector - The selection of the query
+     * @property {Object} docs - The deleted documents information
+     */
     this.emit(
         'remove',
         {
@@ -1209,7 +1250,7 @@ var _ensureFindParams = function(params) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collection.html">Collection</a></li><li><a href="Cursor.html">Cursor</a></li><li><a href="Logger.html">Logger</a></li><li><a href="MongoPortable.html">MongoPortable</a></li><li><a href="ObjectId.html">ObjectId</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collection.html">Collection</a></li><li><a href="Cursor.html">Cursor</a></li><li><a href="MongoPortable.html">MongoPortable</a></li><li><a href="ObjectId.html">ObjectId</a></li></ul><h3>Events</h3><ul><li><a href="MongoPortable.html#~event:createCollection">createCollection</a></li><li><a href="MongoPortable.html#~event:find">find</a></li><li><a href="MongoPortable.html#~event:findOne">findOne</a></li><li><a href="MongoPortable.html#~event:insert">insert</a></li><li><a href="MongoPortable.html#~event:remove">remove</a></li><li><a href="MongoPortable.html#~event:update">update</a></li></ul>
 </nav>
 
 <br class="clear">
