@@ -335,7 +335,10 @@ var _buildDocumentSelector = function(key, value) {
             clause.kind = 'operator';
             clause.type = 'array';
             
-            clause.value = _buildSelector(value);
+            clause.value = [];
+            for (let i = 0; i < value.length; i++) {
+                clause.value = _.union(clause.value, _buildSelector(value[i]));
+            }
             
             break;
         default:
