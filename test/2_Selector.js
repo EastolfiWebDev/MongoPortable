@@ -389,14 +389,54 @@ describe("Selector", function() {
                         };
                         
                         expect(new Selector({
-                            $and: {
-                                operatorField1: 5,
-                                operatorField2: 3
+                            $and: [
+                                { operatorField1: 5 },
+                                { operatorField2: 3 }
+                            ]
+                        }).test(doc)).to.be.true;
+                        
+                        expect(new Selector({
+                            $and: [
+                                { operatorField1: 5 },
+                                { operatorField2: 6 }
+                            ]
+                        }).test(doc)).to.be.false;
+                    });
+                    
+                    it.skip("it should match with $not", function() {
+                        var doc = {
+                            operatorField: 5
+                        };
+                        
+                        expect(new Selector({
+                            operatorField: {
+                                $not: 3
                             }
                         }).test(doc)).to.be.true;
                     });
                     
-                    it.skip("it should match with $not", function() {
+                    it("it should match with $or", function() {
+                        var doc = {
+                            operatorField1: 2,
+                            operatorField2: 3
+                        };
+                        
+                        expect(new Selector({
+                            $or: [
+                                { operatorField1: 5 },
+                                { operatorField2: 3 }
+                            ]
+                        }).test(doc)).to.be.true;
+                        
+                        expect(new Selector({
+                            $or: [
+                                { operatorField1: 5 },
+                                { operatorField2: 6 }
+                            ]
+                        }).test(doc)).to.be.false;
+                    });
+                    
+                    it.skip("it should match with $nor", function() {
                         var doc = {
                             operatorField: 5
                         };

@@ -13,7 +13,7 @@ class SelectorMatcher {
 	test(document) {
 		logger.debug('Called SelectorMatcher->test');
 		
-		var _match = true;
+		var _match = false;
 
 		if (_.isNil(document)) {
 			logger.debug('document -> null');
@@ -45,9 +45,7 @@ class SelectorMatcher {
 			} else if (clause.kind === 'operator') {
 			    logger.debug(`clause -> operator '${clause.key}'`);
 			    
-		        let _matcher = new SelectorMatcher({ clauses: clause.value });
-		        
-		        _match = _matcher.test(document);
+			    _match = _testLogicalClause(clause, document, clause.key);
 		        
 				logger.debug('clause result -> ' + _match);
 			}
@@ -462,6 +460,37 @@ var _testObjectClause = function(clause, doc, key) {
         
         return _testClause(clause, doc);
     }
+};
+
+var _testLogicalClause = function(clause, doc, key) {
+    var matches = null;
+    
+    for (let i = 0; i < clause.value.length; i++) {
+        let _matcher = new SelectorMatcher({ clauses: [clause.value[i]] });
+        
+        switch (key) {
+            case 'and':
+                // True unless it has one that do not match
+                if (_.isNil(matches)) matches = true;
+                
+                if (!_matcher.test(doc)) {
+                    return false;
+                }
+                
+                break;
+            case 'or':
+                // False unless it has one match at least
+                if (_.isNil(matches)) matches = false;
+                
+                if (_matcher.test(doc)) {
+                    return true;
+                }
+                
+                break;
+        }
+    }
+    
+    return matches || false;
 };
 
 var _testOperatorClause = function(clause, value) {
