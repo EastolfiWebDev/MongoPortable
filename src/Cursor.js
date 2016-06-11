@@ -55,6 +55,17 @@ class Cursor {
             }
         }
         
+        for (let i = 0; i < this.selector_compiled.clauses.length; i++) {
+            if (this.selector_compiled.clauses[i].key === '_id') {
+                var _val = this.selector_compiled.clauses[i].value;
+                
+                if (_.isString(_val) || _.isNumber(_val)) {
+                    this.selector_id = _val;
+                }
+            }
+        }
+
+        
         this.fields = new Selector(fields, Selector.FIELD_SELECTOR);
         
         this.sort_compiled = new Selector(this.sortValue, Selector.SORT_SELECTOR);
