@@ -10,6 +10,7 @@
 var Logger = require("jsw-logger"),
     EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
+    Aggregation = require("./Aggregation"),
     Cursor = require("./Cursor"),
     ObjectId = require('./ObjectId'),
     Selector = require("./Selector"),
@@ -157,7 +158,7 @@ Collection.prototype.insert = function (doc, options, callback) {
  * @param {Number} [options.skip] - Number of documents to be skipped
  * @param {Number} [options.limit] - Max number of documents to display
  * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
- * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns't"e;array of documents already fetched
+ * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
  * 
  * @param {Function} [callback=null] - Callback function to be called at the end with the results
  * 
@@ -876,6 +877,40 @@ Collection.prototype.restore = function (backupID, callback) {
     if (callback) callback(null);
 
     return this;
+};
+
+/**
+ * Calculates aggregate values for the data in a collection
+ * 
+ * @method Collection#aggregate
+ * 
+ * @param {Array} pipeline - A sequence of data aggregation operations or stages
+ * @param {Object} [options] - Additional options
+ * 
+ * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
+ * 
+ * @returns {Array|Cursor} If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
+ */
+Collection.prototype.aggregate = function(pipeline, options = { forceFetch: false }) {
+    if (_.isNil(pipeline) || !_.isArray(pipeline)) logger.throw('The "pipeline" param must be an array');
+    
+    var aggregation = new Aggregation(pipeline);
+    
+    for (let i = 0; i < pipeline.length; i++) {
+        let stage = pipeline[i];
+        
+        for (let key in stage) {
+            if (key.substr(0, 1) !== '$') logger.throw("The pipeline stages must begin with '$'");
+            
+            if (!aggregation.validStage(key)) logger.throw(`Invalid stage "${key}"`);
+            
+            break;
+        }
+    }
+    
+    var result = aggregation.aggregate(this);
+    
+    return result;  // change to cursor
 };
 
 /**

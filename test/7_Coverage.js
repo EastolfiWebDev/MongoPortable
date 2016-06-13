@@ -9,6 +9,7 @@ var expect = require("chai").expect,
     SelectorMatcher = require("../lib/SelectorMatcher"),
     Cursor = require("../lib/Cursor"),
     Collection = require("../lib/Collection"),
+    Aggregation = require("../lib/Aggregation"),
     MongoPortable = require("../lib/MongoPortable");
 
 var TEST_COLL = "TEST_COLL";
@@ -696,6 +697,12 @@ describe("Instances", function() {
     describe("Collection", function() {
         it("should fail when instantiating as a function (without 'new')", function() {
             expect(Collection).to.throw(Error);
+        });
+    });
+    
+    describe("Aggregation", function() {
+        it("should fail when instantiating as a function (without 'new')", function() {
+            expect(Aggregation).to.throw(Error);
         });
     });
 });
