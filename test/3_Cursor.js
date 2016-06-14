@@ -32,11 +32,10 @@ describe("Cursor", function() {
             
             expect(selector).to.exist;
             
-            var c = new Cursor(null, null, selector, ["field1, field2"], { sort: { field2: -1 } });
+            var c = new Cursor([], selector, ["field1, field2"], { sort: { field2: -1 } });
             
             expect(c).to.exist;
             
-            expect(c.db).to.not.exist;
             expect(c.collection).to.not.exist;
             expect(c.selector).to.exist;
             expect(c.fields).to.exist;
@@ -52,11 +51,10 @@ describe("Cursor", function() {
         });
         
         it("should be able to create a new instance from a compiled selector", function() {
-            var c = new Cursor(null, null, { field1: { $gte: 3 } }, ["field1, field2"], { sort: { field2: -1 } });
+            var c = new Cursor([], { field1: { $gte: 3 } }, ["field1, field2"], { sort: { field2: -1 } });
             
             expect(c).to.exist;
             
-            expect(c.db).to.not.exist;
             expect(c.collection).to.not.exist;
             expect(c.selector).to.exist;
             expect(c.fields).to.exist;

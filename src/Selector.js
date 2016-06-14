@@ -1,6 +1,7 @@
 var Logger = require("jsw-logger"),
     _ = require("lodash"),
-    SelectorMatcher = require("./SelectorMatcher");
+    SelectorMatcher = require("./SelectorMatcher"),
+    ObjectId = require("./ObjectId");
     
 var logger = null;
 
@@ -415,6 +416,11 @@ var _buildKeypathSelector = function (keypath, value) {
             
             clause.type = 'operator_object';
         }
+    } else if (value instanceof ObjectId) {
+        logger.debug('clause of type ObjectId -> String');
+        
+        clause.type = 'string';
+        clause.value = value.toString();
     } else {
         clause.type = '__invalid__';
     }

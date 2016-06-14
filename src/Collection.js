@@ -177,8 +177,7 @@ Collection.prototype.find = function (selection, fields, options, callback) {
     options = params.options;
     callback = params.callback;
     
-    // callback for backward compatibility
-    var cursor = new Cursor(this.db, this, selection, fields, options);
+    var cursor = new Cursor(this.docs, selection, fields, options);
 
     /**
      * "find" event.
@@ -239,7 +238,7 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
     options = params.options;
     callback = params.callback;
     
-    var cursor = new Cursor(this.db, this, selection, fields, options);
+    var cursor = new Cursor(this.docs, selection, fields, options);
 
     /**
      * "findOne" event.
