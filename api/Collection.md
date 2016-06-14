@@ -17,6 +17,7 @@ Collection class that maps a MongoDB-like collection
     * [.destroy()](#Collection+destroy)
     * [.drop([options], [callback])](#Collection+drop) ⇒ <code>Object</code>
     * [.save(doc, [callback])](#Collection+save) ⇒ <code>Object</code>
+    * [.aggregate(pipeline, [options])](#Collection+aggregate) ⇒ <code>Array</code> &#124; <code>Cursor</code>
 
 <a name="new_Collection_new"></a>
 
@@ -62,7 +63,7 @@ Finds all matching documents
 | [options.skip] | <code>Number</code> |  | Number of documents to be skipped |
 | [options.limit] | <code>Number</code> |  | Max number of documents to display |
 | [options.fields] | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> |  | Same as "fields" parameter (if both passed, "options.fields" will be ignored) |
-| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns't"e;array of documents already fetched |
+| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns the array of documents already fetched |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
 <a name="Collection+findOne"></a>
@@ -160,4 +161,18 @@ Insert or update a document. If the document has an "_id" is an update (with ups
 | [options.dropIndexes] | <code>Number</code> | <code>false</code> | True if we want to drop the indexes too |
 | [options.writeConcern] | <code>Object</code> | <code></code> | An object expressing the write concern |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
+
+<a name="Collection+aggregate"></a>
+
+### collection.aggregate(pipeline, [options]) ⇒ <code>Array</code> &#124; <code>Cursor</code>
+Calculates aggregate values for the data in a collection
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+**Returns**: <code>Array</code> &#124; <code>Cursor</code> - If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| pipeline | <code>Array</code> |  | A sequence of data aggregation operations or stages |
+| [options] | <code>Object</code> |  | Additional options |
+| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns the array of documents already fetched |
 

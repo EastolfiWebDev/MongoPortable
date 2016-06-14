@@ -439,6 +439,7 @@ Collection class that maps a MongoDB-like collection
     * [.destroy()](#Collection+destroy)
     * [.drop([options], [callback])](#Collection+drop) ⇒ <code>Object</code>
     * [.save(doc, [callback])](#Collection+save) ⇒ <code>Object</code>
+    * [.aggregate(pipeline, [options])](#Collection+aggregate) ⇒ <code>Array</code> &#124; <code>[Cursor](#Cursor)</code>
 
 <a name="new_Collection_new"></a>
 
@@ -484,7 +485,7 @@ Finds all matching documents
 | [options.skip] | <code>Number</code> |  | Number of documents to be skipped |
 | [options.limit] | <code>Number</code> |  | Max number of documents to display |
 | [options.fields] | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> |  | Same as "fields" parameter (if both passed, "options.fields" will be ignored) |
-| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns't"e;array of documents already fetched |
+| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns the array of documents already fetched |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
 <a name="Collection+findOne"></a>
@@ -583,6 +584,20 @@ Insert or update a document. If the document has an "_id" is an update (with ups
 | [options.writeConcern] | <code>Object</code> | <code></code> | An object expressing the write concern |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
+<a name="Collection+aggregate"></a>
+
+### collection.aggregate(pipeline, [options]) ⇒ <code>Array</code> &#124; <code>[Cursor](#Cursor)</code>
+Calculates aggregate values for the data in a collection
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+**Returns**: <code>Array</code> &#124; <code>[Cursor](#Cursor)</code> - If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| pipeline | <code>Array</code> |  | A sequence of data aggregation operations or stages |
+| [options] | <code>Object</code> |  | Additional options |
+| [options.forceFetch] | <code>Boolean</code> | <code>false</code> | If set to'"true" returns the array of documents already fetched |
+
 <a name="Cursor"></a>
 
 ## Cursor
@@ -592,7 +607,8 @@ Cursor class that maps a MongoDB-like cursor
 **Since**: 0.0.1  
 
 * [Cursor](#Cursor)
-    * [new Cursor(db, collection, [selection], [fields], [options])](#new_Cursor_new)
+    * [new Cursor(db, documents, [selection], [fields], [options])](#new_Cursor_new)
+    * [.fetch_mode](#Cursor+fetch_mode)
     * [.rewind()](#Cursor+rewind)
     * [.forEach([callback])](#Cursor+forEach)
     * [.map([callback])](#Cursor+map) ⇒ <code>Array</code>
@@ -602,6 +618,7 @@ Cursor class that maps a MongoDB-like cursor
     * [.fetchAll()](#Cursor+fetchAll) ⇒ <code>Array</code>
     * [.fetchOne()](#Cursor+fetchOne) ⇒ <code>Object</code>
     * [.count()](#Cursor+count) ⇒ <code>Number</code>
+    * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
     * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
     * [.skip(skip)](#Cursor+skip) ⇒ <code>[Cursor](#Cursor)</code>
     * [.limit(limit)](#Cursor+limit) ⇒ <code>[Cursor](#Cursor)</code>
@@ -629,19 +646,25 @@ Cursor class that maps a MongoDB-like cursor
 
 <a name="new_Cursor_new"></a>
 
-### new Cursor(db, collection, [selection], [fields], [options])
+### new Cursor(db, documents, [selection], [fields], [options])
 Cursor
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | db | <code>[MongoPortable](#MongoPortable)</code> |  | Additional options |
-| collection | <code>[Collection](#Collection)</code> |  | The collection instance |
+| documents | <code>Array</code> |  | The list of documents |
 | [selection] | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> | <code>{}</code> | The selection for matching documents |
 | [fields] | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> | <code>{}</code> | The fields of the document to show |
 | [options] | <code>Object</code> |  | Database object |
 | [options.pkFactory] | <code>Object</code> | <code></code> | Object overriding the basic "ObjectId" primary key generation. |
 
+<a name="Cursor+fetch_mode"></a>
+
+### cursor.fetch_mode
+ADD IDX
+
+**Kind**: instance property of <code>[Cursor](#Cursor)</code>  
 <a name="Cursor+rewind"></a>
 
 ### cursor.rewind()
@@ -711,6 +734,18 @@ Obtains the total of documents of the cursor
 
 **Kind**: instance method of <code>[Cursor](#Cursor)</code>  
 **Returns**: <code>Number</code> - The total of documents in the cursor  
+<a name="Cursor+sort"></a>
+
+### cursor.sort(spec) ⇒ <code>[Cursor](#Cursor)</code>
+Set the sorting of the cursor
+
+**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
+**Returns**: <code>[Cursor](#Cursor)</code> - This instance so it can be chained with other methods  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| spec | <code>Object</code> &#124; <code>Array</code> &#124; <code>String</code> | The sorting specification |
+
 <a name="Cursor+sort"></a>
 
 ### cursor.sort(spec) ⇒ <code>[Cursor](#Cursor)</code>
