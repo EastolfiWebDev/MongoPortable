@@ -8,20 +8,22 @@
  */
 
 var _ = require("lodash"),
-    Logger = require("jsw-logger");
+    Logger = require("jsw-logger"),
+    Cursor = require("./Cursor"),
+    Selector = require("./Selector");
     
 var logger = null;
 
 var stages = {
     '$project': false,
-    '$match': false,
+    '$match': true,
     '$redact': false,
     '$limit': false,
     '$skip': false,
     '$unwind': false,
     '$group': true,
     '$sample': false,
-    '$sort': false,
+    '$sort': true,
     '$geoNear': false,
     '$lookup': false,
     '$out': false,
@@ -158,10 +160,28 @@ var do_complex_group = function() {
     
 };
 
+var do_sort = function(documents, sort_stage) {
+    return documents.sort(new Selector(sort_stage, Selector.SORT_SELECTOR));
+};
+
+var do_match = function(documents, match_stage) {
+    var cursor = new Cursor(documents, match_stage);
+    
+    return cursor.fetch();
+};
+
 var do_group = function(documents, group_stage) {
     if (!_.hasIn(group_stage, '_id')) logger.throw('The field "_id" is required in the "$group" stage');
     
     let new_id = group_stage['_id'];
+    
+    if (!_.isNull(new_id)) {
+        if (new_id.substr(0, 1) !== '$') {
+            logger.throw("Field names references in a right side assignement must be preceded by '$'");
+        } else {
+            new_id = new_id.substr(1, new_id.length);
+        }
+    }
                 
     if (_.isPlainObject(new_id)) {
         // complex_id
@@ -180,16 +200,30 @@ class Aggregation {
     }
     
     aggregate(collection) {
+        var docs = collection.docs;
+        
         for (let i = 0; i < this.pipeline.length; i++) {
             let stage = this.pipeline[i];
             
             for (let key in stage) {
                 switch (key) {
+                    case '$match':
+                        docs = do_match(docs, stage[key]);
+                        
+                        break;
                     case '$group':
-                        return do_group(collection.docs, stage[key]);
+                        docs = do_group(docs, stage[key]);
+                        
+                        break;
+                    case '$sort':
+                        docs = do_sort(docs, stage[key]);
+                        
+                        break;
                 }
             }
         }
+        
+        return docs;    // move to cursor
     }
     
     validStage(stage) {
