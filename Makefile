@@ -9,6 +9,8 @@ jscoverage = ./node_modules/.bin/jscoverage
 # Building #
 build_app = $(grunt) build_app
 
+compress_bundle = $(grunt) bundle
+
 build_web_full = $(grunt) build_doc
 
 build_api_full = $(grunt) build_html
@@ -22,7 +24,7 @@ coveralls = $(grunt) coveralls_dist
 npm_publish = npm publish
 
 # Cleaning #
-clean_test = 	rm -rf test/coverage && rm -rf test/results && rm -rf lib-cov
+clean_test = rm -rf test/coverage && rm -rf test/results && rm -rf lib-cov
 
 ## Actions ##
 
@@ -30,6 +32,9 @@ clean_test = 	rm -rf test/coverage && rm -rf test/results && rm -rf lib-cov
 
 build:
 	$(build_app)
+	
+bundle: build
+	$(compress_bundle)
 	
 # Building Documentation #
 
