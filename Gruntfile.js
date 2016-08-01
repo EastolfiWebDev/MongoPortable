@@ -96,7 +96,7 @@ module.exports = function(grunt) {
             },
             browser: {
                 files: {
-                    './dist/src/index.js':              './browser/index.js'
+                    './dist/mongo-portable.js': './browser/index.js'
                 },
                 options: {
                     transform: [['babelify', {presets: ['es2015', 'react']}]],
