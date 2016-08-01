@@ -71,4 +71,15 @@ coverage: do_coverage
 
 build_all: build build_full_doc test coverage
 
+# Bower Publishing #
+
+bower_major: bundle test
+	bower version major -m "VERSION: New major version released (v%s)"
+
+bower_minor: bundle test
+	bower version minor -m "VERSION: New minor version released (v%s)"
+
+bower_patch: bundle test
+	bower version patch -m "VERSION: New patch released (v%s)"
+	
 .PHONY: build_all
