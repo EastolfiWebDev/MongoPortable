@@ -25,7 +25,7 @@ var logger = null;
  * @classdesc Cursor class that maps a MongoDB-like cursor
  * 
  * @param {MongoPortable} db - Additional options
- * @param {Collection} collection - The collection instance
+ * @param {Array} documents - The list of documents
  * @param {Object|Array|String} [selection={}] - The selection for matching documents
  * @param {Object|Array|String} [fields={}] - The fields of the document to show
  * @param {Object} [options] - Database object
@@ -34,9 +34,8 @@ var logger = null;
  * 
  */
 class Cursor {
-    constructor(db, collection, selection, fields, options = {}) {
-        this.db = db;
-        this.collection = collection;
+    constructor(documents, selection, fields, options = {}) {
+        this.documents = documents;
         this.selector = selection;
         this.skipValue = options.skip || 0;
         this.limitValue = options.limit || 15;
@@ -45,6 +44,7 @@ class Cursor {
         
         logger = Logger.instance;
     
+        /** ADD IDX **/
         if (Selector.isSelectorCompiled(this.selector)) {
             this.selector_compiled = this.selector;
         } else {
@@ -67,6 +67,26 @@ class Cursor {
             }
         }
 
+        /** ADD IDX **/
+        
+        this.fetch_mode = Cursor.COLSCAN || Cursor.IDXSCAN;
+        this.indexex = null;//findUsableIndexes();
+        
+        // if (cursor.fetch_mode === Cursor.COLSCAN) {
+        //     // COLSCAN, wi will iterate over all documents
+        //     docs = _.cloneDeep(cursor.collection.docs);
+        // } else if (cursor.fetch_mode === Cursor.IDXSCAN) {
+        //     // IDXSCAN, wi will iterate over all needed documents
+        //     for (let i = 0; i < cursor.indexes.length; i++) {
+        //         let index = cursor.indexes[i];
+                
+        //         for (let i = index.start; i < index.end; i++) {
+        //             let idx_id = cursor.collection.getIndex(index.name)[i];
+                    
+        //             docs.push(cursor.collection.docs[idx_id]);
+        //         }
+        //     }
+        // }
         
         this.fields = new Selector(fields, Selector.FIELD_SELECTOR);
         
@@ -76,6 +96,9 @@ class Cursor {
         this.cursor_pos = 0;
     }
 }
+
+Cursor.COLSCAN = 'colscan';
+Cursor.IDXSCAN = 'idxscan';
 
 /**
  * Moves a cursor to the begining
@@ -129,7 +152,7 @@ Cursor.prototype.map = function(callback) {
  * @returns {Boolean} True if we can fetch one more document
  */
 Cursor.prototype.hasNext = function() {
-    return (this.cursor_pos < this.collection.docs.length);
+    return (this.cursor_pos < this.documents.length);
 };
 
 /**
@@ -172,7 +195,48 @@ Cursor.prototype.fetchOne = function() {
     return _getDocuments(this, true);
 };
 
-var _mapFields = function(doc, fields) {
+
+
+Cursor.sort = function(doc, fields) {
+    
+};
+
+/**
+ * Projects the fields of one or several documents, changing the output
+ * 
+ * @method Cursor.project
+ * 
+ * @param {Array|Object} doc - The document/s that will be projected
+ * @param {String|Array|Object} spec - Fields projection specification. Can be an space/comma separated list, an array, or an object
+ * 
+ * @returns {Array|Object} The document/s after the projection
+ */
+Cursor.project = function (doc, spec, aggregation = false) {
+    if (_.isNil(doc)) logger.throw('doc param required');
+    if (_.isNil(spec)) logger.throw('spec param required');
+
+    var fields = null;
+    if (aggregation) {
+        fields = new Selector(spec, Selector.AGG_FIELD_SELECTOR);
+    } else {
+        fields = new Selector(spec, Selector.FIELD_SELECTOR);
+    }
+    
+    if (_.isArray(doc)) {
+        for (var i = 0; i < doc.length; i++) {
+            doc[i] = _mapFields(doc[i], fields);
+        }
+        
+        return doc;
+    } else {
+        return _mapFields(doc, fields);
+    }
+
+    
+
+};
+
+var _mapFields = function (doc, fields) {
     var _doc = _.cloneDeep(doc);
 
     if (!_.isNil(fields) && _.isPlainObject(fields) && !_.isEqual(fields, {})) {
@@ -184,29 +248,42 @@ var _mapFields = function(doc, fields) {
             showId = false;
         }
 
+        for (var field in fields) {
+            // Whether if we are showing or hidding fields
+            if (field !== '_id') {
+                if (fields[field] === 1) {
+                    showing = true;
+                    break;
+                } else if (fields[field] === -1) {
+                    showing = false;
+                    break;
+                }
+            }
+        }
+
         var tmp = null;
 
         for (var field in fields) {
-            // Whether if we are showing or hidding fields
-            if (field !== '_id' && showing === null) {
-                showing = fields[field] === 1 ? true : false;
-            }
-
-            if (showing != null) {
-                if (tmp === null) {
-                    if (showing) {
-                        tmp = {};
-                    } else {
-                        tmp = _.cloneDeep(doc);
-                    }
+            if (tmp === null) {
+                if (showing) {
+                    tmp = {};
+                } else {
+                    tmp = _.cloneDeep(doc);
                 }
-        
-                // Add or remove the field
+            }
+    
+            // Add or remove the field
+            if (fields[field] === 1 || fields[field] === -1) {
+                // Show the field
                 if (showing) {
                     tmp[field] = doc[field];
                 } else {
+                    // Hide the field
                     delete tmp[field];
                 }
+            } else {
+                // Show the new field (rename)
+                tmp[field] = doc[fields[field]];
             }
         }
 
@@ -219,7 +296,7 @@ var _mapFields = function(doc, fields) {
 
         _doc = tmp;
     }
-
+    
     return _doc;
 };
 
@@ -235,31 +312,50 @@ var _mapFields = function(doc, fields) {
  * @returns {Array|Object} If [justOne=true] returns the next document, otherwise returns all the documents
  */
 var _getDocuments = function(cursor, justOne = false) {
-    if (cursor.selector_id) {
-        if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selector_id))) {
-            let idx = cursor.collection.doc_indexes[_.toString(cursor.selector_id)];
+    var docs = [];
+    
+    if (cursor.fetch_mode === Cursor.COLSCAN) {
+        // COLSCAN, wi will iterate over all documents
+        docs = _.cloneDeep(cursor.documents);
+    } else if (cursor.fetch_mode === Cursor.IDXSCAN) {
+        // IDXSCAN, wi will iterate over all needed documents
+        for (let i = 0; i < cursor.indexes.length; i++) {
+            let index = cursor.indexes[i];
             
-            return _mapFields(cursor.collection.docs[idx], cursor.fields);
-        } else {
-            if (justOne) {
-                return null;
-            } else {
-                return [];
+            for (let i = index.start; i < index.end; i++) {
+                // let idx_id = cursor.collection.getIndex(index.name)[i];
+                let idx_id = index.index[i];
+                
+                docs.push(cursor.documents[idx_id]);
             }
         }
     }
     
+    // if (cursor.selector_id) {
+    //     if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selector_id))) {
+    //         let idx = cursor.collection.doc_indexes[_.toString(cursor.selector_id)];
+            
+    //         return Cursor.project(cursor.collection.docs[idx], cursor.fields);
+    //     } else {
+    //         if (justOne) {
+    //             return null;
+    //         } else {
+    //             return [];
+    //         }
+    //     }
+    // }
+    
     // TODO add warning when sort/skip/limit and fetching one
     // TODO add warning when skip/limit without order
     // TODO index
-    while (cursor.cursor_pos < cursor.collection.docs.length) {
-        var _doc = cursor.collection.docs[cursor.cursor_pos];
+    while (cursor.cursor_pos < docs.length) {
+        var _doc = docs[cursor.cursor_pos];
         cursor.cursor_pos++;
         
         if (cursor.selector_compiled.test(_doc)) {
             if (_.isNil(cursor.db_objects)) cursor.db_objects = [];
             
-            _doc = _mapFields(_doc, cursor.fields);
+            _doc = Cursor.project(_doc, cursor.fields);
             
             cursor.db_objects.push(_doc);
             
@@ -293,6 +389,26 @@ Cursor.prototype.count = function() {
 };
 
 /**
+ * Set the sorting of the cursor
+ * 
+ * @method Cursor#sort
+ * 
+ * @param {Object|Array|String} spec - The sorting specification
+ * 
+ * @returns {Cursor} This instance so it can be chained with other methods
+ */
+Cursor.prototype.setSorting = function(spec) {
+    if (_.isNil(spec)) logger.throw("You need to specify a sorting");
+    
+    if (spec) {
+        this.sortValue = spec;
+        this.sort_compiled = (new Selector(spec, Selector.SORT_SELECTOR));
+    }
+    
+    return this;
+};
+
+/**
  * Applies a sorting on the cursor
  * 
  * @method Cursor#sort
@@ -309,15 +425,11 @@ Cursor.prototype.sort = function(spec) {
     }
     
     if (_sort) {
-        if (spec) {
-            this.sortValue = spec;
-            this.sort_compiled = _sort;
+        if (!_.isNil(this.db_objects) && _.isArray(this.db_objects)) {
+            this.db_objects = this.db_objects.sort(_sort);
+            this.sorted = true;
         } else {
-            // If no spec, do sort
-            if (!_.isNil(this.db_objects) && _.isArray(this.db_objects)) {
-                this.db_objects = this.db_objects.sort(_sort);
-                this.sorted = true;
-            }
+            this.setSorting(spec);
         }
     }
     
