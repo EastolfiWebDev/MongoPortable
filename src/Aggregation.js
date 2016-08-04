@@ -15,7 +15,7 @@ var _ = require("lodash"),
 var logger = null;
 
 var stages = {
-    '$project': false,
+    '$project': true,
     '$match': true,
     '$redact': false,
     '$limit': false,
@@ -192,6 +192,10 @@ var do_group = function(documents, group_stage) {
     }
 };
 
+var do_project = function(documents, project_stage) {
+    return Cursor.project(documents, project_stage, true);
+};
+
 class Aggregation {
     constructor(pipeline) {
         logger = Logger.instance;
@@ -207,6 +211,10 @@ class Aggregation {
             
             for (let key in stage) {
                 switch (key) {
+                    case '$project':
+                        docs = do_project(docs, stage[key]);
+                        
+                        break;
                     case '$match':
                         docs = do_match(docs, stage[key]);
                         
