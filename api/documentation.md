@@ -431,6 +431,7 @@ Collection class that maps a MongoDB-like collection
 * [Collection](#Collection)
     * [new Collection(db, collectionName, [options])](#new_Collection_new)
     * [.insert(doc, [options], [callback])](#Collection+insert) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
+    * [.bulkInsert(docs, [options], [callback])](#Collection+bulkInsert) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
     * [.find([selection], [fields], [options], [callback])](#Collection+find) ⇒ <code>Array</code> &#124; <code>[Cursor](#Cursor)</code>
     * [.findOne([selection], [fields], [options], [callback])](#Collection+findOne) ⇒ <code>Object</code>
     * [.update([selection], [update], [options], [callback])](#Collection+update) ⇒ <code>Object</code>
@@ -465,6 +466,21 @@ Inserts a document into the collection
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | doc | <code>Object</code> |  | Document to be inserted |
+| [options] | <code>Object</code> |  | Additional options |
+| [options.chain] | <code>Boolean</code> | <code>false</code> | If set to "true" returns this instance, so it can be chained with other methods |
+| [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
+
+<a name="Collection+bulkInsert"></a>
+
+### collection.bulkInsert(docs, [options], [callback]) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
+Inserts several documents into the collection
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+**Returns**: <code>Object</code> &#124; <code>[Collection](#Collection)</code> - If "options.chain" set to "true" returns this instance, otherwise returns the inserted document  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| docs | <code>Array</code> |  | Documents to be inserted |
 | [options] | <code>Object</code> |  | Additional options |
 | [options.chain] | <code>Boolean</code> | <code>false</code> | If set to "true" returns this instance, so it can be chained with other methods |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
@@ -608,41 +624,44 @@ Cursor class that maps a MongoDB-like cursor
 
 * [Cursor](#Cursor)
     * [new Cursor(db, documents, [selection], [fields], [options])](#new_Cursor_new)
-    * [.fetch_mode](#Cursor+fetch_mode)
-    * [.rewind()](#Cursor+rewind)
-    * [.forEach([callback])](#Cursor+forEach)
-    * [.map([callback])](#Cursor+map) ⇒ <code>Array</code>
-    * [.hasNext()](#Cursor+hasNext) ⇒ <code>Boolean</code>
-    * [.next()](#Cursor+next)
-    * [.fetch()](#Cursor+fetch)
-    * [.fetchAll()](#Cursor+fetchAll) ⇒ <code>Array</code>
-    * [.fetchOne()](#Cursor+fetchOne) ⇒ <code>Object</code>
-    * [.count()](#Cursor+count) ⇒ <code>Number</code>
-    * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.skip(skip)](#Cursor+skip) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.limit(limit)](#Cursor+limit) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.batchSize()](#Cursor+batchSize)
-    * [.close()](#Cursor+close)
-    * [.comment()](#Cursor+comment)
-    * [.explain()](#Cursor+explain)
-    * [.hint()](#Cursor+hint)
-    * [.itcount()](#Cursor+itcount)
-    * [.maxScan()](#Cursor+maxScan)
-    * [.maxTimeMS()](#Cursor+maxTimeMS)
-    * [.max()](#Cursor+max)
-    * [.min()](#Cursor+min)
-    * [.noCursorTimeout()](#Cursor+noCursorTimeout)
-    * [.objsLeftInBatch()](#Cursor+objsLeftInBatch)
-    * [.pretty()](#Cursor+pretty)
-    * [.readConcern()](#Cursor+readConcern)
-    * [.readPref()](#Cursor+readPref)
-    * [.returnKey()](#Cursor+returnKey)
-    * [.showRecordId()](#Cursor+showRecordId)
-    * [.size()](#Cursor+size)
-    * [.snapshot()](#Cursor+snapshot)
-    * [.tailable()](#Cursor+tailable)
-    * [.toArray()](#Cursor+toArray)
+    * _instance_
+        * [.fetch_mode](#Cursor+fetch_mode)
+        * [.rewind()](#Cursor+rewind)
+        * [.forEach([callback])](#Cursor+forEach)
+        * [.map([callback])](#Cursor+map) ⇒ <code>Array</code>
+        * [.hasNext()](#Cursor+hasNext) ⇒ <code>Boolean</code>
+        * [.next()](#Cursor+next)
+        * [.fetch()](#Cursor+fetch)
+        * [.fetchAll()](#Cursor+fetchAll) ⇒ <code>Array</code>
+        * [.fetchOne()](#Cursor+fetchOne) ⇒ <code>Object</code>
+        * [.count()](#Cursor+count) ⇒ <code>Number</code>
+        * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.skip(skip)](#Cursor+skip) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.limit(limit)](#Cursor+limit) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.batchSize()](#Cursor+batchSize)
+        * [.close()](#Cursor+close)
+        * [.comment()](#Cursor+comment)
+        * [.explain()](#Cursor+explain)
+        * [.hint()](#Cursor+hint)
+        * [.itcount()](#Cursor+itcount)
+        * [.maxScan()](#Cursor+maxScan)
+        * [.maxTimeMS()](#Cursor+maxTimeMS)
+        * [.max()](#Cursor+max)
+        * [.min()](#Cursor+min)
+        * [.noCursorTimeout()](#Cursor+noCursorTimeout)
+        * [.objsLeftInBatch()](#Cursor+objsLeftInBatch)
+        * [.pretty()](#Cursor+pretty)
+        * [.readConcern()](#Cursor+readConcern)
+        * [.readPref()](#Cursor+readPref)
+        * [.returnKey()](#Cursor+returnKey)
+        * [.showRecordId()](#Cursor+showRecordId)
+        * [.size()](#Cursor+size)
+        * [.snapshot()](#Cursor+snapshot)
+        * [.tailable()](#Cursor+tailable)
+        * [.toArray()](#Cursor+toArray)
+    * _static_
+        * [.project(doc, spec)](#Cursor.project) ⇒ <code>Array</code> &#124; <code>Object</code>
 
 <a name="new_Cursor_new"></a>
 
@@ -949,4 +968,17 @@ Set the max number of document to fetch
 **Todo**
 
 - [ ] Implement
+
+<a name="Cursor.project"></a>
+
+### Cursor.project(doc, spec) ⇒ <code>Array</code> &#124; <code>Object</code>
+Projects the fields of one or several documents, changing the output
+
+**Kind**: static method of <code>[Cursor](#Cursor)</code>  
+**Returns**: <code>Array</code> &#124; <code>Object</code> - The document/s after the projection  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| doc | <code>Array</code> &#124; <code>Object</code> | The document/s that will be projected |
+| spec | <code>String</code> &#124; <code>Array</code> &#124; <code>Object</code> | Fields projection specification. Can be an space/comma separated list, an array, or an object |
 

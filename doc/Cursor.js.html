@@ -221,7 +221,48 @@ Cursor.prototype.fetchOne = function() {
     return _getDocuments(this, true);
 };
 
-var _mapFields = function(doc, fields) {
+
+
+Cursor.sort = function(doc, fields) {
+    
+};
+
+/**
+ * Projects the fields of one or several documents, changing the output
+ * 
+ * @method Cursor.project
+ * 
+ * @param {Array|Object} doc - The document/s that will be projected
+ * @param {String|Array|Object} spec - Fields projection specification. Can be an space/comma separated list, an array, or an object
+ * 
+ * @returns {Array|Object} The document/s after the projection
+ */
+Cursor.project = function (doc, spec, aggregation = false) {
+    if (_.isNil(doc)) logger.throw('doc param required');
+    if (_.isNil(spec)) logger.throw('spec param required');
+
+    var fields = null;
+    if (aggregation) {
+        fields = new Selector(spec, Selector.AGG_FIELD_SELECTOR);
+    } else {
+        fields = new Selector(spec, Selector.FIELD_SELECTOR);
+    }
+    
+    if (_.isArray(doc)) {
+        for (var i = 0; i &lt; doc.length; i++) {
+            doc[i] = _mapFields(doc[i], fields);
+        }
+        
+        return doc;
+    } else {
+        return _mapFields(doc, fields);
+    }
+
+    
+
+};
+
+var _mapFields = function (doc, fields) {
     var _doc = _.cloneDeep(doc);
 
     if (!_.isNil(fields) &amp;&amp; _.isPlainObject(fields) &amp;&amp; !_.isEqual(fields, {})) {
@@ -233,29 +274,42 @@ var _mapFields = function(doc, fields) {
             showId = false;
         }
 
+        for (var field in fields) {
+            // Whether if we are showing or hidding fields
+            if (field !== '_id') {
+                if (fields[field] === 1) {
+                    showing = true;
+                    break;
+                } else if (fields[field] === -1) {
+                    showing = false;
+                    break;
+                }
+            }
+        }
+
         var tmp = null;
 
         for (var field in fields) {
-            // Whether if we are showing or hidding fields
-            if (field !== '_id' &amp;&amp; showing === null) {
-                showing = fields[field] === 1 ? true : false;
-            }
-
-            if (showing != null) {
-                if (tmp === null) {
-                    if (showing) {
-                        tmp = {};
-                    } else {
-                        tmp = _.cloneDeep(doc);
-                    }
+            if (tmp === null) {
+                if (showing) {
+                    tmp = {};
+                } else {
+                    tmp = _.cloneDeep(doc);
                 }
-        
-                // Add or remove the field
+            }
+    
+            // Add or remove the field
+            if (fields[field] === 1 || fields[field] === -1) {
+                // Show the field
                 if (showing) {
                     tmp[field] = doc[field];
                 } else {
+                    // Hide the field
                     delete tmp[field];
                 }
+            } else {
+                // Show the new field (rename)
+                tmp[field] = doc[fields[field]];
             }
         }
 
@@ -268,7 +322,7 @@ var _mapFields = function(doc, fields) {
 
         _doc = tmp;
     }
-
+    
     return _doc;
 };
 
@@ -307,7 +361,7 @@ var _getDocuments = function(cursor, justOne = false) {
     //     if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selector_id))) {
     //         let idx = cursor.collection.doc_indexes[_.toString(cursor.selector_id)];
             
-    //         return _mapFields(cursor.collection.docs[idx], cursor.fields);
+    //         return Cursor.project(cursor.collection.docs[idx], cursor.fields);
     //     } else {
     //         if (justOne) {
     //             return null;
@@ -327,7 +381,7 @@ var _getDocuments = function(cursor, justOne = false) {
         if (cursor.selector_compiled.test(_doc)) {
             if (_.isNil(cursor.db_objects)) cursor.db_objects = [];
             
-            _doc = _mapFields(_doc, cursor.fields);
+            _doc = Cursor.project(_doc, cursor.fields);
             
             cursor.db_objects.push(_doc);
             

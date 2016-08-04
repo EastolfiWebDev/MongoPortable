@@ -8,41 +8,44 @@ Cursor class that maps a MongoDB-like cursor
 
 * [Cursor](#Cursor)
     * [new Cursor(db, documents, [selection], [fields], [options])](#new_Cursor_new)
-    * [.fetch_mode](#Cursor+fetch_mode)
-    * [.rewind()](#Cursor+rewind)
-    * [.forEach([callback])](#Cursor+forEach)
-    * [.map([callback])](#Cursor+map) ⇒ <code>Array</code>
-    * [.hasNext()](#Cursor+hasNext) ⇒ <code>Boolean</code>
-    * [.next()](#Cursor+next)
-    * [.fetch()](#Cursor+fetch)
-    * [.fetchAll()](#Cursor+fetchAll) ⇒ <code>Array</code>
-    * [.fetchOne()](#Cursor+fetchOne) ⇒ <code>Object</code>
-    * [.count()](#Cursor+count) ⇒ <code>Number</code>
-    * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.skip(skip)](#Cursor+skip) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.limit(limit)](#Cursor+limit) ⇒ <code>[Cursor](#Cursor)</code>
-    * [.batchSize()](#Cursor+batchSize)
-    * [.close()](#Cursor+close)
-    * [.comment()](#Cursor+comment)
-    * [.explain()](#Cursor+explain)
-    * [.hint()](#Cursor+hint)
-    * [.itcount()](#Cursor+itcount)
-    * [.maxScan()](#Cursor+maxScan)
-    * [.maxTimeMS()](#Cursor+maxTimeMS)
-    * [.max()](#Cursor+max)
-    * [.min()](#Cursor+min)
-    * [.noCursorTimeout()](#Cursor+noCursorTimeout)
-    * [.objsLeftInBatch()](#Cursor+objsLeftInBatch)
-    * [.pretty()](#Cursor+pretty)
-    * [.readConcern()](#Cursor+readConcern)
-    * [.readPref()](#Cursor+readPref)
-    * [.returnKey()](#Cursor+returnKey)
-    * [.showRecordId()](#Cursor+showRecordId)
-    * [.size()](#Cursor+size)
-    * [.snapshot()](#Cursor+snapshot)
-    * [.tailable()](#Cursor+tailable)
-    * [.toArray()](#Cursor+toArray)
+    * _instance_
+        * [.fetch_mode](#Cursor+fetch_mode)
+        * [.rewind()](#Cursor+rewind)
+        * [.forEach([callback])](#Cursor+forEach)
+        * [.map([callback])](#Cursor+map) ⇒ <code>Array</code>
+        * [.hasNext()](#Cursor+hasNext) ⇒ <code>Boolean</code>
+        * [.next()](#Cursor+next)
+        * [.fetch()](#Cursor+fetch)
+        * [.fetchAll()](#Cursor+fetchAll) ⇒ <code>Array</code>
+        * [.fetchOne()](#Cursor+fetchOne) ⇒ <code>Object</code>
+        * [.count()](#Cursor+count) ⇒ <code>Number</code>
+        * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.skip(skip)](#Cursor+skip) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.limit(limit)](#Cursor+limit) ⇒ <code>[Cursor](#Cursor)</code>
+        * [.batchSize()](#Cursor+batchSize)
+        * [.close()](#Cursor+close)
+        * [.comment()](#Cursor+comment)
+        * [.explain()](#Cursor+explain)
+        * [.hint()](#Cursor+hint)
+        * [.itcount()](#Cursor+itcount)
+        * [.maxScan()](#Cursor+maxScan)
+        * [.maxTimeMS()](#Cursor+maxTimeMS)
+        * [.max()](#Cursor+max)
+        * [.min()](#Cursor+min)
+        * [.noCursorTimeout()](#Cursor+noCursorTimeout)
+        * [.objsLeftInBatch()](#Cursor+objsLeftInBatch)
+        * [.pretty()](#Cursor+pretty)
+        * [.readConcern()](#Cursor+readConcern)
+        * [.readPref()](#Cursor+readPref)
+        * [.returnKey()](#Cursor+returnKey)
+        * [.showRecordId()](#Cursor+showRecordId)
+        * [.size()](#Cursor+size)
+        * [.snapshot()](#Cursor+snapshot)
+        * [.tailable()](#Cursor+tailable)
+        * [.toArray()](#Cursor+toArray)
+    * _static_
+        * [.project(doc, spec)](#Cursor.project) ⇒ <code>Array</code> &#124; <code>Object</code>
 
 <a name="new_Cursor_new"></a>
 
@@ -349,4 +352,17 @@ Set the max number of document to fetch
 **Todo**
 
 - [ ] Implement
+
+<a name="Cursor.project"></a>
+
+### Cursor.project(doc, spec) ⇒ <code>Array</code> &#124; <code>Object</code>
+Projects the fields of one or several documents, changing the output
+
+**Kind**: static method of <code>[Cursor](#Cursor)</code>  
+**Returns**: <code>Array</code> &#124; <code>Object</code> - The document/s after the projection  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| doc | <code>Array</code> &#124; <code>Object</code> | The document/s that will be projected |
+| spec | <code>String</code> &#124; <code>Array</code> &#124; <code>Object</code> | Fields projection specification. Can be an space/comma separated list, an array, or an object |
 

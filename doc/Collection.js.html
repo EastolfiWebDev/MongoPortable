@@ -175,6 +175,49 @@ Collection.prototype.insert = function (doc, options, callback) {
 };
 
 /**
+ * Inserts several documents into the collection
+ * 
+ * @method Collection#bulkInsert
+ * 
+ * @param {Array} docs - Documents to be inserted
+ * @param {Object} [options] - Additional options
+ * 
+ * @param {Boolean} [options.chain=false] - If set to "true" returns this instance, so it can be chained with other methods
+ * 
+ * @param {Function} [callback=null] Callback function to be called at the end with the results
+ * 
+ * @returns {Object|Collection} If "options.chain" set to "true" returns this instance, otherwise returns the inserted document
+ */
+Collection.prototype.bulkInsert = function (docs, options, callback) {
+    if (_.isNil(docs)) logger.throw("docs parameter required");
+    
+    if (!_.isArray(docs)) logger.throw("docs must be an array");
+    
+    if (_.isNil(options)) options = {};
+    
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    }
+    
+    if (!_.isNil(callback) &amp;&amp; !_.isFunction(callback)) logger.throw("callback must be a function");
+    
+    var _docs = [];
+    
+    for (let i = 0; i &lt; docs.length; i++) {
+        let doc = docs[i];
+        
+        _docs.push(this.insert(doc, options));
+    }
+    
+    if (callback) callback(null, _docs);
+
+    if (options.chain) return this;
+    
+    return _docs;
+};
+
+/**
  * Finds all matching documents
  * 
  * @method Collection#find
