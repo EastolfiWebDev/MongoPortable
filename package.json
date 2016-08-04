@@ -37,6 +37,7 @@
     "grunt-coveralls": "1.0.1",
     "grunt-jsdoc": "2.0.0",
     "grunt-jsdoc-to-markdown": "1.2.1",
+    "grunt-mocha": "^1.0.2",
     "grunt-simple-mocha": "0.4.1",
     "jscoverage": "0.6.0",
     "mocha": "2.4.5",
