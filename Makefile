@@ -75,12 +75,15 @@ build_full_doc: build
 
 npm_major: test
 	npm version major --no-git-tag-version
+	git commit -m "VERSION: New major version released"
 
 npm_minor: test
 	npm version minor --no-git-tag-version
+	git commit -m "VERSION: New minor version released"
 
 npm_patch: test
 	npm version patch --no-git-tag-version
+	git commit -m "VERSION: New patch released"
 
 # Bower #
 
