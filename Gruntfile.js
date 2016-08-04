@@ -54,6 +54,12 @@ module.exports = function(grunt) {
             }
         },
         
+        mocha: {
+            test: {
+                src: ['test/browser/index.html'],
+            }
+        },
+        
         jsdoc : {
             dist : {
                 src: ['src/MongoPortable.js', 'src/Aggregation.js', 'src/Collection.js',
@@ -133,6 +139,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-mocha');
     
     // Building
     grunt.registerTask('watch_dist', ['watch:dist']);
@@ -146,8 +153,8 @@ module.exports = function(grunt) {
     
     // Testing
     grunt.registerTask('dev_test', ['simplemocha:dev']);
-    grunt.registerTask('run_test', ['simplemocha:all']);
     grunt.registerTask('coveralls_dist', ['coveralls:dist']);
+    grunt.registerTask('run_test', ['simplemocha:all', 'mocha:test']);
     
     grunt.registerTask('full_build', ['build_app', 'build_doc', 'run_test']);
     
