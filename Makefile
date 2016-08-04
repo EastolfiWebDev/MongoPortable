@@ -28,26 +28,6 @@ clean_test = rm -rf test/coverage && rm -rf test/results && rm -rf lib-cov
 
 ## Actions ##
 
-# Building Application #
-
-build:
-	$(build_app)
-	
-bundle: build
-	$(compress_bundle)
-	
-# Building Documentation #
-
-build_web_doc: build
-	$(build_web_full)
-	
-build_api_doc: build
-	$(build_api_full)
-	
-build_full_doc: build
-	$(build_web_full)
-	$(build_api_full)
-	
 # Running Tests #
 
 test: build
@@ -66,23 +46,68 @@ do_coverage: test
 	
 coverage: do_coverage
 	$(coveralls)
+
+# Building Application #
+
+build:
+	$(build_app)
 	
-# NPM Publishing #
+bundle: build
+	$(compress_bundle)
+	
+build_all: build bundle build_full_doc test coverage
+	
+# Building Documentation #
 
-build_all: build build_full_doc test coverage
+build_web_doc: build
+	$(build_web_full)
+	
+build_api_doc: build
+	$(build_api_full)
+	
+build_full_doc: build
+	$(build_web_full)
+	$(build_api_full)
+	
+## Publishg ##
 
-# Bower Publishing #
+# NPM #
 
-bower_major: bundle test
+npm_major: test
+	npm version major --no-git-tag-version
+
+npm_minor: test
+	npm version minor --no-git-tag-version
+
+npm_patch: test
+	npm version patch --no-git-tag-version
+
+# Bower #
+
+bower_major: test
 	bower version major -m "VERSION: New major version released (v%s)"
 	git push -u origin --follow-tags
 
-bower_minor: bundle test
+bower_minor: test
 	bower version minor -m "VERSION: New minor version released (v%s)"
 	git push -u origin --follow-tags
 
-bower_patch: bundle test
+bower_patch: test
 	bower version patch -m "VERSION: New patch released (v%s)"
 	git push -u origin --follow-tags
 	
-.PHONY: build_all
+# NPM & Bower #
+	
+publish_major:
+	make npm_major
+	make bower_major
+	
+publish_minor:
+	make npm_minor
+	make bower_minor
+	
+publish_patch:
+	make npm_patch
+	make bower_patch
+	
+.PHONY: build_all, publish_major, publish_minor, publish_patch

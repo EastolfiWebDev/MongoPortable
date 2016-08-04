@@ -1,6 +1,6 @@
 {
   "name": "mongo-portable",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Portable Pure JS MongoDB - Based on Monglodb (https://github.com/euforic/monglodb.git) by Christian Sullivan (http://RogueSynaptics.com)",
   "author": "Eduardo Astolfi <eastolfi91@gmail.com>",
   "keywords": [
@@ -46,8 +46,8 @@
   "scripts": {
     "test": "grunt run_test",
     "preversion": "npm test",
-    "version": "make build_all && git add -A lib && git add -A doc && git add -A api",
-    "postversion": "git push -u origin && git push --follow-tags -u origin && npm publish"
+    "version": "make build_all && git add . --all",
+    "postversion": "npm test"
   },
   "repository": {
     "type": "git",
