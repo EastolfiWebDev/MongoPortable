@@ -39,6 +39,7 @@ module.exports = function(grunt) {
                     "lib/Selector.js":                  "src/Selector.js",
                     "lib/Cursor.js":                    "src/Cursor.js",
                     "lib/Collection.js":                "src/Collection.js",
+                    "lib/Aggregation.js":               "src/Aggregation.js",
                     "lib/MongoPortable.js":             "src/MongoPortable.js"
                 }
             }
@@ -48,14 +49,15 @@ module.exports = function(grunt) {
             all: {
                 src: ['test/1_ObjectId.js', 'test/2_Selector.js',
                         'test/3_Cursor.js', 'test/4_Collection.js',
-                        'test/5_MongoPortable.js', 'test/6_Coverage.js']
+                        'test/5_Aggregation.js', 'test/6_MongoPortable.js', 
+                        'test/7_Coverage.js']
             }
         },
         
         jsdoc : {
             dist : {
-                src: ['src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js',
-                        'src/Selector.js', 'src/ObjectId.js'],
+                src: ['src/MongoPortable.js', 'src/Aggregation.js', 'src/Collection.js',
+                       'src/Cursor.js', 'src/Selector.js', 'src/ObjectId.js'],
                 options: {
                     destination: 'doc',
                     config: 'jsdoc.conf.json'
@@ -65,12 +67,13 @@ module.exports = function(grunt) {
         
         jsdoc2md: {
             fullDoc: {
-                src: ['src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js'],
+                src: ['src/MongoPortable.js', 'src/Aggregation.js', 'src/Collection.js', 'src/Cursor.js'],
                 dest: 'api/documentation.md'
             },
             apiDoc: {
                 files: [
                     { src: 'src/MongoPortable.js', dest: 'api/MongoPortable.md' },
+                    { src: 'src/Aggregation.js', dest: 'api/Aggregation.md' },
                     { src: 'src/Collection.js', dest: 'api/Collection.md' },
                     { src: 'src/Cursor.js', dest: 'api/Cursor.md' }
                 ]

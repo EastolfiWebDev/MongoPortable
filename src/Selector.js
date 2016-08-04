@@ -1,6 +1,7 @@
 var Logger = require("jsw-logger"),
     _ = require("lodash"),
-    SelectorMatcher = require("./SelectorMatcher");
+    SelectorMatcher = require("./SelectorMatcher"),
+    ObjectId = require("./ObjectId");
     
 var logger = null;
 
@@ -15,7 +16,9 @@ class Selector {
 		} else if (type === Selector.SORT_SELECTOR) {
 			return this.compileSort(selector);
 		} else if (type === Selector.FIELD_SELECTOR) {
-			return this.compileFields(selector);
+			return this.compileFields(selector, false);
+		} else if (type === Selector.AGG_FIELD_SELECTOR) {
+			return this.compileFields(selector, true);
 		} else {
 			logger.throw("You need to specify the selector type");
 		}
@@ -200,28 +203,33 @@ class Selector {
         // return _func(Selector._f._cmp);
     }
     
-    compileFields(spec) {
+    compileFields(spec, aggregation) {
         var projection = {};
         
         if (_.isNil(spec)) return projection;
         
         if (_.isString(spec)) {
+            // trim surrounding and inner spaces
             spec = spec.replace(/( )+/ig, ' ').trim();
             
+            // Replace the commas by spaces
             if (spec.indexOf(',') !== -1) {
                 // Replace commas by spaces, and treat it as a spaced-separated string
-                return this.compileFields(spec.replace(/,/ig, ' '));
+                return this.compileFields(spec.replace(/,/ig, ' '), aggregation);
             } else if (spec.indexOf(' ') !== -1) {
                 var fields = spec.split(' ');
                 
                 for (var i = 0; i < fields.length; i++) {
+                    // Get the field from the spec (we will be working with pairs)
                     var field = fields[i].trim();
                     
+                    // If the first is not a field, throw error
                     if ((field === '-1'    || field === '1') ||
                         (field === 'false' || field === 'true')) {
                             
                         throw Error("Bad fields specification: ", JSON.stringify(spec));
                     } else {
+                        // Get the next item of the pair
                         var next = _.toString(fields[i+1]);
                         
                         if (next === '-1' || next === '1') {
@@ -250,6 +258,10 @@ class Selector {
                             }
                             
                             i++;
+                        } else if (aggregation && next.indexOf('$') === 0) {
+                            projection[field] = next.replace('$', '');
+                            
+                            i++;
                         } else {
                             projection[field] = 1;
                         }
@@ -262,7 +274,7 @@ class Selector {
             }
         } else if (_.isArray(spec)) {
             // Join the array with spaces, and treat it as a spaced-separated string
-            return this.compileFields(spec.join(' '));
+            return this.compileFields(spec.join(' '), aggregation);
         } else if (_.isPlainObject(spec)) {
             // TODO Nested path -> .find({}, { "field1.field12": "asc" })
             var _spec = [];
@@ -273,7 +285,7 @@ class Selector {
                 }
             }
             
-            return this.compileFields(_spec);
+            return this.compileFields(_spec, aggregation);
         } else {
             throw Error("Bad fields specification: ", JSON.stringify(spec));
         }
@@ -415,6 +427,11 @@ var _buildKeypathSelector = function (keypath, value) {
             
             clause.type = 'operator_object';
         }
+    } else if (value instanceof ObjectId) {
+        logger.debug('clause of type ObjectId -> String');
+        
+        clause.type = 'string';
+        clause.value = value.toString();
     } else {
         clause.type = '__invalid__';
     }
@@ -440,5 +457,6 @@ var _buildKeypathSelector = function (keypath, value) {
 Selector.MATCH_SELECTOR = 'match';
 Selector.SORT_SELECTOR = 'sort';
 Selector.FIELD_SELECTOR = 'field';
+Selector.AGG_FIELD_SELECTOR = 'project';
 
 module.exports = Selector;

@@ -10,6 +10,7 @@
 var Logger = require("jsw-logger"),
     EventEmitter = require("./utils/EventEmitter"),
     _ = require("lodash"),
+    Aggregation = require("./Aggregation"),
     Cursor = require("./Cursor"),
     ObjectId = require('./ObjectId'),
     Selector = require("./Selector"),
@@ -146,6 +147,49 @@ Collection.prototype.insert = function (doc, options, callback) {
 };
 
 /**
+ * Inserts several documents into the collection
+ * 
+ * @method Collection#bulkInsert
+ * 
+ * @param {Array} docs - Documents to be inserted
+ * @param {Object} [options] - Additional options
+ * 
+ * @param {Boolean} [options.chain=false] - If set to "true" returns this instance, so it can be chained with other methods
+ * 
+ * @param {Function} [callback=null] Callback function to be called at the end with the results
+ * 
+ * @returns {Object|Collection} If "options.chain" set to "true" returns this instance, otherwise returns the inserted document
+ */
+Collection.prototype.bulkInsert = function (docs, options, callback) {
+    if (_.isNil(docs)) logger.throw("docs parameter required");
+    
+    if (!_.isArray(docs)) logger.throw("docs must be an array");
+    
+    if (_.isNil(options)) options = {};
+    
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    }
+    
+    if (!_.isNil(callback) && !_.isFunction(callback)) logger.throw("callback must be a function");
+    
+    var _docs = [];
+    
+    for (let i = 0; i < docs.length; i++) {
+        let doc = docs[i];
+        
+        _docs.push(this.insert(doc, options));
+    }
+    
+    if (callback) callback(null, _docs);
+
+    if (options.chain) return this;
+    
+    return _docs;
+};
+
+/**
  * Finds all matching documents
  * 
  * @method Collection#find
@@ -157,7 +201,7 @@ Collection.prototype.insert = function (doc, options, callback) {
  * @param {Number} [options.skip] - Number of documents to be skipped
  * @param {Number} [options.limit] - Max number of documents to display
  * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
- * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns't"e;array of documents already fetched
+ * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
  * 
  * @param {Function} [callback=null] - Callback function to be called at the end with the results
  * 
@@ -176,8 +220,7 @@ Collection.prototype.find = function (selection, fields, options, callback) {
     options = params.options;
     callback = params.callback;
     
-    // callback for backward compatibility
-    var cursor = new Cursor(this.db, this, selection, fields, options);
+    var cursor = new Cursor(this.docs, selection, fields, options);
 
     /**
      * "find" event.
@@ -238,7 +281,7 @@ Collection.prototype.findOne = function (selection, fields, options, callback) {
     options = params.options;
     callback = params.callback;
     
-    var cursor = new Cursor(this.db, this, selection, fields, options);
+    var cursor = new Cursor(this.docs, selection, fields, options);
 
     /**
      * "findOne" event.
@@ -876,6 +919,40 @@ Collection.prototype.restore = function (backupID, callback) {
     if (callback) callback(null);
 
     return this;
+};
+
+/**
+ * Calculates aggregate values for the data in a collection
+ * 
+ * @method Collection#aggregate
+ * 
+ * @param {Array} pipeline - A sequence of data aggregation operations or stages
+ * @param {Object} [options] - Additional options
+ * 
+ * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
+ * 
+ * @returns {Array|Cursor} If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
+ */
+Collection.prototype.aggregate = function(pipeline, options = { forceFetch: false }) {
+    if (_.isNil(pipeline) || !_.isArray(pipeline)) logger.throw('The "pipeline" param must be an array');
+    
+    var aggregation = new Aggregation(pipeline);
+    
+    for (let i = 0; i < pipeline.length; i++) {
+        let stage = pipeline[i];
+        
+        for (let key in stage) {
+            if (key.substr(0, 1) !== '$') logger.throw("The pipeline stages must begin with '$'");
+            
+            if (!aggregation.validStage(key)) logger.throw(`Invalid stage "${key}"`);
+            
+            break;
+        }
+    }
+    
+    var result = aggregation.aggregate(this);
+    
+    return result;  // change to cursor
 };
 
 /**
