@@ -9,6 +9,7 @@ Collection class that maps a MongoDB-like collection
 * [Collection](#Collection)
     * [new Collection(db, collectionName, [options])](#new_Collection_new)
     * [.insert(doc, [options], [callback])](#Collection+insert) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
+    * [.bulkInsert(docs, [options], [callback])](#Collection+bulkInsert) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
     * [.find([selection], [fields], [options], [callback])](#Collection+find) ⇒ <code>Array</code> &#124; <code>Cursor</code>
     * [.findOne([selection], [fields], [options], [callback])](#Collection+findOne) ⇒ <code>Object</code>
     * [.update([selection], [update], [options], [callback])](#Collection+update) ⇒ <code>Object</code>
@@ -43,6 +44,21 @@ Inserts a document into the collection
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | doc | <code>Object</code> |  | Document to be inserted |
+| [options] | <code>Object</code> |  | Additional options |
+| [options.chain] | <code>Boolean</code> | <code>false</code> | If set to "true" returns this instance, so it can be chained with other methods |
+| [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
+
+<a name="Collection+bulkInsert"></a>
+
+### collection.bulkInsert(docs, [options], [callback]) ⇒ <code>Object</code> &#124; <code>[Collection](#Collection)</code>
+Inserts several documents into the collection
+
+**Kind**: instance method of <code>[Collection](#Collection)</code>  
+**Returns**: <code>Object</code> &#124; <code>[Collection](#Collection)</code> - If "options.chain" set to "true" returns this instance, otherwise returns the inserted document  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| docs | <code>Array</code> |  | Documents to be inserted |
 | [options] | <code>Object</code> |  | Additional options |
 | [options.chain] | <code>Boolean</code> | <code>false</code> | If set to "true" returns this instance, so it can be chained with other methods |
 | [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |

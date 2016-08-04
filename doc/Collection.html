@@ -551,7 +551,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line881">line 881</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line924">line 924</a>
     </li></ul></dd>
     
 
@@ -593,6 +593,323 @@
 |
 
 <span class="param-type"><a href="Cursor.html">Cursor</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="bulkInsert"><span class="type-signature"></span>bulkInsert<span class="signature">(docs, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Object.html">Object</a>|<a href="Collection.html">Collection</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Inserts several documents into the collection
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>docs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Documents to be inserted</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Object.html">Object</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Additional options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chain</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">If set to "true" returns this instance, so it can be chained with other methods</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Callback function to be called at the end with the results</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line149">line 149</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If "options.chain" set to "true" returns this instance, otherwise returns the inserted document
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Object.html">Object</a></span>
+|
+
+<span class="param-type"><a href="Collection.html">Collection</a></span>
 
 
     </dd>
@@ -658,7 +975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line645">line 645</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line688">line 688</a>
     </li></ul></dd>
     
 
@@ -740,7 +1057,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line654">line 654</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line697">line 697</a>
     </li></ul></dd>
     
 
@@ -1036,7 +1353,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line663">line 663</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line706">line 706</a>
     </li></ul></dd>
     
 
@@ -1522,7 +1839,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line149">line 149</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -1958,7 +2275,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line211">line 211</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line254">line 254</a>
     </li></ul></dd>
     
 
@@ -2638,7 +2955,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line568">line 568</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line611">line 611</a>
     </li></ul></dd>
     
 
@@ -2924,7 +3241,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line705">line 705</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line748">line 748</a>
     </li></ul></dd>
     
 
@@ -3453,7 +3770,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line275">line 275</a>
+        <a href="Collection.js.html">Collection.js</a>, <a href="Collection.js.html#line318">line 318</a>
     </li></ul></dd>
     
 
