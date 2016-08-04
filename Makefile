@@ -101,13 +101,16 @@ bower_patch: test
 publish_major:
 	make npm_major
 	make bower_major
+	npm publish
 	
 publish_minor:
 	make npm_minor
 	make bower_minor
+	npm publish
 	
 publish_patch:
 	make npm_patch
 	make bower_patch
+	npm publish
 	
 .PHONY: build_all, publish_major, publish_minor, publish_patch
