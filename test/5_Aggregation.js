@@ -85,8 +85,6 @@ describe("Aggregation", function() {
                 }
             }]);
             
-            console.log(docs);
-            
             expect(docs).to.exist;
             expect(docs).to.be.instanceof(Array);
             expect(docs).to.have.length(3);
@@ -129,8 +127,6 @@ describe("Aggregation", function() {
                     }
                 }
             }]);
-            
-            console.log(docs);
             
             expect(docs).to.exist;
             expect(docs).to.be.instanceof(Array);
@@ -177,8 +173,6 @@ describe("Aggregation", function() {
                 }
             }]);
             
-            console.log(docs);
-            
             expect(docs).to.exist;
             expect(docs).to.be.instanceof(Array);
             expect(docs).to.have.length(3);
@@ -220,8 +214,6 @@ describe("Aggregation", function() {
                     age: -1
                 }
             }]);
-            
-            console.log(docs);
             
             expect(docs).to.exist;
             expect(docs).to.be.instanceof(Array);
@@ -281,16 +273,19 @@ describe("Aggregation", function() {
                 $sort: {
                     total: -1
                 }
+            }, {
+                $project: {
+                    suma_total: '$total',
+                    total: -1
+                }
             }]);
-            
-            console.log(docs);
             
             expect(docs).to.exist;
             expect(docs).to.be.instanceof(Array);
             expect(docs).to.have.length(2);
             
-            expect(docs[0]).to.be.eql({ _id: 22, total: 3 });
-            expect(docs[1]).to.be.eql({ _id: 23, total: 2 });
+            expect(docs[0]).to.be.eql({ _id: 22, suma_total: 3 });
+            expect(docs[1]).to.be.eql({ _id: 23, suma_total: 2 });
         });
     });
 });
