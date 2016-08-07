@@ -23,9 +23,6 @@ Portable database with persistence and MongoDB-like API
 * [MongoPortable](#MongoPortable)
     * [new MongoPortable(databaseName)](#new_MongoPortable_new)
     * _instance_
-        * [.use(name, fn)](#MongoPortable+use)
-        * [.addStore(store)](#MongoPortable+addStore) ⇒ <code>[MongoPortable](#MongoPortable)</code>
-        * [.collectionsInfo([collectionName], [callback])](#MongoPortable+collectionsInfo) ⇒ <code>Array</code>
         * [.fetchCollections()](#MongoPortable+fetchCollections)
         * [.collections([options], [callback])](#MongoPortable+collections) ⇒ <code>Array</code>
         * [.collectionNames([options], [callback])](#MongoPortable+collectionNames) ⇒ <code>Array</code>
@@ -60,46 +57,6 @@ MongoPortable
 | Param | Type | Description |
 | --- | --- | --- |
 | databaseName | <code>string</code> | Name of the database. |
-
-<a name="MongoPortable+use"></a>
-
-### mongoPortable.use(name, fn)
-Middleware functions
-
-**Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>String</code> | Name of the middleware:      <ul>          <li>"store": Add a custom store</li>      </ul> |
-| fn | <code>Object</code> &#124; <code>function</code> | Function to implement the middleware |
-
-<a name="MongoPortable+addStore"></a>
-
-### mongoPortable.addStore(store) ⇒ <code>[MongoPortable](#MongoPortable)</code>
-Adds a custom stores for remote and local persistence
-
-**Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
-**Returns**: <code>[MongoPortable](#MongoPortable)</code> - this - The current Instance  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| store | <code>Object</code> &#124; <code>function</code> | The custom store |
-
-<a name="MongoPortable+collectionsInfo"></a>
-
-### mongoPortable.collectionsInfo([collectionName], [callback]) ⇒ <code>Array</code>
-Returns a cursor to all the collection information.
-
-**Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
-**Todo**
-
-- [ ] Implement
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [collectionName] | <code>String</code> | <code></code> | the collection name we wish to retrieve the information from. |
-| [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
 <a name="MongoPortable+fetchCollections"></a>
 
@@ -639,27 +596,6 @@ Cursor class that maps a MongoDB-like cursor
         * [.sort(spec)](#Cursor+sort) ⇒ <code>[Cursor](#Cursor)</code>
         * [.skip(skip)](#Cursor+skip) ⇒ <code>[Cursor](#Cursor)</code>
         * [.limit(limit)](#Cursor+limit) ⇒ <code>[Cursor](#Cursor)</code>
-        * [.batchSize()](#Cursor+batchSize)
-        * [.close()](#Cursor+close)
-        * [.comment()](#Cursor+comment)
-        * [.explain()](#Cursor+explain)
-        * [.hint()](#Cursor+hint)
-        * [.itcount()](#Cursor+itcount)
-        * [.maxScan()](#Cursor+maxScan)
-        * [.maxTimeMS()](#Cursor+maxTimeMS)
-        * [.max()](#Cursor+max)
-        * [.min()](#Cursor+min)
-        * [.noCursorTimeout()](#Cursor+noCursorTimeout)
-        * [.objsLeftInBatch()](#Cursor+objsLeftInBatch)
-        * [.pretty()](#Cursor+pretty)
-        * [.readConcern()](#Cursor+readConcern)
-        * [.readPref()](#Cursor+readPref)
-        * [.returnKey()](#Cursor+returnKey)
-        * [.showRecordId()](#Cursor+showRecordId)
-        * [.size()](#Cursor+size)
-        * [.snapshot()](#Cursor+snapshot)
-        * [.tailable()](#Cursor+tailable)
-        * [.toArray()](#Cursor+toArray)
     * _static_
         * [.project(doc, spec)](#Cursor.project) ⇒ <code>Array</code> &#124; <code>Object</code>
 
@@ -800,174 +736,6 @@ Set the max number of document to fetch
 | Param | Type | Description |
 | --- | --- | --- |
 | limit | <code>Number</code> | The max number of documents |
-
-<a name="Cursor+batchSize"></a>
-
-### cursor.batchSize()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+close"></a>
-
-### cursor.close()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+comment"></a>
-
-### cursor.comment()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+explain"></a>
-
-### cursor.explain()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+hint"></a>
-
-### cursor.hint()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+itcount"></a>
-
-### cursor.itcount()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+maxScan"></a>
-
-### cursor.maxScan()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+maxTimeMS"></a>
-
-### cursor.maxTimeMS()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+max"></a>
-
-### cursor.max()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+min"></a>
-
-### cursor.min()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+noCursorTimeout"></a>
-
-### cursor.noCursorTimeout()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+objsLeftInBatch"></a>
-
-### cursor.objsLeftInBatch()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+pretty"></a>
-
-### cursor.pretty()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+readConcern"></a>
-
-### cursor.readConcern()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+readPref"></a>
-
-### cursor.readPref()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+returnKey"></a>
-
-### cursor.returnKey()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+showRecordId"></a>
-
-### cursor.showRecordId()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+size"></a>
-
-### cursor.size()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+snapshot"></a>
-
-### cursor.snapshot()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+tailable"></a>
-
-### cursor.tailable()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
-
-<a name="Cursor+toArray"></a>
-
-### cursor.toArray()
-**Kind**: instance method of <code>[Cursor](#Cursor)</code>  
-**Todo**
-
-- [ ] Implement
 
 <a name="Cursor.project"></a>
 
