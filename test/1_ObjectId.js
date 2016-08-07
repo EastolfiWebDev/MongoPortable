@@ -1,5 +1,11 @@
 var expect = require("chai").expect,
-    ObjectId = require("../lib/ObjectId");
+    _ = require("lodash");
+
+var Logger = require("jsw-logger");
+
+var BinaryParserBuffer = require("../lib/BinaryParserBuffer")(Logger);
+var BinaryParser = require("../lib/BinaryParser")(BinaryParserBuffer, Logger);
+var ObjectId = require("../lib/ObjectId")(BinaryParser, Logger, _);
 
 describe("ObjectId", function() {
     describe("#Constructor", function() {

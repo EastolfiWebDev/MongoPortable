@@ -105,12 +105,13 @@ module.exports = function(grunt) {
             },
             browser: {
                 files: {
-                    './dist/mongo-portable.js': './browser/index.js'
+                    './dist/mongo-portable.js': ['./node_modules/jsw-logger/index_browser.js', './index_browser.js']
                 },
                 options: {
                     transform: [['babelify', {presets: ['es2015', 'react']}]],
                     alias: {
-                        'mongo-portable':      './browser/MongoPortable.js',
+                        'jsw-logger':       './node_modules/jsw-logger/index_browser.js',
+                        'mongo-portable':   './index_browser.js'
                     }
                 }
             },
@@ -154,9 +155,9 @@ module.exports = function(grunt) {
     // Testing
     grunt.registerTask('dev_test', ['simplemocha:dev']);
     grunt.registerTask('coveralls_dist', ['coveralls:dist']);
-    grunt.registerTask('run_test', ['simplemocha:all', 'mocha:test']);
+    grunt.registerTask('test', ['simplemocha:all', 'mocha:test']);
     
-    grunt.registerTask('full_build', ['build_app', 'build_doc', 'run_test']);
+    grunt.registerTask('full_build', ['build_app', 'build_doc', 'test']);
     
     grunt.registerTask('default', ['full_build']);
 };
