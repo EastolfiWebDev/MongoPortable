@@ -1,5 +1,13 @@
 var expect = require("chai").expect,
-    Selector = require("../lib/Selector");
+    _ = require("lodash");
+
+var Logger = require("jsw-logger");
+
+var BinaryParserBuffer = require("../lib/BinaryParserBuffer")(Logger);
+var BinaryParser = require("../lib/BinaryParser")(BinaryParserBuffer, Logger);
+var ObjectId = require("../lib/ObjectId")(BinaryParser, Logger, _);
+var SelectorMatcher = require("../lib/SelectorMatcher")(Logger, _);
+var Selector = require("../lib/Selector")(ObjectId, SelectorMatcher, Logger, _);
 
 describe("Selector", function() {
     describe("#Constructor", function() {

@@ -17,4 +17,3 @@ describe("MongoPortable - Web", function() {
         expect(Logger).to.exist;
     });
 });
-    

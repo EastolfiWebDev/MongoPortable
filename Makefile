@@ -16,7 +16,7 @@ build_web_full = $(grunt) build_doc
 build_api_full = $(grunt) build_html
 
 # Testing #
-run_test = $(grunt) run_test
+run_test = $(grunt) test
 
 coveralls = $(grunt) coveralls_dist
 
@@ -30,7 +30,7 @@ clean_test = rm -rf test/coverage && rm -rf test/results && rm -rf lib-cov
 
 # Running Tests #
 
-test: build
+test: bundle
 	$(run_test)
 	
 do_coverage: test

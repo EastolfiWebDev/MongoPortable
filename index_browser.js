@@ -1,6 +1,4 @@
-module.exports = require('./lib/MongoPortable');
-
-var _ = require("lodash");
+/* global _ */
 
 var Logger = require("jsw-logger");
 

@@ -1,16 +1,20 @@
-/* Special test case for reaching 100% coverage, due to babel.js transforming */
-
 var expect = require("chai").expect,
-    EventEmitter = require("../lib/utils/EventEmitter"),
-    BinaryParser = require("../lib/BinaryParser"),
-    BinaryParserBuffer = require("../lib/BinaryParserBuffer"),
-    ObjectId = require("../lib/ObjectId"),
-    Selector = require("../lib/Selector"),
-    SelectorMatcher = require("../lib/SelectorMatcher"),
-    Cursor = require("../lib/Cursor"),
-    Collection = require("../lib/Collection"),
-    Aggregation = require("../lib/Aggregation"),
-    MongoPortable = require("../lib/MongoPortable");
+    _ = require("lodash");
+
+var Logger = require("jsw-logger");
+
+var EventEmitter = require("../lib/utils/EventEmitter")(Logger, _);
+var BinaryParserBuffer = require("../lib/BinaryParserBuffer")(Logger);
+var BinaryParser = require("../lib/BinaryParser")(BinaryParserBuffer, Logger);
+var ObjectId = require("../lib/ObjectId")(BinaryParser, Logger, _);
+var SelectorMatcher = require("../lib/SelectorMatcher")(Logger, _);
+var Selector = require("../lib/Selector")(ObjectId, SelectorMatcher, Logger, _);
+var Cursor = require("../lib/Cursor")(Selector, Logger, _);
+var Aggregation = require("../lib/Aggregation")(Selector, Cursor, Logger, _);
+var Collection = require("../lib/Collection")(Aggregation, Cursor, Selector, SelectorMatcher, ObjectId, EventEmitter, Logger, _);
+var MongoPortable = require("../lib/MongoPortable")(Collection, ObjectId, EventEmitter, Logger, _);
+
+/* Special test case for reaching 100% coverage, due to babel.js transforming */
 
 var TEST_COLL = "TEST_COLL";
 
