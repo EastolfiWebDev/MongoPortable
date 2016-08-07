@@ -1,6 +1,6 @@
 /**
  * MongoPortable - Solution for a MongoDB-like portable database.
- * version 1.2.0
+ * version 1.2.1
  * 
  * made by Eduardo Astolfi <eastolfi91@gmail.com>
  * copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>

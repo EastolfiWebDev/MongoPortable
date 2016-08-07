@@ -9,9 +9,6 @@ Portable database with persistence and MongoDB-like API
 * [MongoPortable](#MongoPortable)
     * [new MongoPortable(databaseName)](#new_MongoPortable_new)
     * _instance_
-        * [.use(name, fn)](#MongoPortable+use)
-        * [.addStore(store)](#MongoPortable+addStore) ⇒ <code>[MongoPortable](#MongoPortable)</code>
-        * [.collectionsInfo([collectionName], [callback])](#MongoPortable+collectionsInfo) ⇒ <code>Array</code>
         * [.fetchCollections()](#MongoPortable+fetchCollections)
         * [.collections([options], [callback])](#MongoPortable+collections) ⇒ <code>Array</code>
         * [.collectionNames([options], [callback])](#MongoPortable+collectionNames) ⇒ <code>Array</code>
@@ -41,46 +38,6 @@ MongoPortable
 | Param | Type | Description |
 | --- | --- | --- |
 | databaseName | <code>string</code> | Name of the database. |
-
-<a name="MongoPortable+use"></a>
-
-### mongoPortable.use(name, fn)
-Middleware functions
-
-**Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>String</code> | Name of the middleware:      <ul>          <li>"store": Add a custom store</li>      </ul> |
-| fn | <code>Object</code> &#124; <code>function</code> | Function to implement the middleware |
-
-<a name="MongoPortable+addStore"></a>
-
-### mongoPortable.addStore(store) ⇒ <code>[MongoPortable](#MongoPortable)</code>
-Adds a custom stores for remote and local persistence
-
-**Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
-**Returns**: <code>[MongoPortable](#MongoPortable)</code> - this - The current Instance  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| store | <code>Object</code> &#124; <code>function</code> | The custom store |
-
-<a name="MongoPortable+collectionsInfo"></a>
-
-### mongoPortable.collectionsInfo([collectionName], [callback]) ⇒ <code>Array</code>
-Returns a cursor to all the collection information.
-
-**Kind**: instance method of <code>[MongoPortable](#MongoPortable)</code>  
-**Todo**
-
-- [ ] Implement
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [collectionName] | <code>String</code> | <code></code> | the collection name we wish to retrieve the information from. |
-| [callback] | <code>function</code> | <code></code> | Callback function to be called at the end with the results |
 
 <a name="MongoPortable+fetchCollections"></a>
 
