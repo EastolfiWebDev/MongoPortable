@@ -6,6 +6,8 @@ Solution for a MongoDB-like portable database.
 
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
+[![Codeship Build][codeship-image]][codeship-url]
+
 [![Test Coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][npm-url]
 [![Documentation Status][docs-image]][docs-url]
@@ -192,6 +194,9 @@ MIT
 [travis-url]: https://travis-ci.org/EastolfiWebDev/MongoPortable
 [appveyor-image]: https://img.shields.io/appveyor/ci/eastolfi/MongoPortable/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/eastolfi/mongoportable
+[codeship-image]: https://codeship.com/projects/d57e8820-5e10-0134-8b6d-42ae3f63aed8/status?branch=master
+[codeship-url]: https://codeship.com/projects/174143
+
 [coveralls-image]: https://coveralls.io/repos/github/EastolfiWebDev/MongoPortable/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/EastolfiWebDev/MongoPortable?branch=master
 [downloads-image]: https://img.shields.io/npm/dt/mongo-portable.svg
