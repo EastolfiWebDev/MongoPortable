@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Mongo Portable by EastolfiWebDev</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Mongo Portable</h1>
+        <h2>Solution for a MongoDB-like portable database</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/EastolfiWebDev/MongoPortable/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/EastolfiWebDev/MongoPortable/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/EastolfiWebDev/MongoPortable" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="mongoportable" class="anchor" href="#mongoportable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MongoPortable</h1>
+
+<p>Solution for a MongoDB-like portable database.</p>
+
+<p><a href="https://www.npmjs.com/package/mongo-portable"><img src="https://img.shields.io/npm/v/mongo-portable.svg?label=Package%20Version" alt="Package Version"></a>
+<a href="https://nodejs.org/en/"><img src="https://img.shields.io/badge/node-v4.4.0-blue.svg?label=Node%20Version" alt="NodeJS Version"></a></p>
+
+<p><a href="https://travis-ci.org/EastolfiWebDev/MongoPortable"><img src="https://img.shields.io/travis/EastolfiWebDev/MongoPortable.svg?label=linux" alt="Linux Build"></a>
+<a href="https://ci.appveyor.com/project/eastolfi/mongoportable"><img src="https://img.shields.io/appveyor/ci/eastolfi/MongoPortable/master.svg?label=windows" alt="Windows Build"></a>
+<a href="https://codeship.com/projects/174143"><img src="https://codeship.com/projects/d57e8820-5e10-0134-8b6d-42ae3f63aed8/status?branch=master" alt="Codeship Build"></a></p>
+
+<p><a href="https://coveralls.io/github/EastolfiWebDev/MongoPortable?branch=master"><img src="https://coveralls.io/repos/github/EastolfiWebDev/MongoPortable/badge.svg?branch=master" alt="Test Coverage"></a>
+<a href="https://www.npmjs.com/package/mongo-portable"><img src="https://img.shields.io/npm/dt/mongo-portable.svg" alt="Downloads"></a>
+<a href="http://mongoportable.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/mongoportable/badge/?version=latest" alt="Documentation Status"></a></p>
+
+<p>It handles the collections and documents in memory, and allow the use of stores for persistence.</p>
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h1>
+
+<div class="highlight highlight-source-shell"><pre>npm install --save mongo-portable</pre></div>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h1>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// Declaring the module dependency</span>
+<span class="pl-k">var</span> MongoPortable <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">"</span>mongo-portable<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// Instantiates a new ddbb object by passing a ddbb name</span>
+<span class="pl-k">var</span> db <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">MongoPortable</span>(<span class="pl-s"><span class="pl-pds">"</span>TEST<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// Creates a new collection named "users" </span>
+<span class="pl-c">//      (if it's already created, it will just return it instead)</span>
+<span class="pl-k">var</span> users <span class="pl-k">=</span> <span class="pl-smi">db</span>.<span class="pl-en">collection</span>(<span class="pl-s"><span class="pl-pds">"</span>users<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// Inserts a new document into the collection</span>
+<span class="pl-k">var</span> <span class="pl-c1">document</span> <span class="pl-k">=</span> <span class="pl-smi">users</span>.<span class="pl-en">insert</span>({ name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>John<span class="pl-pds">"</span></span>, lastName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Abruzzi<span class="pl-pds">"</span></span> });
+<span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">document</span>);  <span class="pl-c">// -&gt; { name: "John", lastName: "Abruzzi" }</span>
+
+<span class="pl-c">// Creates a cursor with the query information, ready to be fetched</span>
+<span class="pl-k">var</span> cursor <span class="pl-k">=</span> <span class="pl-smi">users</span>.<span class="pl-c1">find</span>({ name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>John<span class="pl-pds">"</span></span> });
+
+<span class="pl-c">// Iterates over the cursor, obtaining each document that matchs the query</span>
+<span class="pl-smi">cursor</span>.<span class="pl-c1">forEach</span>(<span class="pl-k">function</span>(<span class="pl-smi">doc</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(doc);  <span class="pl-c">// -&gt; { name: "John", lastName: "Abruzzi" }</span>
+});</pre></div>
+
+<h1>
+<a id="modules" class="anchor" href="#modules" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Modules</h1>
+
+<p>The modules visibles for an application are <a href="#MongoPortable">MongoPortable</a>, <a href="#Collection">Collection</a> and <a href="#Cursor">Cursor</a>.</p>
+
+<h2>
+<a id="mongoportable-1" class="anchor" href="#mongoportable-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MongoPortable</h2>
+
+<p>Handles the database, collections and connections.</p>
+
+<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/MongoPortable.md">here</a></p>
+
+<h2>
+<a id="collection" class="anchor" href="#collection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection</h2>
+
+<p>Handles the list of documents by using cursors.</p>
+
+<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Collection.md">here</a></p>
+
+<h2>
+<a id="cursor" class="anchor" href="#cursor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cursor</h2>
+
+<p>Fetchs and access the documents to return them to the client.</p>
+
+<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Cursor.md">here</a></p>
+
+<hr>
+
+<h1>
+<a id="stores" class="anchor" href="#stores" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stores</h1>
+
+<h2>
+<a id="file-system-store" class="anchor" href="#file-system-store" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>File System Store</h2>
+
+<p>It is located in a separated module, so install it by:</p>
+
+<div class="highlight highlight-source-shell"><pre>npm install --save file-system-store</pre></div>
+
+<p>And then use it in your application by adding it in your MongoPortable instance:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> FileSystemStore <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">"</span>file-system-store<span class="pl-pds">"</span></span>);
+<span class="pl-smi">db</span>.<span class="pl-en">addStore</span>(FileSystemStore);</pre></div>
+
+<p>or as a middleware:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> FileSystemStore <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">"</span>file-system-store<span class="pl-pds">"</span></span>);
+<span class="pl-smi">db</span>.<span class="pl-en">use</span>(<span class="pl-s"><span class="pl-pds">"</span>store<span class="pl-pds">"</span></span>, FileSystemStore);</pre></div>
+
+<p>View the package <a href="https://github.com/EastolfiWebDev/FileSystemStore">here</a> and read the full API documentation <a href="https://github.com/EastolfiWebDev/FileSystemStore/blob/master/api/FileSystemStore.md">here</a></p>
+
+<hr>
+
+<h2>
+<a id="to-do-list" class="anchor" href="#to-do-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TO-DO List</h2>
+
+<h3>
+<a id="database-operations" class="anchor" href="#database-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Database Operations</h3>
+
+<ul>
+<li>[ ] DDBB
+
+<ul>
+<li>[X] .use() (Middleware)</li>
+<li>[X] .addStore()</li>
+<li>[X] .dropDatabase()</li>
+<li>[ ] Connections</li>
+</ul>
+</li>
+<li>[ ] Collections
+
+<ul>
+<li>[ ] .collectionsInfo()</li>
+<li>[X] .collections()</li>
+<li>[X] .collectionNames()</li>
+<li>[X] .collection()</li>
+<li>[X] .dropCollection()</li>
+<li>[X] .renameCollection()</li>
+<li>[X] .dropCollection()</li>
+<li>[X] .dropCollection()</li>
+<li>[X] .dropCollection()</li>
+</ul>
+</li>
+<li>[ ] Indexes
+
+<ul>
+<li>[ ] .createIndex()</li>
+<li>[ ] .ensureIndex()</li>
+<li>[ ] .dropIndex()</li>
+<li>[ ] .reIndex()</li>
+<li>[ ] .indexInformation()</li>
+</ul>
+</li>
+<li>[ ] <a href="https://docs.mongodb.com/manual/reference/command/">db.runCommand()</a>
+
+<ul>
+<li>[ ] User Commands</li>
+<li>[ ] Database Operations</li>
+<li>[ ] Internal Commands</li>
+<li>[ ] Testing Commands</li>
+<li>[ ] Auditing Commands</li>
+</ul>
+</li>
+</ul>
+
+<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/MongoPortable.md">here</a></p>
+
+<hr>
+
+<h2>
+<a id="collection-1" class="anchor" href="#collection-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection</h2>
+
+<ul>
+<li>[X] Creating
+
+<ul>
+<li>[X] .insert()</li>
+</ul>
+</li>
+<li>[X] Reading
+
+<ul>
+<li>[X] .find()</li>
+<li>[X] .findOne()</li>
+</ul>
+</li>
+<li>[X] Updating
+
+<ul>
+<li>[X] .update()</li>
+</ul>
+</li>
+<li>[X] Deleting
+
+<ul>
+<li>[X] .remove()</li>
+</ul>
+</li>
+</ul>
+
+<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Collection.md">here</a></p>
+
+<hr>
+
+<h2>
+<a id="cursor-1" class="anchor" href="#cursor-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cursor</h2>
+
+<ul>
+<li>[X] Fetching
+
+<ul>
+<li>[X] .rewind()</li>
+<li>[X] .forEach()</li>
+<li>[X] .map()</li>
+<li>[X] .hasNext()</li>
+<li>[X] .next()</li>
+<li>[X] .fetchAll()</li>
+<li>[X] .fetchOne()</li>
+<li>[X] .count()</li>
+<li>[X] .sort()</li>
+<li>[X] .skip()</li>
+<li>[X] .limit()</li>
+</ul>
+</li>
+<li>[ ] Managing
+
+<ul>
+<li>[ ] .batchSize()</li>
+<li>[ ] .close()</li>
+<li>[ ] .comment()</li>
+<li>[ ] .explain()</li>
+<li>[ ] .hint()</li>
+<li>[ ] .itcount()</li>
+<li>[ ] .maxScan()</li>
+<li>[ ] .maxTimeMS()</li>
+<li>[ ] .max()</li>
+<li>[ ] .min()</li>
+<li>[ ] .noCursorTimeout()</li>
+<li>[ ] .objsLeftInBatch()</li>
+<li>[ ] .pretty()</li>
+<li>[ ] .readConcern()</li>
+<li>[ ] .readPref()</li>
+<li>[ ] .returnKey()</li>
+<li>[ ] .showRecordId()</li>
+<li>[ ] .size()</li>
+<li>[ ] .snapshot()</li>
+<li>[ ] .tailable()</li>
+<li>[ ] .toArray()</li>
+</ul>
+</li>
+</ul>
+
+<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Cursor.md">here</a></p>
+
+<hr>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h1>
+
+<p>MIT</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
