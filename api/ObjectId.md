@@ -11,9 +11,9 @@ Represents the BSON ObjectId type
     * [.toHexString()](#ObjectId+toHexString) ⇒ <code>String</code>
     * [.equals(otherID)](#ObjectId+equals) ⇒ <code>Boolean</code>
     * [.getTimestamp()](#ObjectId+getTimestamp) ⇒ <code>Number</code>
-    * [.createPk(time)](#ObjectId+createPk) ⇒ <code>[ObjectId](#ObjectId)</code>
-    * [.createFromTime(time)](#ObjectId+createFromTime) ⇒ <code>[ObjectId](#ObjectId)</code>
     * [.createFromHexString(hexString)](#ObjectId+createFromHexString) ⇒ <code>[ObjectId](#ObjectId)</code>
+    * [.createFromTime(time)](#ObjectId+createFromTime) ⇒ <code>[ObjectId](#ObjectId)</code>
+    * [.createPk(time)](#ObjectId+createPk) ⇒ <code>[ObjectId](#ObjectId)</code>
 
 <a name="new_ObjectId_new"></a>
 
@@ -51,17 +51,17 @@ Returns the generation time in seconds that this ID was generated.
 
 **Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
 **Returns**: <code>Number</code> - Number of seconds in the timestamp part of the 12 byte id.  
-<a name="ObjectId+createPk"></a>
+<a name="ObjectId+createFromHexString"></a>
 
-### objectId.createPk(time) ⇒ <code>[ObjectId](#ObjectId)</code>
-Creates an ObjectId from a second based number, with the rest of the ObjectId zeroed out. Used for comparisons or sorting the ObjectId.
+### objectId.createFromHexString(hexString) ⇒ <code>[ObjectId](#ObjectId)</code>
+Creates an ObjectId from a hex string representation of an ObjectId.
 
 **Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>[ObjectId](#ObjectId)</code> - return the created ObjectId  
+**Returns**: <code>[ObjectId](#ObjectId)</code> - The created ObjectId  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| time | <code>Number</code> | an integer number representing a number of seconds. |
+| hexString | <code>String</code> | An ObjectId 24 byte hexstring representation. |
 
 <a name="ObjectId+createFromTime"></a>
 
@@ -76,15 +76,15 @@ Used for comparisons or sorting the ObjectId.
 | --- | --- | --- |
 | time | <code>Number</code> | A number of seconds. |
 
-<a name="ObjectId+createFromHexString"></a>
+<a name="ObjectId+createPk"></a>
 
-### objectId.createFromHexString(hexString) ⇒ <code>[ObjectId](#ObjectId)</code>
-Creates an ObjectId from a hex string representation of an ObjectId.
+### objectId.createPk(time) ⇒ <code>[ObjectId](#ObjectId)</code>
+Creates an ObjectId from a second based number, with the rest of the ObjectId zeroed out. Used for comparisons or sorting the ObjectId.
 
 **Kind**: instance method of <code>[ObjectId](#ObjectId)</code>  
-**Returns**: <code>[ObjectId](#ObjectId)</code> - The created ObjectId  
+**Returns**: <code>[ObjectId](#ObjectId)</code> - return the created ObjectId  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| hexString | <code>String</code> | An ObjectId 24 byte hexstring representation. |
+| time | <code>Number</code> | an integer number representing a number of seconds. |
 
