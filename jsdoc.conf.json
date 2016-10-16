@@ -1,4 +1,7 @@
 {
+    "opts": {
+        "destination": "./doc"
+    },
     "templates": {
         "default": {
             "includeDate": false
