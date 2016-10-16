@@ -335,7 +335,6 @@ module.exports = function (BinaryParserBuffer, Logger) {
      * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
      * 
      */
-
     var BinaryParser = function BinaryParser(bigEndian, allowExceptions) {
         _classCallCheck(this, BinaryParser);
 
@@ -777,7 +776,6 @@ module.exports = function (Logger) {
      * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
      * 
      */
-
     var BinaryParserBuffer = function () {
         function BinaryParserBuffer(bigEndian, buffer) {
             _classCallCheck(this, BinaryParserBuffer);
@@ -859,7 +857,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
     return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 };
 
 var _createClass = function () {
@@ -2224,7 +2222,6 @@ module.exports = function (Selector, Logger, _) {
      * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
      * 
      */
-
     var Cursor = function Cursor(documents, selection, fields) {
         var options = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 
@@ -2824,7 +2821,7 @@ module.exports = function (Selector, Logger, _) {
      * @todo Implement
      */
     Cursor.prototype.snapshot = function () {
-        // Forces the cursor to use the index on the _id field. Ensures that the cursor returns each document,
+        // Forces the cursor to use the index on the _id field. Ensures that the cursor returns each document, 
         // with regards to the value of the _id field, only once.
         throw new Error("Not yet implemented");
     };
@@ -2895,7 +2892,6 @@ module.exports = function (Collection, ObjectId, EventEmitter, Logger, _) {
      * 
      * @param {string} databaseName - Name of the database.
      */
-
     var MongoPortable = function (_EventEmitter) {
         _inherits(MongoPortable, _EventEmitter);
 
@@ -3518,7 +3514,7 @@ module.exports = function (Collection, ObjectId, EventEmitter, Logger, _) {
                     return this;
                 }
 
-                // Check for the old property name to
+                // Check for the old property name to 
                 // avoid a ReferenceError in strict mode.
                 if (this.hasOwnProperty(oldName)) {
                     this[newName] = this[oldName];
@@ -4085,6 +4081,7 @@ module.exports = function (ObjectId, SelectorMatcher, Logger, _) {
 
                     for (var i = 0; i < keys.length; i++) {
                         if (i !== 0 && x !== 0) return x; // Non reachable?
+
 
                         // x = Selector._f._cmp(a[JSON.stringify(keys[i])], b[JSON.stringify(keys[i])]);
                         x = SelectorMatcher.cmp(a[keys[i]], b[keys[i]]);
