@@ -13,7 +13,7 @@ gulp.task('clean:lib', function () {
     ]);
 });
 
-gulp.task('build:app', function () {
+gulp.task('build:app', ['clean:lib'], function () {
     return gulp.src('src/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(babel({
