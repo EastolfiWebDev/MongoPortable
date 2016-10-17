@@ -19,6 +19,7 @@ for (var i = 0; i < 64; i++) {
 }
 
 module.exports = function(BinaryParserBuffer, Logger) {
+    logger = Logger.instance;
 
     /**
      * BinaryParser
@@ -145,12 +146,12 @@ module.exports = function(BinaryParserBuffer, Logger) {
         if ((exp = bias + 1 - i) >= minExp && exp <= maxExp) {
             ++i;
         } else if (exp < minExp) {
-            exp != bias + 1 - len && exp < minUnnormExp && console.warn("encodeFloat::float underflow");    // TODO logger
+            exp != bias + 1 - len && exp < minUnnormExp && logger.warn("encodeFloat::float underflow");
             i = bias + 1 - (exp = minExp - 1);
         }
         
         if (intPart || status !== 0) {
-            console.warn(intPart ? "encodeFloat::float overflow" : "encodeFloat::" + status);    // TODO logger
+            logger.warn(intPart ? "encodeFloat::float overflow" : "encodeFloat::" + status);
             exp = maxExp + 1;
             i = bias + 2;
         
@@ -183,7 +184,7 @@ module.exports = function(BinaryParserBuffer, Logger) {
         var max = maxBits[bits];
         
         if (data >= max || data < -(max / 2)) {
-            console.warn("encodeInt::overflow");    // TODO logger
+            logger.warn("encodeInt::overflow");
             data = 0;
         }
         
