@@ -52,16 +52,14 @@ gulp.task('doc:app', function (cb) {
         .pipe(jsdoc(config, cb));
 });
 
-// TODO
-// gulp.task('bundle', function() {
-//     // Single entry point to browserify 
-//     gulp.src('src/js/app.js')
-//         .pipe(browserify({
-//           insertGlobals : true,
-//           debug : !gulp.env.production
-//         }))
-//         .pipe(gulp.dest('./build/js'))
-// });
+gulp.task('bundle', function() {
+    // Single entry point to browserify 
+    return gulp.src(['./index.js'/*, './node_modules/jsw-logger/index.js'*/])
+        .pipe(browserify({
+            insertGlobals : true
+        }))
+        .pipe(gulp.dest('./build'));
+});
 
 gulp.task('clean:lib', function () {
     return del([
@@ -80,7 +78,7 @@ gulp.task('test:app', function () {
 });
 
 gulp.task('test:browser', function () { 
-    return gulp.src('test/browser/index.html', {read: false})
+    return gulp.src('tests/index.html', {read: false})
         .pipe(mochaPhantomJS({reporter: 'nyan'}));
 });
 
@@ -181,7 +179,7 @@ gulp.task('build', function(callback) {
 gulp.task('test', function(callback) {
     runSequence(
         'test:app',
-        'test:browser',
+        // 'test:browser',
     function (error) {
         if (error) {
             console.log(error.message);
@@ -240,3 +238,27 @@ gulp.task('release', function (callback) {
         callback(error);
     });
 });
+
+// gulp.task('test-client', ['bundle-test'], function() {
+//     return gulp.src('tests/fixtures/index.html')
+//         .pipe(mochaPhantomJS({reporter: 'nyan'}));
+// });
+
+// gulp.task('bundle-client', function() {
+//     return gulp.src('tests/index.js')
+//     // return gulp.src('index_browser.js')
+//         .pipe(browserify({
+//           insertGlobals: true
+//         }))
+//         .pipe(rename('mongo-portable.js'))
+//         .pipe(gulp.dest('build'));
+// });
+
+// gulp.task('bundle-test', ['bundle-client'], function() {
+//     return gulp.src('tests/specs/index.js')
+//         .pipe(browserify({
+//           insertGlobals: true
+//         }))
+//         .pipe(rename('client-test.js'))
+//         .pipe(gulp.dest('tests/specs'));
+// });
