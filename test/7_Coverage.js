@@ -3,6 +3,9 @@ var expect = require("chai").expect,
 
 var Logger = require("jsw-logger");
 
+// Avoid logs when testing
+Logger.getInstance({ hideAllLogs: true });
+
 var EventEmitter = require("../lib/utils/EventEmitter")(Logger, _);
 var BinaryParserBuffer = require("../lib/BinaryParserBuffer")(Logger);
 var BinaryParser = require("../lib/BinaryParser")(BinaryParserBuffer, Logger);

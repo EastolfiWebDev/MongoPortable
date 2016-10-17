@@ -342,15 +342,15 @@ module.exports = function(BinaryParserBuffer, Logger) {
             if (s.charCodeAt(i) < 32) {
                 number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                process.stdout.write(number + " ");
+                logger.silly(number + " ");
             } else {
                 number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                process.stdout.write(number + " ");
+                logger.silly(number + " ");
             }
         }
         
-        process.stdout.write("\n\n");
+        logger.silly("\n\n");
         
         return number;
     };
@@ -362,15 +362,15 @@ module.exports = function(BinaryParserBuffer, Logger) {
             if (s.charCodeAt(i) < 32) {
                 number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
                 
-                process.stdout.write(number + " ");
+                logger.silly(number + " ");
             } else {
                 number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
                 
-                process.stdout.write(number + " ");
+                logger.silly(number + " ");
             }
         }
         
-        process.stdout.write("\n\n");
+        logger.silly("\n\n");
         
         return number;
     };
@@ -382,15 +382,15 @@ module.exports = function(BinaryParserBuffer, Logger) {
             if (s.charCodeAt(i) < 32) {
                 number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                process.stdout.write(number + " ");
+                logger.silly(number + " ");
             } else {
                 number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                process.stdout.write(number + " ");
+                logger.silly(number + " ");
             }
         }
         
-        process.stdout.write("\n\n");
+        logger.silly("\n\n");
         
         return number;
     };

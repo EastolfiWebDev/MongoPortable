@@ -29,7 +29,7 @@ describe("MongoPortable", function() {
         it("should have the dependencies ready", function() {
             expect(MongoPortable).to.exist;
             
-            db = new MongoPortable(TEST_DDBB, { log: {} });
+            db = new MongoPortable(TEST_DDBB, { log: {hideAllLogs:true} });
             
             expect(db).to.exist;
             
