@@ -31,14 +31,18 @@ gulp.task('version', function () {
 });
 
 gulp.task('commit-changes', function () {
-    var msg = 'chore(version): Release new patch version';
+    var kind = 'patch';
+    
     
     if (options.major) {
-        msg = 'chore(version): Release new major version';
+        kind = 'major';
     } else if (options.minor) {
-        msg = 'chore(version): Release new minor version';
+        kind = 'minor';
     }
     
+    var version = JSON.parse(fs.readFileSync('package.json')).version;
+    var msg = 'chore(release): Release ' + kind + ' version (v' + version + ')';
+
     return gulp.src('.')
         .pipe(git.add())
         .pipe(git.commit(msg));
