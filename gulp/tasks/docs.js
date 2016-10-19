@@ -38,7 +38,9 @@ gulp.task('changelog', function () {
         buffer: false
     })
     .pipe(conventionalChangelog({
-        preset: 'angular' // Or to any other commit message convention you use.
+        preset: 'angular',
+        outputUnreleased: true,
+        releaseCount: 0
     }))
     .pipe(gulp.dest('./'));
 });
