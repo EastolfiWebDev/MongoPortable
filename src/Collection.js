@@ -212,8 +212,6 @@ module.exports = function(Aggregation, Cursor, Selector, SelectorMatcher, Object
         fields = params.fields;
         options = params.options;
         callback = params.callback;
-        
-        var cursor = new Cursor(this.docs, selection, fields, options);
     
         /**
          * "find" event.
@@ -232,6 +230,8 @@ module.exports = function(Aggregation, Cursor, Selector, SelectorMatcher, Object
                 fields: fields
             }
         );
+        
+        var cursor = new Cursor(this.docs, selection, fields, options);
         
         // Pass the cursor fetched to the callback
         // Add [options.noFetchCallback = true]
@@ -274,8 +274,6 @@ module.exports = function(Aggregation, Cursor, Selector, SelectorMatcher, Object
         options = params.options;
         callback = params.callback;
         
-        var cursor = new Cursor(this.docs, selection, fields, options);
-    
         /**
          * "findOne" event.
          *
@@ -293,6 +291,8 @@ module.exports = function(Aggregation, Cursor, Selector, SelectorMatcher, Object
                 fields: fields
             }
         );
+        
+        var cursor = new Cursor(this.docs, selection, fields, options);
         
         var res = null;
         
