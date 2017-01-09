@@ -5,8 +5,9 @@ require('require-dir')('./gulp/tasks');
 
 gulp.task('build', function(cb) {
     runSequence(
-        'clean:lib',
-        'build:app',
+        'clean:lib',            // deletes folder lib content
+        'build:app',            // build
+        'bundle:app',           // bundle
     function(error) {
         if (error) {
             console.log(error);
@@ -18,7 +19,8 @@ gulp.task('build', function(cb) {
 
 gulp.task('test', function(cb) {
     runSequence(
-        'test:app',
+        'test:app',             // build + test
+        // 'test:browser',         // build + bundle + test
     function(error) {
         if (error) {
             console.log(error);
@@ -30,9 +32,9 @@ gulp.task('test', function(cb) {
 
 gulp.task('doc', function(cb) {
     runSequence(
-        'doc:app',
-        'doc:api:files',
-        'doc:api:full',
+        'doc:app',              // generate html docs
+        'doc:api:files',        // generate MD docs (file/class)
+        'doc:api:full',         // generate MD docs (all class together)
     function(error) {
         if (error) {
             console.log(error);
@@ -44,9 +46,8 @@ gulp.task('doc', function(cb) {
 
 gulp.task('generate', function(cb) {
     runSequence(
-        'build',
-        'test',
-        'doc',
+        'test',                 // build + bundle + tests
+        'doc',                  // generate all docs
     function(error) {
         if (error) {
             console.log(error);
@@ -58,14 +59,14 @@ gulp.task('generate', function(cb) {
 
 gulp.task('release', function(cb) {
     runSequence(
-        'generate',
-        'test',
-        'doc',
-        'version',
-        'commit-changes',
-        'push-changes',
-        'create-new-tag',
-        'github-release',
+        'generate',             // build + bundle + tests + docs
+        'version',              // bump version
+        'commit-changes',       // add all and commit under "relase MAJOR|MINOR|PATCH version (vVERSION)" message
+        'commit-changelog',     // generate changelog
+        'push-changes',         // push all commits to github
+        'create-new-tag',       // generate tag and push it
+        'release:github',       // generate github release
+        'publish:coveralls',    // generate and publis coveralls
     function(error) {
         if (error) {
             console.log(error);

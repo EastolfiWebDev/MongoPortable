@@ -1,15 +1,15 @@
 var gulp = require('gulp');
 var del = require('del');
 var babel = require('gulp-babel');
+var minify = require('gulp-minify');
+var browserify = require("browserify");
 var sourcemaps = require('gulp-sourcemaps');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 
 gulp.task('clean:lib', function () {
     return del([
-        'lib/**/*.js',
-        // // here we use a globbing pattern to match everything inside the `mobile` folder
-        // 'dist/mobile/**/*',
-        // // we don't want to clean this file though so we negate the pattern
-        // '!dist/mobile/deploy.json'
+        'lib/**/*.js'
     ]);
 });
 
@@ -21,6 +21,30 @@ gulp.task('build:app', ['clean:lib'], function () {
         }))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('lib'));
+});
+
+gulp.task('bundle:app', ['build:app'], function() {
+    return browserify({
+        entries: ['./index.js'],
+        debug: true
+    })
+    .transform("babelify", {presets: ["es2015", "react"]})
+    .bundle()
+    .pipe(source('./mongo-portable.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('compress:app', function() {
+    return gulp.src('dist/mongo-portable.js')
+        .pipe(minify({
+            ext:{
+                min:'.min.js'
+            }
+        }))
+        .pipe(gulp.dest('dist'));
 });
 
 // gulp.task('bundle', function() {
