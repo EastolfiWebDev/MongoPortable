@@ -1,0 +1,1 @@
+{"version":3,"sources":["Options.ts"],"names":[],"mappings":";AAAA;IAAA;IAEA,CAAC;IAAD,cAAC;AAAD,CAFA,AAEC,IAAA;AAEQ,0BAAO","file":"Options.js","sourcesContent":["class Options {\n    log: Object;\n}\n\nexport { Options };"]}

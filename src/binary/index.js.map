@@ -1,0 +1,1 @@
+{"version":3,"sources":["binary/index.ts"],"names":[],"mappings":";AAAA,+CAA8C;AAGrC,mDAAY;AAFrB,2DAA0D;AAEnC,qEAAkB","file":"index.js","sourcesContent":["import { BinaryParser } from \"./BinaryParser\";\nimport { BinaryParserBuffer } from \"./BinaryParserBuffer\";\n\nexport { BinaryParser, BinaryParserBuffer };"]}
