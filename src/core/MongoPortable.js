@@ -14,11 +14,11 @@ var __extends = (this && this.__extends) || function (d, b) {
  */
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var emitter_1 = require("./emitter");
 var Options_1 = require("./Options");
-var ObjectId_1 = require("./ObjectId");
-var Collection_1 = require("./Collection");
-var utils_1 = require("./utils");
+var emitter_1 = require("../emitter");
+var collection_1 = require("../collection");
+var document_1 = require("../document");
+var utils_1 = require("../utils");
 // if (!Object.prototype.renameProperty) {
 //     /**
 //      * Renames an object property.
@@ -140,7 +140,7 @@ var MongoPortable = (function (_super) {
             _this.logger.throw("The database name \"" + databaseName + "\" is already in use");
         }
         _this._databaseName = databaseName;
-        MongoPortable._connHelper.addConnection(databaseName, new ObjectId_1.ObjectId());
+        MongoPortable._connHelper.addConnection(databaseName, new document_1.ObjectId());
         return _this;
     }
     MongoPortable.prototype.emit = function (name, args) {
@@ -342,7 +342,7 @@ var MongoPortable = (function (_super) {
             existing = true;
         }
         else {
-            this._collections[collectionName] = new Collection_1.Collection(this, collectionName /*, this.pkFactory*/ /*, options*/);
+            this._collections[collectionName] = new collection_1.Collection(this, collectionName /*, this.pkFactory*/ /*, options*/);
             /**
              * "createCollection" event.
              *
@@ -414,7 +414,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.renameCollection = function (fromCollection, toCollection, callback) {
         if (_.isString(fromCollection) && _.isString(toCollection) && fromCollection !== toCollection) {
             // Execute the command, return the new renamed collection if successful
-            Collection_1.Collection.checkCollectionName(toCollection);
+            collection_1.Collection.checkCollectionName(toCollection);
             if (this._collections[fromCollection]) {
                 this.emit("renameCollection", {
                     conn: this,

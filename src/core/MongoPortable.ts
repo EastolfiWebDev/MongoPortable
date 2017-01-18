@@ -6,14 +6,15 @@
  * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _               from "lodash";
+import { JSWLogger }        from "jsw-logger";
 
-import { EventEmitter } from "./emitter";
-import { Options } from "./Options";
-import { ObjectId } from "./ObjectId";
-import { Collection } from "./Collection";
-import { Utils } from "./utils";
+import { Options }          from "./Options";
+
+import { EventEmitter }     from "../emitter";
+import { Collection }       from "../collection";
+import { ObjectId }         from "../document";
+import { Utils }            from "../utils";
 
 // if (!Object.prototype.renameProperty) {
 //     /**

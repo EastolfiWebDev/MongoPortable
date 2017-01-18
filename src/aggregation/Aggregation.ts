@@ -7,11 +7,11 @@
  * @license MIT Licensed
  */
 
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _               from "lodash";
+import { JSWLogger }        from "jsw-logger";
 
-import { Selector } from "../selector";
-import { Cursor } from "../Cursor";
+import { Selector }         from "../selector";
+import { Cursor }           from "../collection";
     
 var stages = {
     '$project': true,

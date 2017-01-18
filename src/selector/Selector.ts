@@ -1,8 +1,9 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _                   from "lodash";
+import { JSWLogger }            from "jsw-logger";
 
-import { ObjectId } from "../ObjectId";
-import { SelectorMatcher } from "./SelectorMatcher";
+import { SelectorMatcher }      from "./SelectorMatcher";
+
+import { ObjectId }             from "../document";
 
 
 class Clause {

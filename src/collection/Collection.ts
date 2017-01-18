@@ -1,12 +1,12 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _                           from "lodash";
+import { JSWLogger }                    from "jsw-logger";
 
-import { EventEmitter } from "./emitter";
-import { Aggregation } from "./aggregation";
-import { Selector, SelectorMatcher } from "./selector";
-// import { SelectorMatcher } from "./SelectorMatcher";
-import { Cursor } from "./Cursor";
-import { ObjectId } from "./ObjectId";
+import { Cursor }                       from "./Cursor";
+
+import { EventEmitter }                 from "../emitter";
+import { Aggregation }                  from "../aggregation";
+import { Selector, SelectorMatcher }    from "../selector";
+import { ObjectId }                     from "../document";
 
 /**
  * Gets the size of an object.
@@ -85,7 +85,7 @@ class Collection /*extends EventEmitter*/ {
         // this.db = db;
         database = db;
         this.name = collectionName;
-        this.databaseName = db.databaseName;
+        this.databaseName = db._databaseName;
         this.fullName = this.databaseName + '.' + this.name;
         this.docs = [];
         this.doc_indexes = {};
@@ -973,7 +973,7 @@ var _applyModifier = function(_docUpdate, key, val) {
     // var mod = _modifiers[key];
                         
     if (!_modifiers[key]) {
-        this.logger.throw(`Invalid modifier specified: ${key}`);
+        JSWLogger.instance.throw(`Invalid modifier specified: ${key}`);
     }
     
     for (var keypath in val) {
@@ -1001,7 +1001,7 @@ var _modify = function(document, keyparts, value, key, level = 0) {
         
         var create = _.hasIn(Collection._noCreateModifiers, key) ? false : true;
         if (!create && (!_.isObject(document) || _.isNil(target))) {
-            this.logger.throw(`The element "${path}" must exists in "${JSON.stringify(document)}"`);
+            JSWLogger.instance.throw(`The element "${path}" must exists in "${JSON.stringify(document)}"`);
         }
         
         if (_.isArray(document)) {
@@ -1012,7 +1012,7 @@ var _modify = function(document, keyparts, value, key, level = 0) {
             if (isNumeric) {
                 path = _.toNumber(path);
             } else {
-                this.logger.throw(`The field "${path}" can not be appended to an array`);
+                JSWLogger.instance.throw(`The field "${path}" can not be appended to an array`);
             }
             
             // Fill the array to the desired length
@@ -1052,12 +1052,12 @@ var _modify = function(document, keyparts, value, key, level = 0) {
 var _modifiers = {
     $inc: function (target, field, arg) {
         if (!_.isNumber(arg)) {
-            this.logger.throw("Modifier $inc allowed for numbers only");
+            JSWLogger.instance.throw("Modifier $inc allowed for numbers only");
         }
 
         if (field in target) {
             if (!_.isNumber(target[field])) {
-                this.logger.throw("Cannot apply $inc modifier to non-number");
+                JSWLogger.instance.throw("Cannot apply $inc modifier to non-number");
             }
 
             target[field] += arg;
@@ -1088,7 +1088,7 @@ var _modifiers = {
         if (_.isNil(x)) {
             target[field] = [arg];
         } else if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $push modifier to non-array");
+            JSWLogger.instance.throw("Cannot apply $push modifier to non-array");
         } else {
             x.push(_.cloneDeep(arg));
         }
@@ -1100,7 +1100,7 @@ var _modifiers = {
         if (_.isNil(x)) {
             target[field] = arg;
         } else if (!_.isArray(x)) {
-            this.logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
+            JSWLogger.instance.throw("Modifier $pushAll/pullAll allowed for arrays only");
         } else {
             for (var i = 0; i < arg.length; i++) {
                 x.push(arg[i]);
@@ -1114,7 +1114,7 @@ var _modifiers = {
         if (_.isNil(x)) {
             target[field] = [arg];
         } else if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $addToSet modifier to non-array");
+            JSWLogger.instance.throw("Cannot apply $addToSet modifier to non-array");
         } else {
             let isEach = false;
             if (_.isPlainObject(arg)) {
@@ -1144,7 +1144,7 @@ var _modifiers = {
         var x = target[field];
 
         if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $pop modifier to non-array");
+            JSWLogger.instance.throw("Cannot apply $pop modifier to non-array");
         } else {
             if (_.isNumber(arg) && arg < 0) {
                 x.splice(0, 1);
@@ -1160,7 +1160,7 @@ var _modifiers = {
         var x = target[field];
 
         if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $pull/pullAll modifier to non-array");
+            JSWLogger.instance.throw("Cannot apply $pull/pullAll modifier to non-array");
         } else {
             var out = [];
             
@@ -1202,7 +1202,7 @@ var _modifiers = {
         var x = target[field];
 
         if (!_.isNil(x) && !_.isArray(x)) {
-            this.logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
+            JSWLogger.instance.throw("Modifier $pushAll/pullAll allowed for arrays only");
         } else if (!_.isNil(x)) {
             var out = [];
 
@@ -1229,11 +1229,11 @@ var _modifiers = {
     $rename: function (target, field, value) {
         if (field === value) {
             // no idea why mongo has this restriction..
-            this.logger.throw("The new field name must be different");
+            JSWLogger.instance.throw("The new field name must be different");
         }
 
         if (!_.isString(value) || value.trim() === '') {
-            this.logger.throw("The new name must be a non-empty string");
+            JSWLogger.instance.throw("The new name must be a non-empty string");
         }
 
         target[value] = target[field];
@@ -1243,7 +1243,7 @@ var _modifiers = {
     $bit: function (target, field, arg) {
         // XXX mongo only supports $bit on integers, and we only support
         // native javascript numbers (doubles) so far, so we can't support $bit
-        this.logger.throw("$bit is not supported");
+        JSWLogger.instance.throw("$bit is not supported");
     }
 };
 
@@ -1292,14 +1292,14 @@ var _ensureFindParams = function(params) {
     }
 
     if (!_.isNil(params.callback) && !_.isFunction(params.callback)) {
-        this.logger.throw("callback must be a function");
+        JSWLogger.instance.throw("callback must be a function");
     }
 
     if (params.options.fields) {
         if (_.isNil(params.fields) || params.fields.length === 0) {
             params.fields = params.options.fields;
         } else {
-            this.logger.warn("Fields already present. Ignoring 'options.fields'.");
+            JSWLogger.instance.warn("Fields already present. Ignoring 'options.fields'.");
         }
     }
     

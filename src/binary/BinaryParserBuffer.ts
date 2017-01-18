@@ -1,5 +1,5 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _               from "lodash";
+import { JSWLogger }        from "jsw-logger";
 
 /**
  * BinaryParserBuffer

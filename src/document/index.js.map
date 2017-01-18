@@ -1,0 +1,1 @@
+{"version":3,"sources":["document/index.ts"],"names":[],"mappings":";AAAA,uCAA8C;AAGrC,uCAAQ;AAFjB,uCAA8C;AAE3B,uCAAQ","file":"index.js","sourcesContent":["import { Document }         from \"./Document\";\nimport { ObjectId }         from \"./ObjectId\";\n\nexport { Document, ObjectId };"]}

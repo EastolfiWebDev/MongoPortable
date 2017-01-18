@@ -1,11 +1,10 @@
 "use strict";
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var aggregation_1 = require("./aggregation");
-var selector_1 = require("./selector");
-// import { SelectorMatcher } from "./SelectorMatcher";
 var Cursor_1 = require("./Cursor");
-var ObjectId_1 = require("./ObjectId");
+var aggregation_1 = require("../aggregation");
+var selector_1 = require("../selector");
+var document_1 = require("../document");
 /**
  * Gets the size of an object.
  *
@@ -87,11 +86,11 @@ var Collection /*extends EventEmitter*/ = (function () {
             if (_.isNumber(_doc._id)) {
                 _doc._id = _.toString(_doc._id);
             }
-            if (_.isNil(_doc._id) || (!(_doc._id instanceof ObjectId_1.ObjectId) && (!_.isString(_doc._id) || !_doc._id.length))) {
-                _doc._id = new ObjectId_1.ObjectId();
+            if (_.isNil(_doc._id) || (!(_doc._id instanceof document_1.ObjectId) && (!_.isString(_doc._id) || !_doc._id.length))) {
+                _doc._id = new document_1.ObjectId();
             }
             // Add options to more dates
-            _doc.timestamp = new ObjectId_1.ObjectId().generationTime;
+            _doc.timestamp = new document_1.ObjectId().generationTime;
             // Reverse
             this.doc_indexes[_.toString(_doc._id)] = this.docs.length;
             this.docs.push(_doc);
@@ -309,7 +308,7 @@ var Collection /*extends EventEmitter*/ = (function () {
                 options = {};
             }
             // Check special case where we are using an objectId
-            if (selection instanceof ObjectId_1.ObjectId) {
+            if (selection instanceof document_1.ObjectId) {
                 selection = {
                     _id: selection
                 };
@@ -492,7 +491,7 @@ var Collection /*extends EventEmitter*/ = (function () {
             if (getObjectSize(selection) === 0 && !options.justOne)
                 return this.drop(options, callback);
             // Check special case where we are using an objectId
-            if (selection instanceof ObjectId_1.ObjectId) {
+            if (selection instanceof document_1.ObjectId) {
                 selection = {
                     _id: selection
                 };
@@ -620,7 +619,7 @@ var Collection /*extends EventEmitter*/ = (function () {
         this.backup = function (backupID, callback) {
             if (_.isFunction(backupID)) {
                 callback = backupID;
-                backupID = new ObjectId_1.ObjectId().toString();
+                backupID = new document_1.ObjectId().toString();
             }
             if (!_.isNil(callback) && !_.isFunction(callback))
                 this.logger.throw("callback must be a function");
@@ -777,7 +776,7 @@ var Collection /*extends EventEmitter*/ = (function () {
         // this.db = db;
         database = db;
         this.name = collectionName;
-        this.databaseName = db.databaseName;
+        this.databaseName = db._databaseName;
         this.fullName = this.databaseName + '.' + this.name;
         this.docs = [];
         this.doc_indexes = {};
@@ -826,7 +825,7 @@ var _applyModifier = function (_docUpdate, key, val) {
     var doc = _.cloneDeep(_docUpdate);
     // var mod = _modifiers[key];
     if (!_modifiers[key]) {
-        this.logger.throw("Invalid modifier specified: " + key);
+        jsw_logger_1.JSWLogger.instance.throw("Invalid modifier specified: " + key);
     }
     for (var keypath in val) {
         var value = val[keypath];
@@ -843,7 +842,7 @@ var _modify = function (document, keyparts, value, key, level) {
         var target = document[path];
         var create = _.hasIn(Collection._noCreateModifiers, key) ? false : true;
         if (!create && (!_.isObject(document) || _.isNil(target))) {
-            this.logger.throw("The element \"" + path + "\" must exists in \"" + JSON.stringify(document) + "\"");
+            jsw_logger_1.JSWLogger.instance.throw("The element \"" + path + "\" must exists in \"" + JSON.stringify(document) + "\"");
         }
         if (_.isArray(document)) {
             // Do not allow $rename on arrays
@@ -854,7 +853,7 @@ var _modify = function (document, keyparts, value, key, level) {
                 path = _.toNumber(path);
             }
             else {
-                this.logger.throw("The field \"" + path + "\" can not be appended to an array");
+                jsw_logger_1.JSWLogger.instance.throw("The field \"" + path + "\" can not be appended to an array");
             }
             // Fill the array to the desired length
             while (document.length < path) {
@@ -886,11 +885,11 @@ var _modify = function (document, keyparts, value, key, level) {
 var _modifiers = {
     $inc: function (target, field, arg) {
         if (!_.isNumber(arg)) {
-            this.logger.throw("Modifier $inc allowed for numbers only");
+            jsw_logger_1.JSWLogger.instance.throw("Modifier $inc allowed for numbers only");
         }
         if (field in target) {
             if (!_.isNumber(target[field])) {
-                this.logger.throw("Cannot apply $inc modifier to non-number");
+                jsw_logger_1.JSWLogger.instance.throw("Cannot apply $inc modifier to non-number");
             }
             target[field] += arg;
         }
@@ -919,7 +918,7 @@ var _modifiers = {
             target[field] = [arg];
         }
         else if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $push modifier to non-array");
+            jsw_logger_1.JSWLogger.instance.throw("Cannot apply $push modifier to non-array");
         }
         else {
             x.push(_.cloneDeep(arg));
@@ -931,7 +930,7 @@ var _modifiers = {
             target[field] = arg;
         }
         else if (!_.isArray(x)) {
-            this.logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
+            jsw_logger_1.JSWLogger.instance.throw("Modifier $pushAll/pullAll allowed for arrays only");
         }
         else {
             for (var i = 0; i < arg.length; i++) {
@@ -945,7 +944,7 @@ var _modifiers = {
             target[field] = [arg];
         }
         else if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $addToSet modifier to non-array");
+            jsw_logger_1.JSWLogger.instance.throw("Cannot apply $addToSet modifier to non-array");
         }
         else {
             var isEach = false;
@@ -972,7 +971,7 @@ var _modifiers = {
             return;
         var x = target[field];
         if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $pop modifier to non-array");
+            jsw_logger_1.JSWLogger.instance.throw("Cannot apply $pop modifier to non-array");
         }
         else {
             if (_.isNumber(arg) && arg < 0) {
@@ -988,7 +987,7 @@ var _modifiers = {
             return;
         var x = target[field];
         if (!_.isArray(x)) {
-            this.logger.throw("Cannot apply $pull/pullAll modifier to non-array");
+            jsw_logger_1.JSWLogger.instance.throw("Cannot apply $pull/pullAll modifier to non-array");
         }
         else {
             var out = [];
@@ -1027,7 +1026,7 @@ var _modifiers = {
             return;
         var x = target[field];
         if (!_.isNil(x) && !_.isArray(x)) {
-            this.logger.throw("Modifier $pushAll/pullAll allowed for arrays only");
+            jsw_logger_1.JSWLogger.instance.throw("Modifier $pushAll/pullAll allowed for arrays only");
         }
         else if (!_.isNil(x)) {
             var out = [];
@@ -1049,10 +1048,10 @@ var _modifiers = {
     $rename: function (target, field, value) {
         if (field === value) {
             // no idea why mongo has this restriction..
-            this.logger.throw("The new field name must be different");
+            jsw_logger_1.JSWLogger.instance.throw("The new field name must be different");
         }
         if (!_.isString(value) || value.trim() === '') {
-            this.logger.throw("The new name must be a non-empty string");
+            jsw_logger_1.JSWLogger.instance.throw("The new name must be a non-empty string");
         }
         target[value] = target[field];
         delete target[field];
@@ -1060,7 +1059,7 @@ var _modifiers = {
     $bit: function (target, field, arg) {
         // XXX mongo only supports $bit on integers, and we only support
         // native javascript numbers (doubles) so far, so we can't support $bit
-        this.logger.throw("$bit is not supported");
+        jsw_logger_1.JSWLogger.instance.throw("$bit is not supported");
     }
 };
 var _ensureFindParams = function (params) {
@@ -1093,20 +1092,20 @@ var _ensureFindParams = function (params) {
         params.options = {};
     }
     // Check special case where we are using an objectId
-    if (params.selection instanceof ObjectId_1.ObjectId) {
+    if (params.selection instanceof document_1.ObjectId) {
         params.selection = {
             _id: params.selection
         };
     }
     if (!_.isNil(params.callback) && !_.isFunction(params.callback)) {
-        this.logger.throw("callback must be a function");
+        jsw_logger_1.JSWLogger.instance.throw("callback must be a function");
     }
     if (params.options.fields) {
         if (_.isNil(params.fields) || params.fields.length === 0) {
             params.fields = params.options.fields;
         }
         else {
-            this.logger.warn("Fields already present. Ignoring 'options.fields'.");
+            jsw_logger_1.JSWLogger.instance.warn("Fields already present. Ignoring 'options.fields'.");
         }
     }
     return params;

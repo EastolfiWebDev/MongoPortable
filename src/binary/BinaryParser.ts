@@ -1,7 +1,7 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _                   from "lodash";
+import { JSWLogger }            from "jsw-logger";
 
-import { BinaryParserBuffer } from "./BinaryParserBuffer";
+import { BinaryParserBuffer }   from "./BinaryParserBuffer";
 
 // Shorcut for String.fromCharCode
 var chr = String.fromCharCode;
@@ -24,7 +24,40 @@ class BinaryParser {
         this.allowExceptions = allowExceptions;
     }
     
+    /**
+     * Generate a 12 byte id string used in ObjectId"s
+     *
+     * @method BinaryParser#generate12string
+     * 
+     * @return {String} The 12 byte id binary string.
+     */
+    generate12string() {
+        let time9bytes = Date.now().toString(32);
+        let rnd3bytes = this.encodeInt(parseInt((Math.random() * 0xFFFFFF).toString(), 10), 24, false);
+        
+        return time9bytes + rnd3bytes;
+    }
+    
     decodeFloat(data: string|number, precisionBits: number, exponentBits: number) {
+        var b = new BinaryParserBuffer(this.bigEndian, data);
+        
+        b.checkBuffer(precisionBits + exponentBits + 1);
+        
+        var bias = maxBits[exponentBits - 1] - 1
+            , signal = b.readBits(precisionBits + exponentBits, 1)
+            , exponent = b.readBits(precisionBits, exponentBits)
+            , significand = 0
+            , divisor = 2
+            , curByte = b.buffer.length + (-precisionBits >> 3) - 1;
+        
+        do {
+            for (var byteValue = b.buffer[ ++curByte ], startBit = precisionBits % 8 || 8, mask = 1 << startBit; mask >>= 1; ( byteValue & mask ) && ( significand += 1 / divisor ), divisor *= 2 );
+        } while (precisionBits -= startBit);
+        
+        return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
+    }
+    
+    decodeFloat_(data: string|number, precisionBits: number, exponentBits: number) {
         var b = new BinaryParserBuffer(this.bigEndian, data);
     
         b.checkBuffer(precisionBits + exponentBits + 1);
@@ -36,13 +69,27 @@ class BinaryParser {
             divisor = 2,
             curByte = b.buffer.length + (-precisionBits >> 3) - 1;
     
+        curByte++;
+        let byteValue, startBit, mask;
         do {
-            for (
-                var byteValue = b.buffer[ ++curByte ], startBit = precisionBits % 8 || 8, mask = 1 << startBit;
-                mask >>= 1; 
-                ( byteValue & mask ) && ( significand += 1 / divisor ), divisor *= 2 
-            );
-        } while (precisionBits -= startBit);
+            // for (
+            //     var byteValue = b.buffer[ ++curByte ], startBit = precisionBits % 8 || 8, mask = 1 << startBit;
+            //     mask >>= 1; 
+            //     ( byteValue & mask ) && ( significand += 1 / divisor ), divisor *= 2 
+            // );
+            byteValue = b.buffer[curByte];
+            startBit = precisionBits % 8 || 8;
+            mask = 1 << startBit;
+            
+            mask >>= 1;
+            while (mask) {
+                (byteValue & mask) && (significand += 1 / divisor);
+                divisor *= 2;
+                
+                mask >>= 1
+            }
+            precisionBits -= startBit
+        } while (precisionBits);
         
         
     
@@ -71,6 +118,16 @@ class BinaryParser {
     }
     
     decodeInt(data: string|number, bits: number, signed: boolean, forceBigEndian?: boolean) {
+        var b = new BinaryParserBuffer(this.bigEndian || forceBigEndian, data)
+            , x = b.readBits(0, bits)
+            , max = maxBits[bits]; //max = Math.pow( 2, bits );
+        
+        return signed && x >= max / 2
+            ? x - max
+            : x;
+    }
+    
+    decodeInt_(data: string|number, bits: number, signed: boolean, forceBigEndian?: boolean) {
         var b = new BinaryParserBuffer(this.bigEndian || forceBigEndian, data),
             x = b.readBits(0, bits),
             max = maxBits[bits]; //max = Math.pow( 2, bits );
@@ -79,6 +136,87 @@ class BinaryParser {
     }
     
     encodeFloat(data: string|number, precisionBits: number, exponentBits: number) {
+        var bias = maxBits[exponentBits - 1] - 1
+            , minExp = -bias + 1
+            , maxExp = bias
+            , minUnnormExp = minExp - precisionBits
+            , n = parseFloat(_.toString(data))
+            , status = isNaN(n) || n == -Infinity || n == +Infinity ? n : 0
+            , exp = 0
+            , len = 2 * bias + 1 + precisionBits + 3
+            , bin = new Array(len)
+            , signal = (n = status !== 0 ? 0 : n) < 0
+            , intPart = Math.floor(n = Math.abs(n))
+            , floatPart = n - intPart
+            , lastBit
+            , rounded
+            , result
+            , i
+            , j;
+        
+        for (i = len; i; bin[--i] = 0);
+        
+        for (i = bias + 2; intPart && i; bin[--i] = intPart % 2, intPart = Math.floor(intPart / 2));
+        
+        // for (i = bias + 1; floatPart > 0 && i; (bin[++i] = ((floatPart *= 2) >= 1) - 0 ) && --floatPart);
+        for (i = bias + 1; floatPart > 0 && i; (bin[++i] = _.toNumber(((floatPart *= 2) >= 1)) ) && --floatPart);
+        
+        for (i = -1; ++i < len && !bin[i];);
+        
+        if (bin[(lastBit = precisionBits - 1 + (i = (exp = bias + 1 - i) >= minExp && exp <= maxExp ? i + 1 : bias + 1 - (exp = minExp - 1))) + 1]) {
+            if (!(rounded = bin[lastBit])) {
+                for (j = lastBit + 2; !rounded && j < len; rounded = bin[j++]);
+            }
+            
+            // for (j = lastBit + 1; rounded && --j >= 0; (bin[j] = !bin[j] - 0) && (rounded = 0));
+            for (j = lastBit + 1; rounded && --j >= 0; (bin[j] = _.toNumber(!bin[j])) && (rounded = 0));
+            // j = lastBit + 1;
+            // while (rounded && --j >= 0) {
+            //     bin[j] = _.toNumber(!bin[j]);
+            //     rounded = 0;
+            // }
+        }
+        
+        for (i = i - 2 < 0 ? -1 : i - 3; ++i < len && !bin[i];);
+        
+        if ((exp = bias + 1 - i) >= minExp && exp <= maxExp) {
+            ++i;
+        } else if (exp < minExp) {
+            exp != bias + 1 - len && exp < minUnnormExp && this.logger.warn("encodeFloat::float underflow");
+            i = bias + 1 - (exp = minExp - 1);
+        }
+        
+        if (intPart || status !== 0) {
+            this.logger.warn(intPart ? "encodeFloat::float overflow" : "encodeFloat::" + status);
+            exp = maxExp + 1;
+            i = bias + 2;
+            
+            if (status == -Infinity) {
+                signal = true;
+            } else if (isNaN(status)) {
+                bin[i] = 1;
+            }
+        }
+        
+        for (n = Math.abs(exp + bias), j = exponentBits + 1, result = ""; --j; result = (n % 2) + result, n = n >>= 1);
+        
+        var r = [];
+        for (n = 0, j = 0, i = (result = (signal ? "1" : "0") + result + bin.slice(i, i + precisionBits).join("")).length, r = []; i; j = (j + 1) % 8) {
+            n += (1 << j) * result.charAt(--i);
+            if (j == 7) {
+                r[r.length] = String.fromCharCode(n);
+                n = 0;
+            }
+        }
+        
+        r[r.length] = n
+            ? String.fromCharCode(n)
+            : "";
+        
+        return (this.bigEndian ? r.reverse() : r).join("");
+    }
+    
+    encodeFloat_(data: string|number, precisionBits: number, exponentBits: number) {
         var bias = maxBits[exponentBits - 1] - 1,
             minExp = -bias + 1,
             maxExp = bias,
@@ -126,9 +264,14 @@ class BinaryParser {
             i++;
         }
       
-        if (bin[(lastBit = precisionBits - 1 + (i = (exp = bias + 1 - i) >= minExp && exp <= maxExp ? i + 1 : bias + 1 - (exp = minExp - 1))) + 1]) {
+        if (bin[(lastBit = precisionBits - 1 + (i = (exp = bias + 1 - i) >= minExp && 
+                exp <= maxExp ? i + 1 : bias + 1 - (exp = minExp - 1))) + 1]) {
             if (!(rounded = bin[lastBit])) {
-                for (j = lastBit + 2; !rounded && j < len; rounded = bin[j++]);
+                // for (j = lastBit + 2; !rounded && j < len; rounded = bin[j++]);
+                j = lastBit + 2;
+                while (!rounded && j < len) {
+                    rounded = bin[j++];
+                }
             }
             
             // for (j = lastBit + 1; rounded && --j >= 0; (bin[j] = !bin[j] - 0) && (rounded = 0));
@@ -151,6 +294,7 @@ class BinaryParser {
         
         if (intPart || status !== 0) {
             this.logger.warn(intPart ? "encodeFloat::float overflow" : "encodeFloat::" + status);
+            
             exp = maxExp + 1;
             i = bias + 2;
         
@@ -161,11 +305,26 @@ class BinaryParser {
             }
         }
       
-        for (n = Math.abs(exp + bias), j = exponentBits + 1, result = ""; --j; result = (n % 2) + result, n = n >>= 1);
+        // for (n = Math.abs(exp + bias), j = exponentBits + 1, result = ""; --j; result = (n % 2) + result, n = n >>= 1);
+        n = Math.abs(exp + bias);
+        j = exponentBits;
+        result = "";
+        while (j) {
+            j--;
+            result = (n % 2) + result;
+            n = n >>= 1;
+        }
         
         let r = [];
         
-        for (n = 0, j = 0, i = (result = (signal ? "1" : "0") + result + bin.slice(i, i + precisionBits).join("")).length, r = []; i; j = (j + 1) % 8) {
+        // for (n = 0, j = 0, i = (result = (signal ? "1" : "0") + result + bin.slice(i, i + precisionBits).join("")).length, r = []; i; j = (j + 1) % 8) {
+        n = 0;
+        j = 0;
+        result = (signal ? "1" : "0") + result + bin.slice(i, i + precisionBits).join("");
+        i = result.length;
+        r = [];
+        while (i) {
+            j = (j + 1) % 8
             n += (1 << j) * result.charAt(--i);
             
             if (j == 7) {
@@ -181,7 +340,6 @@ class BinaryParser {
     
     encodeInt(data: number, bits: number, signed: boolean, forceBigEndian?: boolean) {
         var max = maxBits[bits];
-        data = data - 0;    // Ensure a number
         
         if (data >= max || data < -(max / 2)) {
             this.logger.warn("encodeInt::overflow");
@@ -195,6 +353,36 @@ class BinaryParser {
         for (var r = []; data; r[r.length] = String.fromCharCode(data % 256), data = Math.floor(data / 256));
         
         for (bits = -(-bits >> 3) - r.length; bits--; r[r.length] = "\0");
+        
+        return ((this.bigEndian || forceBigEndian) ? r.reverse() : r).join("");
+    }
+    
+    encodeInt_(data: number, bits: number, signed: boolean, forceBigEndian?: boolean) {
+        var max = maxBits[bits];
+        data = data - 0;    // Ensure a number
+        
+        if (data >= max || data < -(max / 2)) {
+            this.logger.warn("encodeInt::overflow");
+            data = 0;
+        }
+        
+        if (data < 0) {
+            data += max;
+        }
+        
+        // for (var r = []; data; r[r.length] = String.fromCharCode(data % 256), data = Math.floor(data / 256));
+        let r = [];
+        while(data) {
+            r[r.length] = String.fromCharCode(data % 256);
+            data = Math.floor(data / 256);
+        }
+        
+        // for (bits = -(-bits >> 3) - r.length; bits--; r[r.length] = "\0");
+        bits = -(-bits >> 3) - r.length;
+        while(bits) {
+            bits--;
+            r[r.length] = "\0";
+        }
         
         return ((this.bigEndian || forceBigEndian) ? r.reverse() : r).join("");
     }
@@ -220,6 +408,28 @@ class BinaryParser {
     toDouble   ( data: number ){ return this.decodeFloat( data, 52, 11  ); }
     fromDouble ( data: number ){ return this.encodeFloat( data, 52, 11  ); }
     
+    // Static access to methods
+    static toSmall      ( data: number ) { return (new BinaryParser()).toSmall(data); }
+    static fromSmall    ( data: number ) { return (new BinaryParser()).fromSmall(data); }
+    static toByte       ( data: number ) { return (new BinaryParser()).toByte(data); }
+    static fromByte     ( data: number ) { return (new BinaryParser()).fromByte(data); }
+    static toShort      ( data: number ) { return (new BinaryParser()).toShort(data); }
+    static fromShort    ( data: number ) { return (new BinaryParser()).fromShort(data); }
+    static toWord       ( data: number ) { return (new BinaryParser()).toWord(data); }
+    static fromWord     ( data: number ) { return (new BinaryParser()).fromWord(data); }
+    static toInt        ( data: number ) { return (new BinaryParser()).toInt(data); }
+    static fromInt      ( data: number ) { return (new BinaryParser()).fromInt(data); }
+    static toLong       ( data: number ) { return (new BinaryParser()).toLong(data); }
+    static fromLong     ( data: number ) { return (new BinaryParser()).fromLong(data); }
+    static toDWord      ( data: number ) { return (new BinaryParser()).toDWord(data); }
+    static fromDWord    ( data: number ) { return (new BinaryParser()).fromDWord(data); }
+    static toQWord      ( data: number ) { return (new BinaryParser()).toQWord(data); }
+    static fromQWord    ( data: number ) { return (new BinaryParser()).fromQWord(data); }
+    static toFloat      ( data: number ) { return (new BinaryParser()).toFloat(data); }
+    static fromFloat    ( data: number ) { return (new BinaryParser()).fromFloat(data); }
+    static toDouble     ( data: number ) { return (new BinaryParser()).toDouble(data); }
+    static fromDouble   ( data: number ) { return (new BinaryParser()).fromDouble(data); }
+    
     // Factor out the encode so it can be shared by add_header and push_int32
     encode_int32(number, asArray) {
         var a, b, c, d, unsigned;
@@ -238,6 +448,8 @@ class BinaryParser {
         
         return asArray ? [chr(a), chr(b), chr(c), chr(d)] : chr(a) + chr(b) + chr(c) + chr(d);
     }
+    
+    static encode_int32 ( number, asArray ) { return (new BinaryParser()).encode_int32(number, asArray); }
     
     encode_int64(number) {
         var a, b, c, d, e, f, g, h, unsigned;
@@ -268,6 +480,8 @@ class BinaryParser {
         
         return chr(a) + chr(b) + chr(c) + chr(d) + chr(e) + chr(f) + chr(g) + chr(h);
     }
+    
+    static encode_int64 ( number ) { return (new BinaryParser()).encode_int64(number); }
     
     /**
      * UTF8 methods
@@ -307,11 +521,15 @@ class BinaryParser {
         return decoded;
     }
     
+    static decode_utf8 ( binaryStr ) { return (new BinaryParser()).decode_utf8(binaryStr); }
+    
     // Encode a cstring
     encode_cstring(s) {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/escape
         return encodeURIComponent(encodeURIComponent(s)) + this.fromByte(0);
     }
+    
+    static encode_cstring ( s ) { return (new BinaryParser()).encode_cstring(s); }
     
     // Take a utf8 string and return a binary string
     encode_utf8(s) {
@@ -336,6 +554,8 @@ class BinaryParser {
         return a;
     }
     
+    static encode_utf8 ( s ) { return (new BinaryParser()).encode_utf8(s); }
+    
     hprint(s) {
         var number;
     
@@ -355,6 +575,8 @@ class BinaryParser {
         
         return number;
     }
+    
+    static hprint ( s ) { return (new BinaryParser()).hprint(s); }
     
     ilprint(s) {
         var number;
@@ -376,6 +598,8 @@ class BinaryParser {
         return number;
     }
     
+    static ilprint ( s ) { return (new BinaryParser()).ilprint(s); }
+    
     hlprint(s) {
         var number;
         
@@ -395,6 +619,8 @@ class BinaryParser {
         
         return number;
     }
+    
+    static hlprint ( s ) { return (new BinaryParser()).hlprint(s); }
 }
 
 

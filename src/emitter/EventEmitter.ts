@@ -1,7 +1,7 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _           from "lodash";
+import { JSWLogger }    from "jsw-logger";
 
-import { Options } from "../Options";
+import { Options }      from "../core";
 
 class EventEmitter {
     protected logger: JSWLogger;

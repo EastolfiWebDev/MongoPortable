@@ -1,9 +1,9 @@
 "use strict";
-var MongoPortable_1 = require("./src/MongoPortable");
-exports.MongoPortable = MongoPortable_1.MongoPortable;
+var core_1 = require("./src/core");
+exports.MongoPortable = core_1.MongoPortable;
 try {
     if (window) {
-        window["MongoPortable"] = MongoPortable_1.MongoPortable;
+        window["MongoPortable"] = core_1.MongoPortable;
     }
 }
 catch (e) { }

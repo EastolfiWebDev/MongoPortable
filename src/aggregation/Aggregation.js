@@ -10,7 +10,7 @@
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var selector_1 = require("../selector");
-var Cursor_1 = require("../Cursor");
+var collection_1 = require("../collection");
 var stages = {
     '$project': true,
     '$match': true,
@@ -138,7 +138,7 @@ var do_sort = function (documents, sort_stage) {
     return documents.sort(new selector_1.Selector(sort_stage, selector_1.Selector.SORT_SELECTOR));
 };
 var do_match = function (documents, match_stage) {
-    var cursor = new Cursor_1.Cursor(documents, match_stage);
+    var cursor = new collection_1.Cursor(documents, match_stage);
     return cursor.fetch();
 };
 var do_group = function (documents, group_stage) {
@@ -161,7 +161,7 @@ var do_group = function (documents, group_stage) {
     }
 };
 var do_project = function (documents, project_stage) {
-    return Cursor_1.Cursor.project(documents, project_stage, true);
+    return collection_1.Cursor.project(documents, project_stage, true);
 };
 var Aggregation = (function () {
     function Aggregation(pipeline) {

@@ -1,5 +1,5 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _           from "lodash";
+import { JSWLogger }    from "jsw-logger";
 
 class SelectorMatcher {
     protected logger: JSWLogger;
@@ -366,7 +366,7 @@ class SelectorMatcher {
 }
 
 var _testClause = function(clause, val) {
-    this.logger.debug("Called _testClause");
+    JSWLogger.instance.debug("Called _testClause");
     
     // var _val = clause.value;
     
@@ -376,7 +376,7 @@ var _testClause = function(clause, val) {
         // TODO object ids, dates, timestamps?
         switch (clause.type) {
             case "null":
-                this.logger.debug("test Null equality");
+                JSWLogger.instance.debug("test Null equality");
                 
                 // http://www.mongodb.org/display/DOCS/Querying+and+nulls
                 if (_.isNil(_value)) {
@@ -385,31 +385,31 @@ var _testClause = function(clause, val) {
                     return false;
                 }
             case "regexp":
-                this.logger.debug("test RegExp equality");
+                JSWLogger.instance.debug("test RegExp equality");
                 
                 return _testOperatorClause(clause, _value);
             case "literal_object":
-                this.logger.debug("test Literal Object equality");
+                JSWLogger.instance.debug("test Literal Object equality");
                 
                 return SelectorMatcher.equal(_value, clause.value);
             case "operator_object":
-                this.logger.debug("test Operator Object equality");
+                JSWLogger.instance.debug("test Operator Object equality");
                 
                 return _testOperatorClause(clause, _value);
             case "string":
-                this.logger.debug("test String equality");
+                JSWLogger.instance.debug("test String equality");
                 
                 return _.toString(_value) === _.toString(clause.value);
             case "number":
-                this.logger.debug("test Number equality");
+                JSWLogger.instance.debug("test Number equality");
                 
                 return _.toNumber(_value) === _.toNumber(clause.value);
             case "boolean":
-                this.logger.debug("test Boolean equality");
+                JSWLogger.instance.debug("test Boolean equality");
                 
                 return (_.isBoolean(_value) && _.isBoolean(clause.value) && (_value === clause.value));
             case "array":
-                this.logger.debug("test Boolean equality");
+                JSWLogger.instance.debug("test Boolean equality");
                 
                 // Check type
                 if (_.isArray(_value) && _.isArray(clause.value)) {
@@ -430,17 +430,17 @@ var _testClause = function(clause, val) {
                     return false;
                 }
             case "function":
-                this.logger.debug("test Function equality");
+                JSWLogger.instance.debug("test Function equality");
                 
-                throw Error("Bad value type in query");
+                JSWLogger.instance.throw("Bad value type in query");
             default:
-                throw Error("Bad value type in query");
+                JSWLogger.instance.throw("Bad value type in query");
         }
     });
 };
 
 var _testObjectClause = function(clause, doc, key) {
-    this.logger.debug("Called _testObjectClause");
+    JSWLogger.instance.debug("Called _testObjectClause");
     
     var val = null;
     
@@ -448,17 +448,17 @@ var _testObjectClause = function(clause, doc, key) {
         var path = key.pop();
         val = doc[path];
         
-        this.logger.debug("check on field " + path);
+        JSWLogger.instance.debug("check on field " + path);
         
         // TODO add _.isNumber(val) and treat it as an array
         if (val) {
-            this.logger.log(val);
-            this.logger.debug("going deeper");
+            JSWLogger.instance.log(val);
+            JSWLogger.instance.debug("going deeper");
             
             return _testObjectClause(clause, val, key);
         }
     } else {
-        this.logger.debug("lowest path: " + path);
+        JSWLogger.instance.debug("lowest path: " + path);
         
         return _testClause(clause, doc);
     }
@@ -496,7 +496,7 @@ var _testLogicalClause = function(clause, doc, key) {
 };
 
 var _testOperatorClause = function(clause, value) {
-    this.logger.debug("Called _testOperatorClause");
+    JSWLogger.instance.debug("Called _testOperatorClause");
     
     for (var key in clause.value) {
         if (!_testOperatorConstraint(key, clause.value[key], clause.value, value, clause)) {
@@ -508,45 +508,45 @@ var _testOperatorClause = function(clause, value) {
 };
 
 var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal, clause) {
-    this.logger.debug("Called _testOperatorConstraint");
+    JSWLogger.instance.debug("Called _testOperatorConstraint");
     
     switch (key) {
         // Comparison Query Operators
         case "$gt":
-            this.logger.debug("testing operator $gt");
+            JSWLogger.instance.debug("testing operator $gt");
 
             return SelectorMatcher.cmp(docVal, operatorValue) > 0;
         case "$lt":
-            this.logger.debug("testing operator $lt");
+            JSWLogger.instance.debug("testing operator $lt");
             
             return SelectorMatcher.cmp(docVal, operatorValue) < 0;
         case "$gte":
-            this.logger.debug("testing operator $gte");
+            JSWLogger.instance.debug("testing operator $gte");
             
             return SelectorMatcher.cmp(docVal, operatorValue) >= 0;
         case "$lte":
-            this.logger.debug("testing operator $lte");
+            JSWLogger.instance.debug("testing operator $lte");
             
             return SelectorMatcher.cmp(docVal, operatorValue) <= 0;
         case "$eq":
-            this.logger.debug("testing operator $eq");
+            JSWLogger.instance.debug("testing operator $eq");
             
             return SelectorMatcher.equal(docVal, operatorValue);
         case "$ne":
-            this.logger.debug("testing operator $ne");
+            JSWLogger.instance.debug("testing operator $ne");
             
             return !SelectorMatcher.equal(docVal, operatorValue);
         case "$in":
-            this.logger.debug("testing operator $in");
+            JSWLogger.instance.debug("testing operator $in");
             
             return SelectorMatcher.in(docVal, operatorValue);
         case "$nin":
-            this.logger.debug("testing operator $nin");
+            JSWLogger.instance.debug("testing operator $nin");
             
             return !SelectorMatcher.in(docVal, operatorValue);
         // Logical Query Operators
         case "$not":
-            this.logger.debug("testing operator $not");
+            JSWLogger.instance.debug("testing operator $not");
             
             // $or, $and, $nor are in the "operator" kind treatment
             /*
@@ -561,33 +561,33 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             return !(_testClause(_clause, docVal));
             */
             // TODO implement
-            throw Error("$not unimplemented");
+            JSWLogger.instance.throw("$not unimplemented");
         // Element Query Operators
         case "$exists":
-            this.logger.debug("testing operator $exists");
+            JSWLogger.instance.debug("testing operator $exists");
             
             return operatorValue ? !_.isUndefined(docVal) : _.isUndefined(docVal);
         case "$type":
-            this.logger.debug("testing operator $type");
+            JSWLogger.instance.debug("testing operator $type");
             
             // $type: 1 is true for an array if any element in the array is of
             // type 1. but an array doesn"t have type array unless it contains
             // an array..
             // var Selector._f._type(docVal);
             // return Selector._f._type(docVal).type === operatorValue;
-            throw Error("$type unimplemented");
+            JSWLogger.instance.throw("$type unimplemented");
         // Evaluation Query Operators
         case "$mod":
-            this.logger.debug("testing operator $mod");
+            JSWLogger.instance.debug("testing operator $mod");
             
             return docVal % operatorValue[0] === operatorValue[1];
         case "$options":
-            this.logger.debug("testing operator $options (ignored)");
+            JSWLogger.instance.debug("testing operator $options (ignored)");
             
             // Ignore, as it is to the RegExp
             return true;
         case "$regex":
-            this.logger.debug("testing operator $regex");
+            JSWLogger.instance.debug("testing operator $regex");
             
             var _opt = null;
             if (_.hasIn(clauseValue, "$options")) {
@@ -600,7 +600,7 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
                     // between our behavior and mongo"s behavior. ideally we would
                     // implement x and s by transforming the regexp, but not today..
                     
-                    throw Error("Only the i, m, and g regexp options are supported");
+                    JSWLogger.instance.throw("Only the i, m, and g regexp options are supported");
                 }
             }
             
@@ -619,12 +619,12 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             
             return regexp.test(docVal);
         case "$text":
-            this.logger.debug("testing operator $text");
+            JSWLogger.instance.debug("testing operator $text");
             
             // TODO implement
             throw Error("$text unimplemented");
         case "$where":
-            this.logger.debug("testing operator $where");
+            JSWLogger.instance.debug("testing operator $where");
             
             // TODO implement
             throw Error("$where unimplemented");
@@ -632,25 +632,25 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
         // TODO -> in operator kind
         // Query Operator Array
         case "$all":
-            this.logger.debug("testing operator $all");
+            JSWLogger.instance.debug("testing operator $all");
             
             // return SelectorMatcher.all(operatorValue, docVal) > 0;
             return SelectorMatcher.all(operatorValue, docVal);
         case "$elemMatch":
-            this.logger.debug("testing operator $elemMatch");
+            JSWLogger.instance.debug("testing operator $elemMatch");
             
             // TODO implement
             throw Error("$elemMatch unimplemented");
         case "$size":
-            this.logger.debug("testing operator $size");
+            JSWLogger.instance.debug("testing operator $size");
             
             return _.isArray(docVal) && docVal.length === operatorValue;
         // Bitwise Query Operators
         // TODO
         default:
-            this.logger.debug("testing operator " + key);
+            JSWLogger.instance.debug("testing operator " + key);
             
-            throw Error("Unrecognized key in selector: " + key);
+            JSWLogger.instance.throw("Unrecognized key in selector: " + key);
     }
 };
 
@@ -703,7 +703,7 @@ var BsonTypes = {
         
         if (_.isSymbol(val)) return this.getByAlias("symbol");
         
-        throw Error("Unaccepted BSON type");
+        JSWLogger.instance.throw("Unaccepted BSON type");
 	}
 };
 

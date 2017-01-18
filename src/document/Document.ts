@@ -1,0 +1,5 @@
+class Document {
+    
+}
+
+export { Document };

@@ -1,8 +1,8 @@
 "use strict";
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var ObjectId_1 = require("../ObjectId");
 var SelectorMatcher_1 = require("./SelectorMatcher");
+var document_1 = require("../document");
 var Clause = (function () {
     function Clause() {
     }
@@ -125,7 +125,7 @@ var Selector = (function () {
                 clause.type = "operator_object";
             }
         }
-        else if (value instanceof ObjectId_1.ObjectId) {
+        else if (value instanceof document_1.ObjectId) {
             this.logger.debug("clause of type ObjectId -> String");
             clause.type = "string";
             clause.value = value.toString();

@@ -1,7 +1,7 @@
-import * as _ from "lodash";
-import { JSWLogger } from "jsw-logger";
+import * as _               from "lodash";
+import { JSWLogger }        from "jsw-logger";
 
-import { BinaryParser } from "./binary";
+import { BinaryParser }     from "../binary";
 
 /**
  * Machine id.
@@ -104,7 +104,13 @@ class ObjectId {
             value;
         
         for (var index = 0, len = this.id.length; index < len; index++) {
-            value = this.binaryParser.toByte(parseInt(this.id[index])); // TODO
+            let char = this.id[index];
+            
+            if (_.isNaN(parseInt(char))) {
+                char = `${char.charCodeAt(0)}`;
+            }
+            
+            value = this.binaryParser.toByte(parseInt(char));
             number = value <= 15 ? "0" + value.toString(16) : value.toString(16);
             
             hexString = hexString + number;
@@ -147,6 +153,17 @@ class ObjectId {
         return ObjectId.index = (ObjectId.index + 1) % 0xFFFFFF;
     }
     
+    returnHash(length: number) {
+        let abc = "abcdefghijklmnopqrstuvwxyz1234567890".split("");
+        let token = ""; 
+        
+        for(let i = 0; i < length; i++) {
+             token += abc[Math.floor(Math.random() * abc.length)];
+        }
+        
+        return token; //Will return a 32 bit "hash"
+    }
+    
     /**
      * Generate a 12 byte id string used in ObjectId"s
      *
@@ -158,17 +175,57 @@ class ObjectId {
      * @return {String} The 12 byte id binary string.
      */
     generate(time?: string|number) {
-        if (_.isNil(time) || !_.isNumber(time)) {
-            time = Date.now() / 1000;
+        // If is a number string, parse it
+        if (!_.isNil(time) && _.isString(time) && !_.isNaN(parseInt(<string>time))) {
+            time = <number>_.toNumber(time);
         }
         
-        /* for time-based ObjectId the bytes following the time will be zeroed */
-        var time4Bytes = this.binaryParser.encodeInt(<number>time, 32, true, true);
-        var machine3Bytes = this.binaryParser.encodeInt(MACHINE_ID, 24, false);
-        var pid2Bytes = this.binaryParser.fromShort(pid);
-        var index3Bytes = this.binaryParser.encodeInt(this.getInc(), 24, false, true);
+        // If its still a non-number, take a new timestamp
+        if (_.isNil(time) || !_.isNumber(time)) {
+            // let now = _.toString(Date.now());
+            // let first = now.substr(0, now.length / 2);
+            // let second = now.substr(now.length / 2, now.length);
+            
+            // time = parseInt(first, 10) + parseInt(second, 10);
+            // time = parseInt(`${second}${time}`, 10);
+            // time = time / 1000;
+            // time = Date.now() / 1000;
+            return this.binaryParser.generate12string();
+        } else {
+            /* for time-based ObjectId the bytes following the time will be zeroed */
+            var time4Bytes = this.binaryParser.encodeInt(<number>time, 32, true, true);
+            var machine3Bytes = this.binaryParser.encodeInt(MACHINE_ID, 24, false);
+            var pid2Bytes = this.binaryParser.fromShort(pid);
+            var index3Bytes = this.binaryParser.encodeInt(this.getInc(), 24, false, true);
+            
+            return time4Bytes + machine3Bytes + pid2Bytes + index3Bytes;
+        }
         
-        return time4Bytes + machine3Bytes + pid2Bytes + index3Bytes;
+        // // If is a number string, parse it
+        // if (!_.isNil(time) && _.isString(time) && !_.isNaN(parseInt(<string>time))) {
+        //     time = <number>_.toNumber(time);
+        // }
+        
+        // // If its still a non-number, take a new timestamp
+        // if (_.isNil(time) || !_.isNumber(time)) {
+        //     let now = _.toString(Date.now());
+        //     let first = now.substr(0, now.length / 2);
+        //     let second = now.substr(now.length / 2, now.length);
+            
+        //     time = parseInt(first, 10) + parseInt(second, 10);
+        //     time = parseInt(`${second}${time}`, 10);
+        //     time = time / 1000;
+        //     // time = Date.now() / 1000;
+        // }
+        
+        // /* for time-based ObjectId the bytes following the time will be zeroed */
+        // var time4Bytes = this.binaryParser.encodeInt(<number>time, 32, true, true);
+        // // let time4Bytes = this.returnHash(4);
+        // var machine3Bytes = this.binaryParser.encodeInt(MACHINE_ID, 24, false);
+        // var pid2Bytes = this.binaryParser.fromShort(pid);
+        // var index3Bytes = this.binaryParser.encodeInt(this.getInc(), 24, false, true);
+        
+        // return time4Bytes + machine3Bytes + pid2Bytes + index3Bytes;
     }
     
     /**

@@ -1,4 +1,4 @@
-import { MongoPortable } from "./src/MongoPortable";
+import { MongoPortable } from "./src/core";
 
 try {
     if (window) {
