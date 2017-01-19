@@ -17,7 +17,7 @@ if (browser) {
     // _ = require("lodash");
 
     if (!!process.env.test_coverage) {
-        MongoPortable = require("../../test/coverage/lib/MongoPortable.js").MongoPortable;
+        MongoPortable = require("../../test/coverage/lib/core/index.js").MongoPortable;
     } else {
         MongoPortable = require("../../index.js").MongoPortable;
     }
