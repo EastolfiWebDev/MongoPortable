@@ -1,6 +1,6 @@
 var expect = null,
     // _ = null,
-    MongoPortable = null;
+    _MongoPortable = null;
 
 var browser = false;
 
@@ -11,17 +11,19 @@ try {
 if (browser) {
     expect = window.chai.expect;
     // _ = window._;
-    MongoPortable = window.MongoPortable;
+    _MongoPortable = window.MongoPortable;
 } else {
     expect = require("chai").expect;
     // _ = require("lodash");
 
     if (!!process.env.test_coverage) {
-        MongoPortable = require("../../test/coverage/lib/core/index.js").MongoPortable;
+        _MongoPortable = require("../../test/coverage/lib/core/index.js").MongoPortable;
     } else {
-        MongoPortable = require("../../index.js").MongoPortable;
+        _MongoPortable = require("../../index.js").MongoPortable;
     }
 }
+
+var MongoPortable = _MongoPortable;
 
 var TEST_DDBB = "test_database";
 var TEST_COLL = "test_collection";

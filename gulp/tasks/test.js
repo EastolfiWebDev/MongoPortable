@@ -4,6 +4,7 @@ var del = require("del");
 var mocha = require("gulp-mocha");
 var execSync = require("child_process").execSync;
 var runSequence = require("run-sequence");
+var mochaPhantomJS = require("gulp-mocha-phantomjs");
 
 gulp.task("clean:coveralls", function () {
     return del([
@@ -61,12 +62,7 @@ gulp.task("test:app", ["build:app"], function () {
         .pipe(mocha({reporter: "nyan"}));
 });
 
-// gulp.task('test:browser', function () { 
-//     return gulp.src('tests/index.html', {read: false})
-//         .pipe(mochaPhantomJS({reporter: 'nyan'}));
-// });
-
-// gulp.task('test-client', ['bundle-test'], function() {
-//     return gulp.src('tests/fixtures/index.html')
-//         .pipe(mochaPhantomJS({reporter: 'nyan'}));
-// });
+gulp.task("test:browser", ["compress:app"], function () { 
+    return gulp.src("test/index.html", {read: false})
+        .pipe(mochaPhantomJS({reporter: "nyan"}));
+});

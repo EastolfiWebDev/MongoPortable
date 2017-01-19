@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+        <title>Mongo Portable Browser Tests</title>
+        
+        <link rel="stylesheet" media="all" href="../node_modules/mocha/mocha.css">
+    </head>
+    <body>
+        <div id="mocha"><p><a href=".">Index</a></p></div>
+        <div id="messages"></div>
+        <div id="fixtures"></div>
+        
+        <!-- Mocha / Chai -->
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script src="../node_modules/chai/chai.js"></script>
+        
+        <!-- Modules -->
+        <script src="../dist/mongo-portable.min.js"></script>
+        
+        <!-- Setup Mocha -->
+        <script>mocha.setup('bdd');</script>
+        
+        <!-- Test Spec -->
+        <script src="./specs/6_MongoPortable.js"></script>
+        
+        <!-- Run Test -->
+        <script>mocha.run();</script>
+    </body>
+</html>
