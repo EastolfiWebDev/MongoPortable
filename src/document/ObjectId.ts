@@ -24,7 +24,8 @@ var isValidHexRegExp = function(str, len = 24) {
 
 var pid: number;
 try {
-    if (_.isNil(process)) pid = process.pid;
+    // if (_.isNil(process)) pid = process.pid;
+    pid = Math.floor(Math.random() * 100000);
 } catch (e) {
     pid = Math.floor(Math.random() * 100000);
 }

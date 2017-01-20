@@ -2,45 +2,84 @@ var gulp = require('gulp');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
-var jsdoc = require('gulp-jsdoc3');
+var typedoc = require("gulp-typedoc");
+var ghPages = require("gulp-gh-pages");
 var jsdoc2md = require('jsdoc-to-markdown');
 var gulpJsdoc2md = require('gulp-jsdoc-to-markdown');
 var conventionalChangelog = require('gulp-conventional-changelog');
 
-gulp.task('doc:api:full', function () {
-    return jsdoc2md.render({ files: 'src/**/*.js' })
+gulp.task("doc:api:full", function () {
+    return jsdoc2md.render({ files: "src/**/*.js" })
     .then(function(output) {
-        return fs.writeFileSync('api/documentation.md', output);
+        return fs.writeFileSync("api/index.md", output);
     });
 });
 
-gulp.task('doc:api:files', function () {
-    return gulp.src(['src/MongoPortable.js', 'src/Collection.js', 'src/Cursor.js', 'src/Selector.js', 'src/ObjectId.js'])
-        .pipe(gulpJsdoc2md(/*{ template: fs.readFileSync('./readme.hbs', 'utf8') }*/))
-        .on('error', function (err) {
-            gutil.log(gutil.colors.red('jsdoc2md failed'), err.message);
+gulp.task("doc:api:files", function () {
+    return gulp.src([
+            "src/utils/Utils.js", "src/emitter/EventEmitter.js",
+            "src/binary/BinaryParserBuffer.js", "src/binary/BinaryParser.js",
+            "src/document/ObjectId.js", "src/document/Document.js",
+            "src/selector/SelectorMatcher.js", "src/selector/Selector.js",
+            "src/collection/Collection.js", "src/collection/Cursor.js",
+            "src/aggregation/Aggregation.js", "src/core/Options.js",
+            "src/core/MongoPortable.js"
+        ])
+        .pipe(gulpJsdoc2md(/*{ template: fs.readFileSync("./readme.hbs", "utf8") }*/))
+        .on("error", function (err) {
+            gutil.log(gutil.colors.red("jsdoc2md failed"), err.message);
         })
         .pipe(rename(function (path) {
-            path.extname = '.md';
+            path.extname = ".md";
         }))
-        .pipe(gulp.dest('api'));
+        .pipe(gulp.dest("api"));
 });
 
-gulp.task('doc:app', function (cb) {
-    var config = require('../../jsdoc.conf.json');
+// gulp.task('doc:app', function (cb) {
+//     var config = require('../../jsdoc.conf.json');
     
-    gulp.src(['./src/**/*.js'], {read: false})
-        .pipe(jsdoc(config, cb));
+//     gulp.src(['./src/**/*.js'], {read: false})
+//         .pipe(jsdoc(config, cb));
+// });
+gulp.task("doc:app", function (cb) {
+    return gulp.src("./src/**/*.ts")
+        .pipe(typedoc({
+            // typescript
+            target: "es6",
+    		module: "commonjs",
+    		moduleResolution: "node",
+    		experimentalDecorators: true,
+    		emitDecoratorMetadata: true,
+    		noImplicitAny: false,
+    		suppressImplicitAnyIndexErrors: true,
+    		
+    		// typedoc
+    		out: "docs",
+    		json: "docs/out.json",
+    		
+    		name: "Mongo Portable",
+    		ignoreCompilerErrors: false,
+    		version: true
+        }));
 });
 
-gulp.task('changelog', function () {
-    return gulp.src('CHANGELOG.md', {
+gulp.task("publish:ghpages", function() {
+  return gulp.src("./docs/**/*")
+    .pipe(ghPages());
+});
+
+gulp.task("changelog", function () {
+    return gulp.src("CHANGELOG.md", {
         buffer: false
     })
     .pipe(conventionalChangelog({
-        preset: 'angular',
+        preset: "angular",
         outputUnreleased: true,
         releaseCount: 0
+    }, {
+        host: "https://github.com",
+        owner: "EastolfiWebDev",
+        repository: "MongoPortable"
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest("./"));
 });

@@ -1,3 +1,71 @@
+## Modules
+
+<dl>
+<dt><a href="#module_BinaryParserBuffer">BinaryParserBuffer</a></dt>
+<dd><p>BinaryParserBuffer</p>
+</dd>
+<dt><a href="#module_Cursor">Cursor</a></dt>
+<dd><p>Cursor</p>
+</dd>
+<dt><a href="#module_MongoPortable">MongoPortable</a></dt>
+<dd><p>MongoPortable</p>
+</dd>
+<dt><a href="#module_ObjectId">ObjectId</a></dt>
+<dd><p>ObjectId</p>
+</dd>
+</dl>
+
+## Classes
+
+<dl>
+<dt><a href="#Collection">Collection</a></dt>
+<dd><p>Collection class that maps a MongoDB-like collection</p>
+</dd>
+</dl>
+
+<a name="module_BinaryParserBuffer"></a>
+
+## BinaryParserBuffer
+BinaryParserBuffer
+
+**Since**: 0.0.1  
+**Author:** Eduardo Astolfi <eastolfi91@gmail.com>  
+**License**: MIT Licensed  
+**Copyright**: 2016 Eduardo Astolfi &lt;eastolfi91@gmail.com&gt;  
+<a name="module_Cursor"></a>
+
+## Cursor
+Cursor
+
+**Since**: 0.0.1  
+**Author:** Eduardo Astolfi <eduardo.astolfi91@gmail.com>  
+**License**: MIT Licensed  
+**Copyright**: 2016 Eduardo Astolfi &lt;eduardo.astolfi91@gmail.com&gt;  
+<a name="module_MongoPortable"></a>
+
+## MongoPortable
+MongoPortable
+
+**Since**: 0.0.1  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| databaseName | <code>string</code> | Name of the database. |
+
+<a name="module_ObjectId"></a>
+
+## ObjectId
+ObjectId
+
+**Since**: 0.0.1  
+**Author:** Eduardo Astolfi <eastolfi91@gmail.com>  
+**License**: MIT Licensed  
+**Copyright**: 2016 Eduardo Astolfi &lt;eastolfi91@gmail.com&gt;  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> &#124; <code>number</code> | Can be a 24 byte hex string, a 12 byte binary string or a Number. |
+
 <a name="Collection"></a>
 
 ## Collection

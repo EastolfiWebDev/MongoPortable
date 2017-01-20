@@ -1,13 +1,14 @@
-var gulp = require('gulp');
-var runSequence = require('run-sequence');
+var gulp = require("gulp");
+var runSequence = require("run-sequence");
 
-require('require-dir')('./gulp/tasks');
+// Importing all the sub-tasks
+require("require-dir")("./gulp/tasks");
 
-gulp.task('build', function(cb) {
+// Build the application and bundle it for browser
+gulp.task("build", function(cb) {
     runSequence(
-        'clean:lib',            // deletes folder lib content
-        'build:app',            // build
-        'bundle:app',           // bundle
+        "build:app",            // build
+        "compress:app",         // bundle + compress
     function(error) {
         if (error) {
             console.log(error);
@@ -17,10 +18,12 @@ gulp.task('build', function(cb) {
     });
 });
 
-gulp.task('test', function(cb) {
+
+// Launch tests as a node module and browser
+gulp.task("test", function(cb) {
     runSequence(
-        'test:app',             // build + test
-        // 'test:browser',         // build + bundle + test
+        "test:app",             // build + test
+        "test:browser",         // build + bundle + test
     function(error) {
         if (error) {
             console.log(error);
@@ -30,11 +33,12 @@ gulp.task('test', function(cb) {
     });
 });
 
-gulp.task('doc', function(cb) {
+// Creates the html docs, and the .md docs
+gulp.task("doc", function(cb) {
     runSequence(
-        'doc:app',              // generate html docs
-        'doc:api:files',        // generate MD docs (file/class)
-        'doc:api:full',         // generate MD docs (all class together)
+        "doc:app",              // generate html docs
+        "doc:api:files",        // generate MD docs (file/class)
+        "doc:api:full",         // generate MD docs (all class together)
     function(error) {
         if (error) {
             console.log(error);
@@ -44,10 +48,11 @@ gulp.task('doc', function(cb) {
     });
 });
 
-gulp.task('generate', function(cb) {
+// Generates the application by building, testing, and documenting
+gulp.task("generate", function(cb) {
     runSequence(
-        'test',                 // build + bundle + tests
-        'doc',                  // generate all docs
+        "test",                 // build + bundle + tests
+        "doc",                  // generate all docs
     function(error) {
         if (error) {
             console.log(error);
@@ -57,16 +62,22 @@ gulp.task('generate', function(cb) {
     });
 });
 
-gulp.task('release', function(cb) {
+// Release a new version to github:
+//      Generates the application
+//      Updates the changelog
+//      Bump version, push changes and release to github
+//      Push test coveralls
+gulp.task("release", function(cb) {
     runSequence(
-        'generate',             // build + bundle + tests + docs
-        'version',              // bump version
-        'commit-changes',       // add all and commit under "relase MAJOR|MINOR|PATCH version (vVERSION)" message
-        'commit-changelog',     // generate changelog
-        'push-changes',         // push all commits to github
-        'create-new-tag',       // generate tag and push it
-        'release:github',       // generate github release
-        'publish:coveralls',    // generate and publis coveralls
+        "generate",             // build + bundle + tests + docs
+        "version",              // bump version
+        "commit-changes",       // add all and commit under "relase MAJOR|MINOR|PATCH version (vVERSION)" message
+        "commit-changelog",     // generate changelog
+        "push-changes",         // push all commits to github
+        "create-new-tag",       // generate tag and push it
+        "release:github",       // generate github release
+        "publish:coveralls",    // generate and publis coveralls
+        "publish:ghpages",
     function(error) {
         if (error) {
             console.log(error);
@@ -76,9 +87,9 @@ gulp.task('release', function(cb) {
     });
 });
 
-gulp.task('default', function(cb) {
+gulp.task("default", function(cb) {
     runSequence(
-        'generate',
+        "generate",
     function(error) {
         if (error) {
             console.log(error);
