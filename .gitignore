@@ -8,3 +8,5 @@ test/coverage
 test/results
 
 logs/*
+
+.publish
