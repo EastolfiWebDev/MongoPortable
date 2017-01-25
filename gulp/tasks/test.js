@@ -3,6 +3,7 @@ var fs = require("fs");
 var del = require("del");
 var mocha = require("gulp-mocha");
 var execSync = require("child_process").execSync;
+var coveralls = require("gulp-coveralls");
 var runSequence = require("run-sequence");
 var mochaPhantomJS = require("gulp-mocha-phantomjs");
 
@@ -54,6 +55,11 @@ gulp.task("coveralls", function (cb) {
         
         cb(error);
     });
+});
+
+gulp.task("publish:coveralls", ["coveralls"], function() {
+    return gulp.src("test/coverage/coverage-dist.lcov")
+        .pipe(coveralls());
 });
 
 gulp.task("test:app", ["build:app"], function () { 
