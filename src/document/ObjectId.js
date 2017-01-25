@@ -20,13 +20,12 @@ var isValidHexRegExp = function (str, len) {
         return true;
     return false;
 };
-var pid;
+var pid = Math.floor(Math.random() * 100000);
 try {
-    // if (_.isNil(process)) pid = process.pid;
-    pid = Math.floor(Math.random() * 100000);
+    if (!_.isNil(process))
+        pid = process.pid;
 }
 catch (e) {
-    pid = Math.floor(Math.random() * 100000);
 }
 /**
  * ObjectId

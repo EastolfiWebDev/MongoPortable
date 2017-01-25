@@ -22,12 +22,12 @@ var isValidHexRegExp = function(str, len = 24) {
     return false;
 };
 
-var pid: number;
+var pid: number = Math.floor(Math.random() * 100000);
+
 try {
-    // if (_.isNil(process)) pid = process.pid;
-    pid = Math.floor(Math.random() * 100000);
+    if (!_.isNil(process)) pid = process.pid;
 } catch (e) {
-    pid = Math.floor(Math.random() * 100000);
+    // "process" does not exists -> keep the value from Math.random
 }
 
 /**
