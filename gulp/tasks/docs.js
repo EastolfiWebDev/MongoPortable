@@ -35,12 +35,6 @@ gulp.task("doc:api:files", function () {
         .pipe(gulp.dest("api"));
 });
 
-// gulp.task('doc:app', function (cb) {
-//     var config = require('../../jsdoc.conf.json');
-    
-//     gulp.src(['./src/**/*.js'], {read: false})
-//         .pipe(jsdoc(config, cb));
-// });
 gulp.task("doc:app", function (cb) {
     return gulp.src("./src/**/*.ts")
         .pipe(typedoc({
@@ -58,7 +52,7 @@ gulp.task("doc:app", function (cb) {
     		json: "docs/out.json",
     		
     		name: "Mongo Portable",
-    		ignoreCompilerErrors: false,
+    		ignoreCompilerErrors: true, // true -> Cannot find name 'process'
     		version: true
         }));
 });
