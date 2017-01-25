@@ -1,5 +1,21 @@
-<a name="Unreleased"></a>
-# Unreleased (2016-10-19)
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/EastolfiWebDev/MongoPortable/compare/1.3.0...v1.3.1) (2017-01-25)
+
+
+### Bug Fixes
+
+* Solve browser support ([d10406f](https://github.com/EastolfiWebDev/MongoPortable/commit/d10406f))
+* Solve issue for unknown name "process" ([58fa3e5](https://github.com/EastolfiWebDev/MongoPortable/commit/58fa3e5))
+
+
+
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/EastolfiWebDev/MongoPortable/compare/v1.2.1...1.3.0) (2017-01-08)
+
+
+### Bug Fixes
+
+* Solve a query problem when using stores ([1bca18d](https://github.com/EastolfiWebDev/MongoPortable/commit/1bca18d))
 
 
 
