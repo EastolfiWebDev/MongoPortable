@@ -1,5 +1,15 @@
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/EastolfiWebDev/MongoPortable/compare/1.3.1...v1.3.2) (2017-01-26)
+
+
+### Bug Fixes
+
+* Correct an error when emitting events from a collection ([d60ed21](https://github.com/EastolfiWebDev/MongoPortable/commit/d60ed21))
+
+
+
 <a name="1.3.1"></a>
-## [1.3.1](https://github.com/EastolfiWebDev/MongoPortable/compare/1.3.0...v1.3.1) (2017-01-25)
+## [1.3.1](https://github.com/EastolfiWebDev/MongoPortable/compare/1.3.0...1.3.1) (2017-01-25)
 
 
 ### Bug Fixes
