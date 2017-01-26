@@ -94,7 +94,9 @@ class Collection /*extends EventEmitter*/ {
         
         // _.merge(this.opts, options);
         
-        this.emit = db.emit;
+        this.emit = (name, args) => {
+            db.emit(name, args);
+        };
     }
     
     // emit(name, args) {

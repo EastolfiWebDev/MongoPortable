@@ -783,7 +783,9 @@ var Collection /*extends EventEmitter*/ = (function () {
         this.snapshots = [];
         // this.opts = {}; // Default options
         // _.merge(this.opts, options);
-        this.emit = db.emit;
+        this.emit = function (name, args) {
+            db.emit(name, args);
+        };
     }
     /**
      * @ignore
