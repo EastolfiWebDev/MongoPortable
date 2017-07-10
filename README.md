@@ -21,7 +21,7 @@ npm install --save mongo-portable
 # Usage
 ```javascript
 // Declaring the module dependency
-var MongoPortable = require("mongo-portable");
+var MongoPortable = require("mongo-portable").MongoPortable;
 
 // Instantiates a new ddbb object by passing a ddbb name
 var db = new MongoPortable("TEST");
