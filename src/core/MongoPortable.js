@@ -61,10 +61,19 @@ var ConnectionHelper = (function () {
     function ConnectionHelper() {
         this._pool = [];
     }
-    ConnectionHelper.prototype.addConnection = function (name, id) {
+    ConnectionHelper.prototype.addConnection = function (name, id, instance) {
         if (!this.hasConnection(name)) {
-            this._pool.push({ name: name, id: id });
+            this._pool.push({ name: name, id: id, instance: instance });
         }
+    };
+    ConnectionHelper.prototype.getConnection = function (name) {
+        for (var _i = 0, _a = this._pool; _i < _a.length; _i++) {
+            var conn = _a[_i];
+            if (conn.name === name) {
+                return conn;
+            }
+        }
+        return false;
     };
     ConnectionHelper.prototype.dropConnection = function (name) {
         for (var i = 0; i < this._pool.length; i++) {
@@ -140,7 +149,7 @@ var MongoPortable = (function (_super) {
             _this.logger.throw("The database name \"" + databaseName + "\" is already in use");
         }
         _this._databaseName = databaseName;
-        MongoPortable._connHelper.addConnection(databaseName, new document_1.ObjectId());
+        MongoPortable._connHelper.addConnection(databaseName, new document_1.ObjectId(), _this);
         return _this;
     }
     MongoPortable.prototype.emit = function (name, args) {
@@ -182,6 +191,19 @@ var MongoPortable = (function (_super) {
             this.logger.throw("\"store\" must be a function or object");
         }
         return this;
+    };
+    /**
+     * Retrieves the instance of that DDBB name
+     *
+     * @param {String} name - The DDBB name
+     *
+     * @return {MongoPortable} - The DDBB instance
+     */
+    MongoPortable.getInstance = function (name) {
+        if (!_.isNil(name)) {
+            return MongoPortable._connHelper.getConnection(name);
+        }
+        return null;
     };
     /**
      * Returns a cursor to all the collection information.

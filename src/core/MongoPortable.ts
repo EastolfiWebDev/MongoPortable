@@ -59,16 +59,26 @@ import { Utils }            from "../utils";
 // }
 
 class ConnectionHelper {
-    private _pool: Array<{name: string, id: any}>;
+    private _pool: Array<{name: string, id: any, instance: MongoPortable}>;
     
     constructor() {
         this._pool = [];
     }
     
-    addConnection(name: string, id:any) {
+    addConnection(name: string, id:any, instance: MongoPortable) {
         if (!this.hasConnection(name)) {
-            this._pool.push({ name, id });
+            this._pool.push({ name, id, instance });
         }
+    }
+    
+    getConnection(name: string) {
+        for (let conn of this._pool) {
+            if (conn.name === name) {
+                return conn;
+            }
+        }
+        
+        return false;
     }
     
     dropConnection(name: string) {
@@ -161,7 +171,7 @@ class MongoPortable extends EventEmitter {
     
         this._databaseName = databaseName;
     
-        MongoPortable._connHelper.addConnection(databaseName, new ObjectId());
+        MongoPortable._connHelper.addConnection(databaseName, new ObjectId(), this);
     }
     
     emit(name: string, args: Object) {
@@ -204,6 +214,21 @@ class MongoPortable extends EventEmitter {
         }
         
         return this;
+    }
+    
+    /**
+     * Retrieves the instance of that DDBB name
+     * 
+     * @param {String} name - The DDBB name
+     * 
+     * @return {MongoPortable} - The DDBB instance
+     */
+    static getInstance(name: string) {
+        if (!_.isNil(name)) {
+            return MongoPortable._connHelper.getConnection(name);
+        }
+
+        return null;
     }
     
     /**
