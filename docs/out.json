@@ -2185,7 +2185,7 @@
 			]
 		},
 		{
-			"id": 974,
+			"id": 990,
 			"name": "\"src/aggregation/Aggregation\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -2195,28 +2195,28 @@
 			"originalName": "/home/ubuntu/workspace/src/aggregation/Aggregation.ts",
 			"children": [
 				{
-					"id": 975,
+					"id": 991,
 					"name": "Aggregation",
 					"kind": 128,
 					"kindString": "Class",
 					"flags": {},
 					"children": [
 						{
-							"id": 978,
+							"id": 994,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 979,
+									"id": 995,
 									"name": "new Aggregation",
 									"kind": 16384,
 									"kindString": "Constructor signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 980,
+											"id": 996,
 											"name": "pipeline",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2230,7 +2230,7 @@
 									"type": {
 										"type": "reference",
 										"name": "Aggregation",
-										"id": 975
+										"id": 991
 									}
 								}
 							],
@@ -2243,7 +2243,7 @@
 							]
 						},
 						{
-							"id": 976,
+							"id": 992,
 							"name": "logger",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2264,7 +2264,7 @@
 							}
 						},
 						{
-							"id": 977,
+							"id": 993,
 							"name": "pipeline",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2282,21 +2282,21 @@
 							}
 						},
 						{
-							"id": 981,
+							"id": 997,
 							"name": "aggregate",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 982,
+									"id": 998,
 									"name": "aggregate",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 983,
+											"id": 999,
 											"name": "collection",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2322,21 +2322,21 @@
 							]
 						},
 						{
-							"id": 984,
+							"id": 1000,
 							"name": "validStage",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 985,
+									"id": 1001,
 									"name": "validStage",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 986,
+											"id": 1002,
 											"name": "stage",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2380,23 +2380,23 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								978
+								994
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								976,
-								977
+								992,
+								993
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								981,
-								984
+								997,
+								1000
 							]
 						}
 					],
@@ -2409,14 +2409,14 @@
 					]
 				},
 				{
-					"id": 1023,
+					"id": 1039,
 					"name": "do_complex_group",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1024,
+							"id": 1040,
 							"name": "do_complex_group",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -2436,21 +2436,21 @@
 					]
 				},
 				{
-					"id": 1033,
+					"id": 1049,
 					"name": "do_group",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1034,
+							"id": 1050,
 							"name": "do_group",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1035,
+									"id": 1051,
 									"name": "documents",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2461,7 +2461,7 @@
 									}
 								},
 								{
-									"id": 1036,
+									"id": 1052,
 									"name": "group_stage",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2487,21 +2487,21 @@
 					]
 				},
 				{
-					"id": 1029,
+					"id": 1045,
 					"name": "do_match",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1030,
+							"id": 1046,
 							"name": "do_match",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1031,
+									"id": 1047,
 									"name": "documents",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2512,7 +2512,7 @@
 									}
 								},
 								{
-									"id": 1032,
+									"id": 1048,
 									"name": "match_stage",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2538,21 +2538,21 @@
 					]
 				},
 				{
-					"id": 1037,
+					"id": 1053,
 					"name": "do_project",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1038,
+							"id": 1054,
 							"name": "do_project",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1039,
+									"id": 1055,
 									"name": "documents",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2563,7 +2563,7 @@
 									}
 								},
 								{
-									"id": 1040,
+									"id": 1056,
 									"name": "project_stage",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2589,21 +2589,21 @@
 					]
 				},
 				{
-					"id": 1018,
+					"id": 1034,
 					"name": "do_single_group",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1019,
+							"id": 1035,
 							"name": "do_single_group",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1020,
+									"id": 1036,
 									"name": "group_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2614,7 +2614,7 @@
 									}
 								},
 								{
-									"id": 1021,
+									"id": 1037,
 									"name": "group_stage",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2625,7 +2625,7 @@
 									}
 								},
 								{
-									"id": 1022,
+									"id": 1038,
 									"name": "documents",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2651,21 +2651,21 @@
 					]
 				},
 				{
-					"id": 1025,
+					"id": 1041,
 					"name": "do_sort",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1026,
+							"id": 1042,
 							"name": "do_sort",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1027,
+									"id": 1043,
 									"name": "documents",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2676,7 +2676,7 @@
 									}
 								},
 								{
-									"id": 1028,
+									"id": 1044,
 									"name": "sort_stage",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2702,28 +2702,28 @@
 					]
 				},
 				{
-					"id": 1001,
+					"id": 1017,
 					"name": "group_operators",
 					"kind": 2097152,
 					"kindString": "Object literal",
 					"flags": {},
 					"children": [
 						{
-							"id": 1010,
+							"id": 1026,
 							"name": "$avg",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 1011,
+									"id": 1027,
 									"name": "$avg",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 1012,
+											"id": 1028,
 											"name": "documents",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2734,7 +2734,7 @@
 											}
 										},
 										{
-											"id": 1013,
+											"id": 1029,
 											"name": "new_id",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2745,7 +2745,7 @@
 											}
 										},
 										{
-											"id": 1014,
+											"id": 1030,
 											"name": "new_field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2756,7 +2756,7 @@
 											}
 										},
 										{
-											"id": 1015,
+											"id": 1031,
 											"name": "value",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2767,7 +2767,7 @@
 											}
 										},
 										{
-											"id": 1016,
+											"id": 1032,
 											"name": "isCount",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2781,7 +2781,7 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 1017,
+											"id": 1033,
 											"name": "__type",
 											"kind": 65536,
 											"kindString": "Type literal",
@@ -2799,21 +2799,21 @@
 							]
 						},
 						{
-							"id": 1002,
+							"id": 1018,
 							"name": "$sum",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 1003,
+									"id": 1019,
 									"name": "$sum",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 1004,
+											"id": 1020,
 											"name": "documents",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2824,7 +2824,7 @@
 											}
 										},
 										{
-											"id": 1005,
+											"id": 1021,
 											"name": "new_id",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2835,7 +2835,7 @@
 											}
 										},
 										{
-											"id": 1006,
+											"id": 1022,
 											"name": "new_field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2846,7 +2846,7 @@
 											}
 										},
 										{
-											"id": 1007,
+											"id": 1023,
 											"name": "value",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2857,7 +2857,7 @@
 											}
 										},
 										{
-											"id": 1008,
+											"id": 1024,
 											"name": "isCount",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2871,7 +2871,7 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 1009,
+											"id": 1025,
 											"name": "__type",
 											"kind": 65536,
 											"kindString": "Type literal",
@@ -2894,8 +2894,8 @@
 							"title": "Functions",
 							"kind": 64,
 							"children": [
-								1010,
-								1002
+								1026,
+								1018
 							]
 						}
 					],
@@ -2912,14 +2912,14 @@
 					}
 				},
 				{
-					"id": 987,
+					"id": 1003,
 					"name": "stages",
 					"kind": 2097152,
 					"kindString": "Object literal",
 					"flags": {},
 					"children": [
 						{
-							"id": 997,
+							"id": 1013,
 							"name": "$geoNear",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2938,7 +2938,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 994,
+							"id": 1010,
 							"name": "$group",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2957,7 +2957,7 @@
 							"defaultValue": "true"
 						},
 						{
-							"id": 1000,
+							"id": 1016,
 							"name": "$indexStats",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2976,7 +2976,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 991,
+							"id": 1007,
 							"name": "$limit",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2995,7 +2995,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 998,
+							"id": 1014,
 							"name": "$lookup",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3014,7 +3014,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 989,
+							"id": 1005,
 							"name": "$match",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3033,7 +3033,7 @@
 							"defaultValue": "true"
 						},
 						{
-							"id": 999,
+							"id": 1015,
 							"name": "$out",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3052,7 +3052,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 988,
+							"id": 1004,
 							"name": "$project",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3071,7 +3071,7 @@
 							"defaultValue": "true"
 						},
 						{
-							"id": 990,
+							"id": 1006,
 							"name": "$redact",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3090,7 +3090,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 995,
+							"id": 1011,
 							"name": "$sample",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3109,7 +3109,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 992,
+							"id": 1008,
 							"name": "$skip",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3128,7 +3128,7 @@
 							"defaultValue": "false"
 						},
 						{
-							"id": 996,
+							"id": 1012,
 							"name": "$sort",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3147,7 +3147,7 @@
 							"defaultValue": "true"
 						},
 						{
-							"id": 993,
+							"id": 1009,
 							"name": "$unwind",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3171,19 +3171,19 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								997,
-								994,
-								1000,
-								991,
-								998,
-								989,
-								999,
-								988,
-								990,
-								995,
-								992,
-								996,
-								993
+								1013,
+								1010,
+								1016,
+								1007,
+								1014,
+								1005,
+								1015,
+								1004,
+								1006,
+								1011,
+								1008,
+								1012,
+								1009
 							]
 						}
 					],
@@ -3205,27 +3205,27 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						975
+						991
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						1023,
-						1033,
-						1029,
-						1037,
-						1018,
-						1025
+						1039,
+						1049,
+						1045,
+						1053,
+						1034,
+						1041
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						1001,
-						987
+						1017,
+						1003
 					]
 				}
 			],
@@ -3238,7 +3238,7 @@
 			]
 		},
 		{
-			"id": 793,
+			"id": 809,
 			"name": "\"src/aggregation/index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -6960,7 +6960,7 @@
 			]
 		},
 		{
-			"id": 794,
+			"id": 810,
 			"name": "\"src/collection/Collection\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -6970,14 +6970,14 @@
 			"originalName": "/home/ubuntu/workspace/src/collection/Collection.ts",
 			"children": [
 				{
-					"id": 795,
+					"id": 811,
 					"name": "Collection",
 					"kind": 128,
 					"kindString": "Class",
 					"flags": {},
 					"children": [
 						{
-							"id": 804,
+							"id": 820,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
@@ -6985,7 +6985,7 @@
 							"comment": {},
 							"signatures": [
 								{
-									"id": 805,
+									"id": 821,
 									"name": "new Collection",
 									"kind": 16384,
 									"kindString": "Constructor signature",
@@ -6993,7 +6993,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 806,
+											"id": 822,
 											"name": "db",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7007,7 +7007,7 @@
 											}
 										},
 										{
-											"id": 807,
+											"id": 823,
 											"name": "collectionName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7024,7 +7024,7 @@
 									"type": {
 										"type": "reference",
 										"name": "Collection",
-										"id": 795
+										"id": 811
 									}
 								}
 							],
@@ -7037,7 +7037,7 @@
 							]
 						},
 						{
-							"id": 798,
+							"id": 814,
 							"name": "databaseName",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7055,7 +7055,7 @@
 							}
 						},
 						{
-							"id": 801,
+							"id": 817,
 							"name": "doc_indexes",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7073,7 +7073,7 @@
 							}
 						},
 						{
-							"id": 800,
+							"id": 816,
 							"name": "docs",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7091,7 +7091,7 @@
 							}
 						},
 						{
-							"id": 803,
+							"id": 819,
 							"name": "emit",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7109,7 +7109,7 @@
 							}
 						},
 						{
-							"id": 799,
+							"id": 815,
 							"name": "fullName",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7127,7 +7127,7 @@
 							}
 						},
 						{
-							"id": 796,
+							"id": 812,
 							"name": "logger",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7148,7 +7148,7 @@
 							}
 						},
 						{
-							"id": 797,
+							"id": 813,
 							"name": "name",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7166,7 +7166,7 @@
 							}
 						},
 						{
-							"id": 802,
+							"id": 818,
 							"name": "snapshots",
 							"kind": 1024,
 							"kindString": "Property",
@@ -7184,7 +7184,7 @@
 							}
 						},
 						{
-							"id": 889,
+							"id": 905,
 							"name": "aggregate",
 							"kind": 2048,
 							"kindString": "Method",
@@ -7201,7 +7201,7 @@
 							},
 							"signatures": [
 								{
-									"id": 890,
+									"id": 906,
 									"name": "aggregate",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -7212,7 +7212,7 @@
 									},
 									"parameters": [
 										{
-											"id": 891,
+											"id": 907,
 											"name": "pipeline",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7226,7 +7226,7 @@
 											}
 										},
 										{
-											"id": 892,
+											"id": 908,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7234,14 +7234,14 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 893,
+													"id": 909,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
 													"flags": {},
 													"children": [
 														{
-															"id": 894,
+															"id": 910,
 															"name": "forceFetch",
 															"kind": 32,
 															"kindString": "Variable",
@@ -7265,7 +7265,7 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																894
+																910
 															]
 														}
 													]
@@ -7289,7 +7289,7 @@
 							]
 						},
 						{
-							"id": 871,
+							"id": 887,
 							"name": "backup",
 							"kind": 2048,
 							"kindString": "Method",
@@ -7304,7 +7304,7 @@
 							},
 							"signatures": [
 								{
-									"id": 872,
+									"id": 888,
 									"name": "backup",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -7312,7 +7312,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 873,
+											"id": 889,
 											"name": "backupID",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7323,7 +7323,7 @@
 											}
 										},
 										{
-											"id": 874,
+											"id": 890,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7337,14 +7337,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 875,
+											"id": 891,
 											"name": "__type",
 											"kind": 65536,
 											"kindString": "Type literal",
 											"flags": {},
 											"children": [
 												{
-													"id": 876,
+													"id": 892,
 													"name": "backupID",
 													"kind": 32,
 													"kindString": "Variable",
@@ -7363,7 +7363,7 @@
 													"defaultValue": " backupID"
 												},
 												{
-													"id": 877,
+													"id": 893,
 													"name": "documents",
 													"kind": 32,
 													"kindString": "Variable",
@@ -7387,8 +7387,8 @@
 													"title": "Variables",
 													"kind": 32,
 													"children": [
-														876,
-														877
+														892,
+														893
 													]
 												}
 											]
@@ -7405,7 +7405,7 @@
 							]
 						},
 						{
-							"id": 878,
+							"id": 894,
 							"name": "backups",
 							"kind": 2048,
 							"kindString": "Method",
@@ -7420,7 +7420,7 @@
 							},
 							"signatures": [
 								{
-									"id": 879,
+									"id": 895,
 									"name": "backups",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -7428,7 +7428,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 880,
+											"id": 896,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7460,7 +7460,7 @@
 							]
 						},
 						{
-							"id": 822,
+							"id": 838,
 							"name": "bulkInsert",
 							"kind": 2048,
 							"kindString": "Method",
@@ -7477,7 +7477,7 @@
 							},
 							"signatures": [
 								{
-									"id": 823,
+									"id": 839,
 									"name": "bulkInsert",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -7488,7 +7488,7 @@
 									},
 									"parameters": [
 										{
-											"id": 824,
+											"id": 840,
 											"name": "docs",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7502,7 +7502,7 @@
 											}
 										},
 										{
-											"id": 825,
+											"id": 841,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7513,7 +7513,7 @@
 											}
 										},
 										{
-											"id": 826,
+											"id": 842,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -7539,7 +7539,7 @@
 							]
 						},
 						{
-							"id": 850,
+							"id": 866,
 							"name": "delete",
 							"kind": 2048,
 							"kindString": "Method",
@@ -7555,7 +7555,7 @@
 							},
 							"signatures": [
 								{
-									"id": 851,
+									"id": 867,
 									"name": "delete",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -7565,8 +7565,357 @@
 									},
 									"parameters": [
 										{
-											"id": 852,
+											"id": 868,
 											"name": "selection",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 869,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 870,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/collection/Collection.ts",
+									"line": 685,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 871,
+							"name": "destroy",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"comment": {
+								"shortText": "Alias for {@link Collection#remove}",
+								"tags": [
+									{
+										"tag": "method",
+										"text": "Collection#destroy\n"
+									}
+								]
+							},
+							"signatures": [
+								{
+									"id": 872,
+									"name": "destroy",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Alias for {@link Collection#remove}"
+									},
+									"parameters": [
+										{
+											"id": 873,
+											"name": "selection",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 874,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 875,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/collection/Collection.ts",
+									"line": 694,
+									"character": 11
+								}
+							]
+						},
+						{
+							"id": 876,
+							"name": "drop",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"comment": {
+								"shortText": "Drops a collection",
+								"returns": "True when the collection is dropped\n",
+								"tags": [
+									{
+										"tag": "method",
+										"text": "Collection#drop\n"
+									}
+								]
+							},
+							"signatures": [
+								{
+									"id": 877,
+									"name": "drop",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Drops a collection",
+										"returns": "True when the collection is dropped\n"
+									},
+									"parameters": [
+										{
+											"id": 878,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 879,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "boolean"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/collection/Collection.ts",
+									"line": 712,
+									"character": 8
+								}
+							]
+						},
+						{
+							"id": 885,
+							"name": "ensureIndex",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"comment": {
+								"tags": [
+									{
+										"tag": "ignore",
+										"text": "\n"
+									}
+								]
+							},
+							"signatures": [
+								{
+									"id": 886,
+									"name": "ensureIndex",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {},
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/collection/Collection.ts",
+									"line": 779,
+									"character": 15
+								}
+							]
+						},
+						{
+							"id": 843,
+							"name": "find",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"comment": {
+								"shortText": "Finds all matching documents",
+								"returns": "If \"options.forceFetch\" set to true returns the array of documents, otherwise returns a cursor\n",
+								"tags": [
+									{
+										"tag": "method",
+										"text": "Collection#find\n"
+									}
+								]
+							},
+							"signatures": [
+								{
+									"id": 844,
+									"name": "find",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Finds all matching documents",
+										"returns": "If \"options.forceFetch\" set to true returns the array of documents, otherwise returns a cursor\n"
+									},
+									"parameters": [
+										{
+											"id": 845,
+											"name": "selection",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 846,
+											"name": "fields",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 847,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 848,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/collection/Collection.ts",
+									"line": 277,
+									"character": 8
+								}
+							]
+						},
+						{
+							"id": 849,
+							"name": "findOne",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"comment": {
+								"shortText": "Finds the first matching document",
+								"returns": "Returns the first matching document of the collection\n",
+								"tags": [
+									{
+										"tag": "method",
+										"text": "Collection#findOne\n"
+									}
+								]
+							},
+							"signatures": [
+								{
+									"id": 850,
+									"name": "findOne",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Finds the first matching document",
+										"returns": "Returns the first matching document of the collection\n"
+									},
+									"parameters": [
+										{
+											"id": 851,
+											"name": "selection",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 852,
+											"name": "fields",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -7607,362 +7956,13 @@
 							"sources": [
 								{
 									"fileName": "src/collection/Collection.ts",
-									"line": 685,
-									"character": 10
-								}
-							]
-						},
-						{
-							"id": 855,
-							"name": "destroy",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"comment": {
-								"shortText": "Alias for {@link Collection#remove}",
-								"tags": [
-									{
-										"tag": "method",
-										"text": "Collection#destroy\n"
-									}
-								]
-							},
-							"signatures": [
-								{
-									"id": 856,
-									"name": "destroy",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Alias for {@link Collection#remove}"
-									},
-									"parameters": [
-										{
-											"id": 857,
-											"name": "selection",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 858,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 859,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "any"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/collection/Collection.ts",
-									"line": 694,
-									"character": 11
-								}
-							]
-						},
-						{
-							"id": 860,
-							"name": "drop",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"comment": {
-								"shortText": "Drops a collection",
-								"returns": "True when the collection is dropped\n",
-								"tags": [
-									{
-										"tag": "method",
-										"text": "Collection#drop\n"
-									}
-								]
-							},
-							"signatures": [
-								{
-									"id": 861,
-									"name": "drop",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Drops a collection",
-										"returns": "True when the collection is dropped\n"
-									},
-									"parameters": [
-										{
-											"id": 862,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 863,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "boolean"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/collection/Collection.ts",
-									"line": 712,
-									"character": 8
-								}
-							]
-						},
-						{
-							"id": 869,
-							"name": "ensureIndex",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"comment": {
-								"tags": [
-									{
-										"tag": "ignore",
-										"text": "\n"
-									}
-								]
-							},
-							"signatures": [
-								{
-									"id": 870,
-									"name": "ensureIndex",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {},
-									"type": {
-										"type": "instrinct",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/collection/Collection.ts",
-									"line": 779,
-									"character": 15
-								}
-							]
-						},
-						{
-							"id": 827,
-							"name": "find",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"comment": {
-								"shortText": "Finds all matching documents",
-								"returns": "If \"options.forceFetch\" set to true returns the array of documents, otherwise returns a cursor\n",
-								"tags": [
-									{
-										"tag": "method",
-										"text": "Collection#find\n"
-									}
-								]
-							},
-							"signatures": [
-								{
-									"id": 828,
-									"name": "find",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Finds all matching documents",
-										"returns": "If \"options.forceFetch\" set to true returns the array of documents, otherwise returns a cursor\n"
-									},
-									"parameters": [
-										{
-											"id": 829,
-											"name": "selection",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 830,
-											"name": "fields",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 831,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 832,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "any"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/collection/Collection.ts",
-									"line": 277,
-									"character": 8
-								}
-							]
-						},
-						{
-							"id": 833,
-							"name": "findOne",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"comment": {
-								"shortText": "Finds the first matching document",
-								"returns": "Returns the first matching document of the collection\n",
-								"tags": [
-									{
-										"tag": "method",
-										"text": "Collection#findOne\n"
-									}
-								]
-							},
-							"signatures": [
-								{
-									"id": 834,
-									"name": "findOne",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Finds the first matching document",
-										"returns": "Returns the first matching document of the collection\n"
-									},
-									"parameters": [
-										{
-											"id": 835,
-											"name": "selection",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 836,
-											"name": "fields",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 837,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 838,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "any"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/collection/Collection.ts",
 									"line": 338,
 									"character": 11
 								}
 							]
 						},
 						{
-							"id": 817,
+							"id": 833,
 							"name": "insert",
 							"kind": 2048,
 							"kindString": "Method",
@@ -7979,7 +7979,7 @@
 							},
 							"signatures": [
 								{
-									"id": 818,
+									"id": 834,
 									"name": "insert",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -7990,7 +7990,7 @@
 									},
 									"parameters": [
 										{
-											"id": 819,
+											"id": 835,
 											"name": "doc",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8004,7 +8004,7 @@
 											}
 										},
 										{
-											"id": 820,
+											"id": 836,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8015,7 +8015,7 @@
 											}
 										},
 										{
-											"id": 821,
+											"id": 837,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8041,7 +8041,7 @@
 							]
 						},
 						{
-							"id": 845,
+							"id": 861,
 							"name": "remove",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8058,7 +8058,7 @@
 							},
 							"signatures": [
 								{
-									"id": 846,
+									"id": 862,
 									"name": "remove",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8069,7 +8069,7 @@
 									},
 									"parameters": [
 										{
-											"id": 847,
+											"id": 863,
 											"name": "selection",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8080,7 +8080,7 @@
 											}
 										},
 										{
-											"id": 848,
+											"id": 864,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8091,7 +8091,7 @@
 											}
 										},
 										{
-											"id": 849,
+											"id": 865,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8117,7 +8117,7 @@
 							]
 						},
 						{
-							"id": 881,
+							"id": 897,
 							"name": "removeBackup",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8132,7 +8132,7 @@
 							},
 							"signatures": [
 								{
-									"id": 882,
+									"id": 898,
 									"name": "removeBackup",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8140,7 +8140,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 883,
+											"id": 899,
 											"name": "backupID",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8151,7 +8151,7 @@
 											}
 										},
 										{
-											"id": 884,
+											"id": 900,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8177,7 +8177,7 @@
 							]
 						},
 						{
-							"id": 895,
+							"id": 911,
 							"name": "rename",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8192,7 +8192,7 @@
 							},
 							"signatures": [
 								{
-									"id": 896,
+									"id": 912,
 									"name": "rename",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8200,7 +8200,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 897,
+											"id": 913,
 											"name": "newName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8226,7 +8226,7 @@
 							]
 						},
 						{
-							"id": 885,
+							"id": 901,
 							"name": "restore",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8241,7 +8241,7 @@
 							},
 							"signatures": [
 								{
-									"id": 886,
+									"id": 902,
 									"name": "restore",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8249,7 +8249,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 887,
+											"id": 903,
 											"name": "backupID",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8260,7 +8260,7 @@
 											}
 										},
 										{
-											"id": 888,
+											"id": 904,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8286,7 +8286,7 @@
 							]
 						},
 						{
-							"id": 864,
+							"id": 880,
 							"name": "save",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8303,7 +8303,7 @@
 							},
 							"signatures": [
 								{
-									"id": 865,
+									"id": 881,
 									"name": "save",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8314,7 +8314,7 @@
 									},
 									"parameters": [
 										{
-											"id": 866,
+											"id": 882,
 											"name": "doc",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8328,7 +8328,7 @@
 											}
 										},
 										{
-											"id": 867,
+											"id": 883,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8339,7 +8339,7 @@
 											}
 										},
 										{
-											"id": 868,
+											"id": 884,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8365,7 +8365,7 @@
 							]
 						},
 						{
-							"id": 839,
+							"id": 855,
 							"name": "update",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8382,7 +8382,7 @@
 							},
 							"signatures": [
 								{
-									"id": 840,
+									"id": 856,
 									"name": "update",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8393,7 +8393,7 @@
 									},
 									"parameters": [
 										{
-											"id": 841,
+											"id": 857,
 											"name": "selection",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8404,7 +8404,7 @@
 											}
 										},
 										{
-											"id": 842,
+											"id": 858,
 											"name": "update",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8415,7 +8415,7 @@
 											}
 										},
 										{
-											"id": 843,
+											"id": 859,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8426,7 +8426,7 @@
 											}
 										},
 										{
-											"id": 844,
+											"id": 860,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8452,7 +8452,7 @@
 							]
 						},
 						{
-							"id": 814,
+							"id": 830,
 							"name": "checkCollectionName",
 							"kind": 2048,
 							"kindString": "Method",
@@ -8461,7 +8461,7 @@
 							},
 							"signatures": [
 								{
-									"id": 815,
+									"id": 831,
 									"name": "checkCollectionName",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -8476,7 +8476,7 @@
 									},
 									"parameters": [
 										{
-											"id": 816,
+											"id": 832,
 											"name": "collectionName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -8502,7 +8502,7 @@
 							]
 						},
 						{
-							"id": 808,
+							"id": 824,
 							"name": "_noCreateModifiers",
 							"kind": 2097152,
 							"kindString": "Object literal",
@@ -8519,7 +8519,7 @@
 							},
 							"children": [
 								{
-									"id": 810,
+									"id": 826,
 									"name": "$pop",
 									"kind": 32,
 									"kindString": "Variable",
@@ -8538,7 +8538,7 @@
 									"defaultValue": "true"
 								},
 								{
-									"id": 812,
+									"id": 828,
 									"name": "$pull",
 									"kind": 32,
 									"kindString": "Variable",
@@ -8557,7 +8557,7 @@
 									"defaultValue": "true"
 								},
 								{
-									"id": 813,
+									"id": 829,
 									"name": "$pullAll",
 									"kind": 32,
 									"kindString": "Variable",
@@ -8576,7 +8576,7 @@
 									"defaultValue": "true"
 								},
 								{
-									"id": 811,
+									"id": 827,
 									"name": "$rename",
 									"kind": 32,
 									"kindString": "Variable",
@@ -8595,7 +8595,7 @@
 									"defaultValue": "true"
 								},
 								{
-									"id": 809,
+									"id": 825,
 									"name": "$unset",
 									"kind": 32,
 									"kindString": "Variable",
@@ -8619,11 +8619,11 @@
 									"title": "Variables",
 									"kind": 32,
 									"children": [
-										810,
-										812,
-										813,
-										811,
-										809
+										826,
+										828,
+										829,
+										827,
+										825
 									]
 								}
 							],
@@ -8645,52 +8645,52 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								804
+								820
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								798,
-								801,
-								800,
-								803,
-								799,
-								796,
-								797,
-								802
+								814,
+								817,
+								816,
+								819,
+								815,
+								812,
+								813,
+								818
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								889,
+								905,
+								887,
+								894,
+								838,
+								866,
 								871,
-								878,
-								822,
-								850,
-								855,
-								860,
-								869,
-								827,
-								833,
-								817,
-								845,
-								881,
-								895,
+								876,
 								885,
-								864,
-								839,
-								814
+								843,
+								849,
+								833,
+								861,
+								897,
+								911,
+								901,
+								880,
+								855,
+								830
 							]
 						},
 						{
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								808
+								824
 							]
 						}
 					],
@@ -8703,7 +8703,7 @@
 					]
 				},
 				{
-					"id": 901,
+					"id": 917,
 					"name": "database",
 					"kind": 32,
 					"kindString": "Variable",
@@ -8755,21 +8755,21 @@
 					"defaultValue": " null"
 				},
 				{
-					"id": 902,
+					"id": 918,
 					"name": "_applyModifier",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 903,
+							"id": 919,
 							"name": "_applyModifier",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 904,
+									"id": 920,
 									"name": "_docUpdate",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8780,7 +8780,7 @@
 									}
 								},
 								{
-									"id": 905,
+									"id": 921,
 									"name": "key",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8791,7 +8791,7 @@
 									}
 								},
 								{
-									"id": 906,
+									"id": 922,
 									"name": "val",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8817,21 +8817,21 @@
 					]
 				},
 				{
-					"id": 970,
+					"id": 986,
 					"name": "_ensureFindParams",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 971,
+							"id": 987,
 							"name": "_ensureFindParams",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 972,
+									"id": 988,
 									"name": "params",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8857,21 +8857,21 @@
 					]
 				},
 				{
-					"id": 907,
+					"id": 923,
 					"name": "_modify",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 908,
+							"id": 924,
 							"name": "_modify",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 909,
+									"id": 925,
 									"name": "document",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8882,7 +8882,7 @@
 									}
 								},
 								{
-									"id": 910,
+									"id": 926,
 									"name": "keyparts",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8893,7 +8893,7 @@
 									}
 								},
 								{
-									"id": 911,
+									"id": 927,
 									"name": "value",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8904,7 +8904,7 @@
 									}
 								},
 								{
-									"id": 912,
+									"id": 928,
 									"name": "key",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8915,7 +8915,7 @@
 									}
 								},
 								{
-									"id": 913,
+									"id": 929,
 									"name": "level",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8942,7 +8942,7 @@
 					]
 				},
 				{
-					"id": 898,
+					"id": 914,
 					"name": "getObjectSize",
 					"kind": 64,
 					"kindString": "Function",
@@ -8959,7 +8959,7 @@
 					},
 					"signatures": [
 						{
-							"id": 899,
+							"id": 915,
 							"name": "getObjectSize",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -8970,7 +8970,7 @@
 							},
 							"parameters": [
 								{
-									"id": 900,
+									"id": 916,
 									"name": "obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -8999,7 +8999,7 @@
 					]
 				},
 				{
-					"id": 914,
+					"id": 930,
 					"name": "_modifiers",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -9014,21 +9014,21 @@
 					},
 					"children": [
 						{
-							"id": 940,
+							"id": 956,
 							"name": "$addToSet",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 941,
+									"id": 957,
 									"name": "$addToSet",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 942,
+											"id": 958,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9039,7 +9039,7 @@
 											}
 										},
 										{
-											"id": 943,
+											"id": 959,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9050,7 +9050,7 @@
 											}
 										},
 										{
-											"id": 944,
+											"id": 960,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9076,21 +9076,21 @@
 							]
 						},
 						{
-							"id": 965,
+							"id": 981,
 							"name": "$bit",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 966,
+									"id": 982,
 									"name": "$bit",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 967,
+											"id": 983,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9101,7 +9101,7 @@
 											}
 										},
 										{
-											"id": 968,
+											"id": 984,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9112,7 +9112,7 @@
 											}
 										},
 										{
-											"id": 969,
+											"id": 985,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9138,21 +9138,21 @@
 							]
 						},
 						{
-							"id": 915,
+							"id": 931,
 							"name": "$inc",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 916,
+									"id": 932,
 									"name": "$inc",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 917,
+											"id": 933,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9163,7 +9163,7 @@
 											}
 										},
 										{
-											"id": 918,
+											"id": 934,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9174,7 +9174,7 @@
 											}
 										},
 										{
-											"id": 919,
+											"id": 935,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9200,21 +9200,21 @@
 							]
 						},
 						{
-							"id": 945,
+							"id": 961,
 							"name": "$pop",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 946,
+									"id": 962,
 									"name": "$pop",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 947,
+											"id": 963,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9225,7 +9225,7 @@
 											}
 										},
 										{
-											"id": 948,
+											"id": 964,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9236,7 +9236,7 @@
 											}
 										},
 										{
-											"id": 949,
+											"id": 965,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9262,21 +9262,21 @@
 							]
 						},
 						{
-							"id": 950,
+							"id": 966,
 							"name": "$pull",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 951,
+									"id": 967,
 									"name": "$pull",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 952,
+											"id": 968,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9287,7 +9287,7 @@
 											}
 										},
 										{
-											"id": 953,
+											"id": 969,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9298,7 +9298,7 @@
 											}
 										},
 										{
-											"id": 954,
+											"id": 970,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9324,21 +9324,21 @@
 							]
 						},
 						{
-							"id": 955,
+							"id": 971,
 							"name": "$pullAll",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 956,
+									"id": 972,
 									"name": "$pullAll",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 957,
+											"id": 973,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9349,7 +9349,7 @@
 											}
 										},
 										{
-											"id": 958,
+											"id": 974,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9360,7 +9360,7 @@
 											}
 										},
 										{
-											"id": 959,
+											"id": 975,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9386,21 +9386,21 @@
 							]
 						},
 						{
-							"id": 930,
+							"id": 946,
 							"name": "$push",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 931,
+									"id": 947,
 									"name": "$push",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 932,
+											"id": 948,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9411,7 +9411,7 @@
 											}
 										},
 										{
-											"id": 933,
+											"id": 949,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9422,7 +9422,7 @@
 											}
 										},
 										{
-											"id": 934,
+											"id": 950,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9448,21 +9448,21 @@
 							]
 						},
 						{
-							"id": 935,
+							"id": 951,
 							"name": "$pushAll",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 936,
+									"id": 952,
 									"name": "$pushAll",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 937,
+											"id": 953,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9473,7 +9473,7 @@
 											}
 										},
 										{
-											"id": 938,
+											"id": 954,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9484,7 +9484,7 @@
 											}
 										},
 										{
-											"id": 939,
+											"id": 955,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9510,21 +9510,21 @@
 							]
 						},
 						{
-							"id": 960,
+							"id": 976,
 							"name": "$rename",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 961,
+									"id": 977,
 									"name": "$rename",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 962,
+											"id": 978,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9535,7 +9535,7 @@
 											}
 										},
 										{
-											"id": 963,
+											"id": 979,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9546,7 +9546,7 @@
 											}
 										},
 										{
-											"id": 964,
+											"id": 980,
 											"name": "value",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9572,21 +9572,21 @@
 							]
 						},
 						{
-							"id": 920,
+							"id": 936,
 							"name": "$set",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 921,
+									"id": 937,
 									"name": "$set",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 922,
+											"id": 938,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9597,7 +9597,7 @@
 											}
 										},
 										{
-											"id": 923,
+											"id": 939,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9608,7 +9608,7 @@
 											}
 										},
 										{
-											"id": 924,
+											"id": 940,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9634,21 +9634,21 @@
 							]
 						},
 						{
-							"id": 925,
+							"id": 941,
 							"name": "$unset",
 							"kind": 64,
 							"kindString": "Function",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 926,
+									"id": 942,
 									"name": "$unset",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 927,
+											"id": 943,
 											"name": "target",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9659,7 +9659,7 @@
 											}
 										},
 										{
-											"id": 928,
+											"id": 944,
 											"name": "field",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9670,7 +9670,7 @@
 											}
 										},
 										{
-											"id": 929,
+											"id": 945,
 											"name": "arg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -9701,17 +9701,17 @@
 							"title": "Functions",
 							"kind": 64,
 							"children": [
-								940,
-								965,
-								915,
-								945,
-								950,
-								955,
-								930,
-								935,
-								960,
-								920,
-								925
+								956,
+								981,
+								931,
+								961,
+								966,
+								971,
+								946,
+								951,
+								976,
+								936,
+								941
 							]
 						}
 					],
@@ -9733,31 +9733,31 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						795
+						811
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						901
+						917
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						902,
-						970,
-						907,
-						898
+						918,
+						986,
+						923,
+						914
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						914
+						930
 					]
 				}
 			],
@@ -12177,7 +12177,7 @@
 			]
 		},
 		{
-			"id": 973,
+			"id": 989,
 			"name": "\"src/collection/index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -12211,14 +12211,14 @@
 					"flags": {},
 					"children": [
 						{
-							"id": 679,
+							"id": 680,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 680,
+									"id": 681,
 									"name": "new ConnectionHelper",
 									"kind": 16384,
 									"kindString": "Constructor signature",
@@ -12234,7 +12234,7 @@
 								{
 									"fileName": "src/core/MongoPortable.ts",
 									"line": 62,
-									"character": 50
+									"character": 75
 								}
 							]
 						},
@@ -12285,6 +12285,25 @@
 													}
 												},
 												{
+													"id": 679,
+													"name": "instance",
+													"kind": 32,
+													"kindString": "Variable",
+													"flags": {},
+													"sources": [
+														{
+															"fileName": "src/core/MongoPortable.ts",
+															"line": 62,
+															"character": 57
+														}
+													],
+													"type": {
+														"type": "reference",
+														"name": "MongoPortable",
+														"id": 703
+													}
+												},
+												{
 													"id": 677,
 													"name": "name",
 													"kind": 32,
@@ -12309,6 +12328,7 @@
 													"kind": 32,
 													"children": [
 														678,
+														679,
 														677
 													]
 												}
@@ -12326,21 +12346,21 @@
 							}
 						},
 						{
-							"id": 681,
+							"id": 682,
 							"name": "addConnection",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 682,
+									"id": 683,
 									"name": "addConnection",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 683,
+											"id": 684,
 											"name": "name",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12351,7 +12371,7 @@
 											}
 										},
 										{
-											"id": 684,
+											"id": 685,
 											"name": "id",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12359,6 +12379,18 @@
 											"type": {
 												"type": "instrinct",
 												"name": "any"
+											}
+										},
+										{
+											"id": 686,
+											"name": "instance",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "MongoPortable",
+												"id": 703
 											}
 										}
 									],
@@ -12377,21 +12409,21 @@
 							]
 						},
 						{
-							"id": 685,
+							"id": 694,
 							"name": "dropConnection",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 686,
+									"id": 695,
 									"name": "dropConnection",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 687,
+											"id": 696,
 											"name": "name",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12405,6 +12437,129 @@
 									"type": {
 										"type": "instrinct",
 										"name": "boolean"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 84,
+									"character": 18
+								}
+							]
+						},
+						{
+							"id": 687,
+							"name": "getConnection",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 688,
+									"name": "getConnection",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 689,
+											"name": "name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "instrinct",
+												"name": "false"
+											},
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 690,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
+													"flags": {},
+													"children": [
+														{
+															"id": 692,
+															"name": "id",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "src/core/MongoPortable.ts",
+																	"line": 62,
+																	"character": 42
+																}
+															],
+															"type": {
+																"type": "instrinct",
+																"name": "any"
+															}
+														},
+														{
+															"id": 693,
+															"name": "instance",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "src/core/MongoPortable.ts",
+																	"line": 62,
+																	"character": 57
+																}
+															],
+															"type": {
+																"type": "reference",
+																"name": "MongoPortable",
+																"id": 703
+															}
+														},
+														{
+															"id": 691,
+															"name": "name",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "src/core/MongoPortable.ts",
+																	"line": 62,
+																	"character": 30
+																}
+															],
+															"type": {
+																"type": "instrinct",
+																"name": "string"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																692,
+																693,
+																691
+															]
+														}
+													]
+												}
+											}
+										]
 									}
 								}
 							],
@@ -12412,26 +12567,26 @@
 								{
 									"fileName": "src/core/MongoPortable.ts",
 									"line": 74,
-									"character": 18
+									"character": 17
 								}
 							]
 						},
 						{
-							"id": 688,
+							"id": 697,
 							"name": "hasConnection",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 689,
+									"id": 698,
 									"name": "hasConnection",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 690,
+											"id": 699,
 											"name": "name",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12451,13 +12606,13 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 86,
+									"line": 96,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 691,
+							"id": 700,
 							"name": "validateDatabaseName",
 							"kind": 2048,
 							"kindString": "Method",
@@ -12466,7 +12621,7 @@
 							},
 							"signatures": [
 								{
-									"id": 692,
+									"id": 701,
 									"name": "validateDatabaseName",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -12485,7 +12640,7 @@
 									},
 									"parameters": [
 										{
-											"id": 693,
+											"id": 702,
 											"name": "name",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12505,7 +12660,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 106,
+									"line": 116,
 									"character": 24
 								}
 							]
@@ -12516,7 +12671,7 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								679
+								680
 							]
 						},
 						{
@@ -12530,10 +12685,11 @@
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								681,
-								685,
-								688,
-								691
+								682,
+								694,
+								687,
+								697,
+								700
 							]
 						}
 					],
@@ -12546,7 +12702,7 @@
 					]
 				},
 				{
-					"id": 694,
+					"id": 703,
 					"name": "MongoPortable",
 					"kind": 128,
 					"kindString": "Class",
@@ -12575,21 +12731,21 @@
 					},
 					"children": [
 						{
-							"id": 701,
+							"id": 710,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 702,
+									"id": 711,
 									"name": "new MongoPortable",
 									"kind": 16384,
 									"kindString": "Constructor signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 703,
+											"id": 712,
 											"name": "databaseName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12600,7 +12756,7 @@
 											}
 										},
 										{
-											"id": 704,
+											"id": 713,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12615,30 +12771,30 @@
 									"type": {
 										"type": "reference",
 										"name": "MongoPortable",
-										"id": 694
+										"id": 703
 									},
 									"overwrites": {
 										"type": "reference",
 										"name": "EventEmitter.__constructor",
-										"id": 784
+										"id": 800
 									}
 								}
 							],
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 144,
+									"line": 154,
 									"character": 14
 								}
 							],
 							"overwrites": {
 								"type": "reference",
 								"name": "EventEmitter.__constructor",
-								"id": 784
+								"id": 800
 							}
 						},
 						{
-							"id": 696,
+							"id": 705,
 							"name": "_collections",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12648,7 +12804,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 137,
+									"line": 147,
 									"character": 24
 								}
 							],
@@ -12658,7 +12814,7 @@
 							}
 						},
 						{
-							"id": 698,
+							"id": 707,
 							"name": "_databaseName",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12668,7 +12824,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 139,
+									"line": 149,
 									"character": 25
 								}
 							],
@@ -12678,7 +12834,7 @@
 							}
 						},
 						{
-							"id": 697,
+							"id": 706,
 							"name": "_stores",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12688,7 +12844,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 138,
+									"line": 148,
 									"character": 19
 								}
 							],
@@ -12713,7 +12869,7 @@
 							}
 						},
 						{
-							"id": 737,
+							"id": 753,
 							"name": "createCollection",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12730,19 +12886,19 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 416,
+									"line": 441,
 									"character": 20
 								}
 							],
 							"type": {
 								"type": "reference",
 								"name": "collection",
-								"id": 732
+								"id": 748
 							},
 							"defaultValue": " this.collection"
 						},
 						{
-							"id": 695,
+							"id": 704,
 							"name": "logger",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12752,7 +12908,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 135,
+									"line": 145,
 									"character": 20
 								}
 							],
@@ -12764,11 +12920,11 @@
 							"overwrites": {
 								"type": "reference",
 								"name": "EventEmitter.logger",
-								"id": 783
+								"id": 799
 							}
 						},
 						{
-							"id": 700,
+							"id": 709,
 							"name": "pkFactory",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12776,7 +12932,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 144,
+									"line": 154,
 									"character": 13
 								}
 							],
@@ -12786,7 +12942,7 @@
 							}
 						},
 						{
-							"id": 699,
+							"id": 708,
 							"name": "_connHelper",
 							"kind": 1024,
 							"kindString": "Property",
@@ -12797,7 +12953,7 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 141,
+									"line": 151,
 									"character": 30
 								}
 							],
@@ -12809,14 +12965,14 @@
 							"defaultValue": " new ConnectionHelper()"
 						},
 						{
-							"id": 713,
+							"id": 722,
 							"name": "addStore",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 714,
+									"id": 723,
 									"name": "addStore",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -12827,7 +12983,7 @@
 									},
 									"parameters": [
 										{
-											"id": 715,
+											"id": 724,
 											"name": "store",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -12850,20 +13006,20 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 195,
+									"line": 205,
 									"character": 12
 								}
 							]
 						},
 						{
-							"id": 732,
+							"id": 748,
 							"name": "collection",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 733,
+									"id": 749,
 									"name": "collection",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -12884,300 +13040,13 @@
 									},
 									"parameters": [
 										{
-											"id": 734,
+											"id": 750,
 											"name": "collectionName",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
 												"text": "the collection name we wish to access."
-											},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 735,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 736,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "any"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 345,
-									"character": 14
-								}
-							]
-						},
-						{
-							"id": 728,
-							"name": "collectionNames",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 729,
-									"name": "collectionNames",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Get the list of all collection names for the specified db,\n by calling MongoPortable#collections with [options.namesOnly = true]",
-										"returns": "\n\n{@link MongoPortable#collections}\n",
-										"tags": [
-											{
-												"tag": "method",
-												"text": "MongoPortable#collectionNames\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 730,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 731,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"name": "Array",
-										"typeArguments": [
-											{
-												"type": "instrinct",
-												"name": "any"
-											}
-										]
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 296,
-									"character": 19
-								}
-							]
-						},
-						{
-							"id": 724,
-							"name": "collections",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 725,
-									"name": "collections",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Get the list of all collection for the specified db",
-										"returns": "\n",
-										"tags": [
-											{
-												"tag": "method",
-												"text": "MongoPortable#collections\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 726,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 727,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"name": "Array",
-										"typeArguments": [
-											{
-												"type": "instrinct",
-												"name": "any"
-											}
-										]
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 246,
-									"character": 15
-								}
-							]
-						},
-						{
-							"id": 716,
-							"name": "collectionsInfo",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 717,
-									"name": "collectionsInfo",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Returns a cursor to all the collection information.",
-										"returns": "\n",
-										"tags": [
-											{
-												"tag": "todo",
-												"text": "Implement\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 718,
-											"name": "collectionName",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 719,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 219,
-									"character": 19
-								}
-							]
-						},
-						{
-							"id": 747,
-							"name": "createIndex",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 748,
-									"name": "createIndex",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Creates an index on the collection.",
-										"tags": [
-											{
-												"tag": "method",
-												"text": "MongoPortable#createIndex\n"
-											},
-											{
-												"tag": "todo",
-												"text": "Implement\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 749,
-											"name": "collectionName",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"comment": {
-												"text": "Name of the collection to create the index on."
-											},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 750,
-											"name": "fieldOrSpec",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"comment": {
-												"text": "FieldOrSpec that defines the index."
 											},
 											"type": {
 												"type": "instrinct",
@@ -13209,6 +13078,201 @@
 									],
 									"type": {
 										"type": "instrinct",
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 370,
+									"character": 14
+								}
+							]
+						},
+						{
+							"id": 744,
+							"name": "collectionNames",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 745,
+									"name": "collectionNames",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Get the list of all collection names for the specified db,\n by calling MongoPortable#collections with [options.namesOnly = true]",
+										"returns": "\n\n{@link MongoPortable#collections}\n",
+										"tags": [
+											{
+												"tag": "method",
+												"text": "MongoPortable#collectionNames\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 746,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 747,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Array",
+										"typeArguments": [
+											{
+												"type": "instrinct",
+												"name": "any"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 321,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 740,
+							"name": "collections",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 741,
+									"name": "collections",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Get the list of all collection for the specified db",
+										"returns": "\n",
+										"tags": [
+											{
+												"tag": "method",
+												"text": "MongoPortable#collections\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 742,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 743,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Array",
+										"typeArguments": [
+											{
+												"type": "instrinct",
+												"name": "any"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 271,
+									"character": 15
+								}
+							]
+						},
+						{
+							"id": 732,
+							"name": "collectionsInfo",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 733,
+									"name": "collectionsInfo",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Returns a cursor to all the collection information.",
+										"returns": "\n",
+										"tags": [
+											{
+												"tag": "todo",
+												"text": "Implement\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 734,
+											"name": "collectionName",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 735,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
 										"name": "void"
 									}
 								}
@@ -13216,20 +13280,112 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 540,
+									"line": 244,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 763,
+							"name": "createIndex",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 764,
+									"name": "createIndex",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Creates an index on the collection.",
+										"tags": [
+											{
+												"tag": "method",
+												"text": "MongoPortable#createIndex\n"
+											},
+											{
+												"tag": "todo",
+												"text": "Implement\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 765,
+											"name": "collectionName",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "Name of the collection to create the index on."
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 766,
+											"name": "fieldOrSpec",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "FieldOrSpec that defines the index."
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 767,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 768,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 565,
 									"character": 15
 								}
 							]
 						},
 						{
-							"id": 776,
+							"id": 792,
 							"name": "dereference",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 777,
+									"id": 793,
 									"name": "dereference",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13249,13 +13405,208 @@
 									},
 									"parameters": [
 										{
-											"id": 778,
+											"id": 794,
 											"name": "dbRef",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
 												"text": "db reference object we wish to resolve."
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 795,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 699,
+									"character": 15
+								}
+							]
+						},
+						{
+							"id": 754,
+							"name": "dropCollection",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 755,
+									"name": "dropCollection",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Drop a collection from the database, removing it permanently. New accesses will create a new collection.",
+										"returns": "\"true\" if dropped successfully\n",
+										"tags": [
+											{
+												"tag": "method",
+												"text": "MongoPortable#dropCollection\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 756,
+											"name": "collectionName",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "The name of the collection we wish to drop."
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 757,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "boolean"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 453,
+									"character": 18
+								}
+							]
+						},
+						{
+							"id": 789,
+							"name": "dropDatabase",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 790,
+									"name": "dropDatabase",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Drop the whole database.",
+										"returns": "\"true\" if dropped successfully\n",
+										"tags": [
+											{
+												"tag": "method",
+												"text": "MongoPortable#dropDatabase\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 791,
+											"name": "callback",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "boolean"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 661,
+									"character": 16
+								}
+							]
+						},
+						{
+							"id": 775,
+							"name": "dropIndex",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 776,
+									"name": "dropIndex",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Drop an index on a collection.",
+										"tags": [
+											{
+												"tag": "method",
+												"text": "MongoPortable#dropIndex\n"
+											},
+											{
+												"tag": "todo",
+												"text": "Implement\n"
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 777,
+											"name": "collectionName",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "The name of the collection where the command will drop an index."
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 778,
+											"name": "indexName",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "Name of the index to drop."
 											},
 											"type": {
 												"type": "instrinct",
@@ -13283,222 +13634,27 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 674,
-									"character": 15
-								}
-							]
-						},
-						{
-							"id": 738,
-							"name": "dropCollection",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 739,
-									"name": "dropCollection",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Drop a collection from the database, removing it permanently. New accesses will create a new collection.",
-										"returns": "\"true\" if dropped successfully\n",
-										"tags": [
-											{
-												"tag": "method",
-												"text": "MongoPortable#dropCollection\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 740,
-											"name": "collectionName",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"comment": {
-												"text": "The name of the collection we wish to drop."
-											},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 741,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "boolean"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 428,
-									"character": 18
-								}
-							]
-						},
-						{
-							"id": 773,
-							"name": "dropDatabase",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 774,
-									"name": "dropDatabase",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Drop the whole database.",
-										"returns": "\"true\" if dropped successfully\n",
-										"tags": [
-											{
-												"tag": "method",
-												"text": "MongoPortable#dropDatabase\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 775,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "boolean"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 636,
-									"character": 16
-								}
-							]
-						},
-						{
-							"id": 759,
-							"name": "dropIndex",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 760,
-									"name": "dropIndex",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"comment": {
-										"shortText": "Drop an index on a collection.",
-										"tags": [
-											{
-												"tag": "method",
-												"text": "MongoPortable#dropIndex\n"
-											},
-											{
-												"tag": "todo",
-												"text": "Implement\n"
-											}
-										]
-									},
-									"parameters": [
-										{
-											"id": 761,
-											"name": "collectionName",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"comment": {
-												"text": "The name of the collection where the command will drop an index."
-											},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 762,
-											"name": "indexName",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"comment": {
-												"text": "Name of the index to drop."
-											},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										},
-										{
-											"id": 763,
-											"name": "callback",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "instrinct",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "instrinct",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "src/core/MongoPortable.ts",
-									"line": 589,
+									"line": 614,
 									"character": 13
 								}
 							]
 						},
 						{
-							"id": 705,
+							"id": 714,
 							"name": "emit",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 706,
+									"id": 715,
 									"name": "emit",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 707,
+											"id": 716,
 											"name": "name",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13509,7 +13665,7 @@
 											}
 										},
 										{
-											"id": 708,
+											"id": 717,
 											"name": "args",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13527,32 +13683,32 @@
 									"overwrites": {
 										"type": "reference",
 										"name": "EventEmitter.emit",
-										"id": 787
+										"id": 803
 									}
 								}
 							],
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 167,
+									"line": 177,
 									"character": 8
 								}
 							],
 							"overwrites": {
 								"type": "reference",
 								"name": "EventEmitter.emit",
-								"id": 787
+								"id": 803
 							}
 						},
 						{
-							"id": 753,
+							"id": 769,
 							"name": "ensureIndex",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 754,
+									"id": 770,
 									"name": "ensureIndex",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13572,7 +13728,7 @@
 									},
 									"parameters": [
 										{
-											"id": 755,
+											"id": 771,
 											"name": "collectionName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13586,7 +13742,7 @@
 											}
 										},
 										{
-											"id": 756,
+											"id": 772,
 											"name": "fieldOrSpec",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13600,7 +13756,7 @@
 											}
 										},
 										{
-											"id": 757,
+											"id": 773,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13611,7 +13767,7 @@
 											}
 										},
 										{
-											"id": 758,
+											"id": 774,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13631,20 +13787,20 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 574,
+									"line": 599,
 									"character": 15
 								}
 							]
 						},
 						{
-							"id": 720,
+							"id": 736,
 							"name": "fetchCollections",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 721,
+									"id": 737,
 									"name": "fetchCollections",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13660,7 +13816,7 @@
 									},
 									"parameters": [
 										{
-											"id": 722,
+											"id": 738,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13671,7 +13827,7 @@
 											}
 										},
 										{
-											"id": 723,
+											"id": 739,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13697,20 +13853,20 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 228,
+									"line": 253,
 									"character": 20
 								}
 							]
 						},
 						{
-							"id": 768,
+							"id": 784,
 							"name": "indexInformation",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 769,
+									"id": 785,
 									"name": "indexInformation",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13730,7 +13886,7 @@
 									},
 									"parameters": [
 										{
-											"id": 770,
+											"id": 786,
 											"name": "collectionName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13744,7 +13900,7 @@
 											}
 										},
 										{
-											"id": 771,
+											"id": 787,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13755,7 +13911,7 @@
 											}
 										},
 										{
-											"id": 772,
+											"id": 788,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13775,20 +13931,20 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 623,
+									"line": 648,
 									"character": 20
 								}
 							]
 						},
 						{
-							"id": 764,
+							"id": 780,
 							"name": "reIndex",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 765,
+									"id": 781,
 									"name": "reIndex",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13808,7 +13964,7 @@
 									},
 									"parameters": [
 										{
-											"id": 766,
+											"id": 782,
 											"name": "collectionName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13822,7 +13978,7 @@
 											}
 										},
 										{
-											"id": 767,
+											"id": 783,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13842,20 +13998,20 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 604,
+									"line": 629,
 									"character": 11
 								}
 							]
 						},
 						{
-							"id": 742,
+							"id": 758,
 							"name": "renameCollection",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 743,
+									"id": 759,
 									"name": "renameCollection",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13872,7 +14028,7 @@
 									},
 									"parameters": [
 										{
-											"id": 744,
+											"id": 760,
 											"name": "fromCollection",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13886,7 +14042,7 @@
 											}
 										},
 										{
-											"id": 745,
+											"id": 761,
 											"name": "toCollection",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13900,7 +14056,7 @@
 											}
 										},
 										{
-											"id": 746,
+											"id": 762,
 											"name": "callback",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13920,20 +14076,20 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 466,
+									"line": 491,
 									"character": 20
 								}
 							]
 						},
 						{
-							"id": 709,
+							"id": 718,
 							"name": "use",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 710,
+									"id": 719,
 									"name": "use",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -13943,7 +14099,7 @@
 									},
 									"parameters": [
 										{
-											"id": 711,
+											"id": 720,
 											"name": "name",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13957,7 +14113,7 @@
 											}
 										},
 										{
-											"id": 712,
+											"id": 721,
 											"name": "obj",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -13977,8 +14133,140 @@
 							"sources": [
 								{
 									"fileName": "src/core/MongoPortable.ts",
-									"line": 180,
+									"line": 190,
 									"character": 7
+								}
+							]
+						},
+						{
+							"id": 725,
+							"name": "getInstance",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true
+							},
+							"signatures": [
+								{
+									"id": 726,
+									"name": "getInstance",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Retrieves the instance of that DDBB name",
+										"returns": "- The DDBB instance\n"
+									},
+									"parameters": [
+										{
+											"id": 727,
+											"name": "name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "The DDBB name\n"
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "instrinct",
+												"name": "false"
+											},
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 728,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
+													"flags": {},
+													"children": [
+														{
+															"id": 730,
+															"name": "id",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "src/core/MongoPortable.ts",
+																	"line": 62,
+																	"character": 42
+																}
+															],
+															"type": {
+																"type": "instrinct",
+																"name": "any"
+															}
+														},
+														{
+															"id": 731,
+															"name": "instance",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "src/core/MongoPortable.ts",
+																	"line": 62,
+																	"character": 57
+																}
+															],
+															"type": {
+																"type": "reference",
+																"name": "MongoPortable",
+																"id": 703
+															}
+														},
+														{
+															"id": 729,
+															"name": "name",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "src/core/MongoPortable.ts",
+																	"line": 62,
+																	"character": 30
+																}
+															],
+															"type": {
+																"type": "instrinct",
+																"name": "string"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																730,
+																731,
+																729
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "src/core/MongoPortable.ts",
+									"line": 226,
+									"character": 22
 								}
 							]
 						}
@@ -13988,50 +14276,51 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								701
+								710
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								696,
-								698,
-								697,
-								737,
-								695,
-								700,
-								699
+								705,
+								707,
+								706,
+								753,
+								704,
+								709,
+								708
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								713,
+								722,
+								748,
+								744,
+								740,
 								732,
-								728,
-								724,
-								716,
-								747,
-								776,
-								738,
-								773,
-								759,
-								705,
-								753,
-								720,
-								768,
-								764,
-								742,
-								709
+								763,
+								792,
+								754,
+								789,
+								775,
+								714,
+								769,
+								736,
+								784,
+								780,
+								758,
+								718,
+								725
 							]
 						}
 					],
 					"sources": [
 						{
 							"fileName": "src/core/MongoPortable.ts",
-							"line": 134,
+							"line": 144,
 							"character": 19
 						}
 					],
@@ -14039,7 +14328,7 @@
 						{
 							"type": "reference",
 							"name": "EventEmitter",
-							"id": 782
+							"id": 798
 						}
 					]
 				}
@@ -14050,7 +14339,7 @@
 					"kind": 128,
 					"children": [
 						674,
-						694
+						703
 					]
 				}
 			],
@@ -14134,7 +14423,7 @@
 			]
 		},
 		{
-			"id": 780,
+			"id": 796,
 			"name": "\"src/core/index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -15235,7 +15524,7 @@
 			]
 		},
 		{
-			"id": 781,
+			"id": 797,
 			"name": "\"src/emitter/EventEmitter\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -15245,28 +15534,28 @@
 			"originalName": "/home/ubuntu/workspace/src/emitter/EventEmitter.ts",
 			"children": [
 				{
-					"id": 782,
+					"id": 798,
 					"name": "EventEmitter",
 					"kind": 128,
 					"kindString": "Class",
 					"flags": {},
 					"children": [
 						{
-							"id": 784,
+							"id": 800,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 785,
+									"id": 801,
 									"name": "new EventEmitter",
 									"kind": 16384,
 									"kindString": "Constructor signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 786,
+											"id": 802,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -15281,7 +15570,7 @@
 									"type": {
 										"type": "reference",
 										"name": "EventEmitter",
-										"id": 782
+										"id": 798
 									}
 								}
 							],
@@ -15294,7 +15583,7 @@
 							]
 						},
 						{
-							"id": 783,
+							"id": 799,
 							"name": "logger",
 							"kind": 1024,
 							"kindString": "Property",
@@ -15315,21 +15604,21 @@
 							}
 						},
 						{
-							"id": 787,
+							"id": 803,
 							"name": "emit",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 788,
+									"id": 804,
 									"name": "emit",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 789,
+											"id": 805,
 											"name": "event",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -15340,7 +15629,7 @@
 											}
 										},
 										{
-											"id": 790,
+											"id": 806,
 											"name": "args",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -15351,7 +15640,7 @@
 											}
 										},
 										{
-											"id": 791,
+											"id": 807,
 											"name": "stores",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -15397,21 +15686,21 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								784
+								800
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								783
+								799
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								787
+								803
 							]
 						}
 					],
@@ -15426,7 +15715,7 @@
 						{
 							"type": "reference",
 							"name": "MongoPortable",
-							"id": 694
+							"id": 703
 						}
 					]
 				}
@@ -15436,7 +15725,7 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						782
+						798
 					]
 				}
 			],
@@ -15449,7 +15738,7 @@
 			]
 		},
 		{
-			"id": 792,
+			"id": 808,
 			"name": "\"src/emitter/index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -17607,22 +17896,22 @@
 				101,
 				17,
 				1,
-				974,
-				793,
+				990,
+				809,
 				203,
 				181,
 				430,
-				794,
+				810,
 				532,
-				973,
+				989,
 				673,
 				662,
-				780,
+				796,
 				179,
 				431,
 				481,
-				781,
-				792,
+				797,
+				808,
 				482,
 				102,
 				531,

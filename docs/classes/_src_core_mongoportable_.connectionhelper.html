@@ -98,6 +98,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_src_core_mongoportable_.connectionhelper.html#addconnection" class="tsd-kind-icon">add<wbr>Connection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_src_core_mongoportable_.connectionhelper.html#dropconnection" class="tsd-kind-icon">drop<wbr>Connection</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_src_core_mongoportable_.connectionhelper.html#getconnection" class="tsd-kind-icon">get<wbr>Connection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_src_core_mongoportable_.connectionhelper.html#hasconnection" class="tsd-kind-icon">has<wbr>Connection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-not-exported"><a href="_src_core_mongoportable_.connectionhelper.html#validatedatabasename" class="tsd-kind-icon">validate<wbr>Database<wbr>Name</a></li>
 							</ul>
@@ -117,7 +118,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/8ae7180/src/core/MongoPortable.ts#L62">src/core/MongoPortable.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L62">src/core/MongoPortable.ts:62</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_src_core_mongoportable_.connectionhelper.html" class="tsd-signature-type">ConnectionHelper</a></h4>
@@ -133,7 +134,7 @@
 					<div class="tsd-signature tsd-kind-icon">_pool<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/8ae7180/src/core/MongoPortable.ts#L62">src/core/MongoPortable.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L62">src/core/MongoPortable.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -144,13 +145,13 @@
 					<a name="addconnection" class="tsd-anchor"></a>
 					<h3>add<wbr>Connection</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Connection<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Connection<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, instance<span class="tsd-signature-symbol">: </span><a href="_src_core_mongoportable_.mongoportable.html" class="tsd-signature-type">MongoPortable</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/8ae7180/src/core/MongoPortable.ts#L68">src/core/MongoPortable.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L68">src/core/MongoPortable.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -160,6 +161,9 @@
 								</li>
 								<li>
 									<h5>id: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>instance: <a href="_src_core_mongoportable_.mongoportable.html" class="tsd-signature-type">MongoPortable</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -176,7 +180,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/8ae7180/src/core/MongoPortable.ts#L74">src/core/MongoPortable.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L84">src/core/MongoPortable.ts:84</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -190,6 +194,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+					<a name="getconnection" class="tsd-anchor"></a>
+					<h3>get<wbr>Connection</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Connection<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L74">src/core/MongoPortable.ts:74</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">false</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">object</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 					<a name="hasconnection" class="tsd-anchor"></a>
 					<h3>has<wbr>Connection</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
@@ -199,7 +229,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/8ae7180/src/core/MongoPortable.ts#L86">src/core/MongoPortable.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L96">src/core/MongoPortable.ts:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -222,7 +252,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/8ae7180/src/core/MongoPortable.ts#L106">src/core/MongoPortable.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/febad5b/src/core/MongoPortable.ts#L116">src/core/MongoPortable.ts:116</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,6 +307,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 								<a href="_src_core_mongoportable_.connectionhelper.html#dropconnection" class="tsd-kind-icon">drop<wbr>Connection</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+								<a href="_src_core_mongoportable_.connectionhelper.html#getconnection" class="tsd-kind-icon">get<wbr>Connection</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 								<a href="_src_core_mongoportable_.connectionhelper.html#hasconnection" class="tsd-kind-icon">has<wbr>Connection</a>
