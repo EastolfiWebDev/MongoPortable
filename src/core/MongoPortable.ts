@@ -6,130 +6,15 @@
  * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
-import * as _               from "lodash";
-import { JSWLogger }        from "jsw-logger";
+import * as _               			from "lodash";
+import { JSWLogger }        			from "jsw-logger";
 
 import { Options }          from "./Options";
 
-import { EventEmitter }     from "../emitter";
-import { Collection }       from "../collection";
-import { ObjectId }         from "../document";
-import { Utils }            from "../utils";
-
-// if (!Object.prototype.renameProperty) {
-//     /**
-//      * Renames an object property.
-//      * 
-//      * @method Object#renameProperty
-//      * 
-//      * @param {String} oldName - The name of the property to rename
-//      * @param {String} newName - The new name of the property
-//      * 
-//      * @returns {this} The called object
-//      */
-//     Object.defineProperty(
-//         Object.prototype, 
-//         "renameProperty",
-//         {
-//             writable : false, // Cannot alter this property
-//             enumerable : false, // Will not show up in a for-in loop.
-//             configurable : false, // Cannot be deleted via the delete operator
-//             value : function (oldName, newName) {
-//                 // Do nothing if some name is missing or is not an string
-//                 if (!_.isString(oldName) || !_.isString(newName)) {
-//                     return this;
-//                 }
-                
-//                 // Do nothing if the names are the same
-//                 if (oldName == newName) {
-//                     return this;
-//                 }
-                
-//                 // Check for the old property name to 
-//                 // avoid a ReferenceError in strict mode.
-//                 if (this.hasOwnProperty(oldName)) {
-//                     this[newName] = this[oldName];
-//                     delete this[oldName];
-//                 }
-                
-//                 return this;
-//             }
-//         }
-//     );
-// }
-
-class ConnectionHelper {
-    private _pool: Array<{name: string, id: any, instance: MongoPortable}>;
-    
-    constructor() {
-        this._pool = [];
-    }
-    
-    addConnection(name: string, id:any, instance: MongoPortable) {
-        if (!this.hasConnection(name)) {
-            this._pool.push({ name, id, instance });
-        }
-    }
-    
-    getConnection(name: string) {
-        for (let conn of this._pool) {
-            if (conn.name === name) {
-                return conn;
-            }
-        }
-        
-        return false;
-    }
-    
-    dropConnection(name: string) {
-        for (let i = 0; i < this._pool.length; i++) {
-            if (this._pool[i].name === name) {
-                this._pool.splice(i, 1);
-                
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    hasConnection(name: string) {
-        for (let conn of this._pool) {
-            if (conn.name === name) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Validates the database name
-     * 
-     * @method MongoPortable#_validateDatabaseName
-     * @private
-     * 
-     * @param {String} databaseName - The name of the database to validate
-     * 
-     * @return {Boolean} "true" if the name is valid
-     */
-    validateDatabaseName(name: string) {
-        let logger = JSWLogger.instance;
-        
-        if (!_.isString(name)) logger.throw("database name must be a string");
-    
-        if (name.length === 0) logger.throw("database name cannot be the empty string");
-    
-        let invalidChars = [" ", ".", "$", "/", "\\"];
-        for(let i = 0; i < invalidChars.length; i++) {
-            if(name.indexOf(invalidChars[i]) != -1) {
-                logger.throw(`database names cannot contain the character "${invalidChars[i]}"`);
-            }
-        }
-        
-        return true;
-    }
-}
+import { EventEmitter }     			from "../emitter";
+import { Collection }       			from "../collection";
+import { ObjectId }         			from "../document";
+import { Utils, ConnectionHelper } 		from "../utils/index";
 
 /**
  * MongoPortable
@@ -141,7 +26,7 @@ class ConnectionHelper {
  * 
  * @param {string} databaseName - Name of the database.
  */
-class MongoPortable extends EventEmitter {
+export class MongoPortable extends EventEmitter {
     protected logger: JSWLogger;
     
     private _collections: {};
@@ -712,4 +597,4 @@ class MongoPortable extends EventEmitter {
     }
 }
 
-export { MongoPortable };
+// export { MongoPortable };

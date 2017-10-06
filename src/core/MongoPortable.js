@@ -1,9 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
@@ -18,107 +24,7 @@ var Options_1 = require("./Options");
 var emitter_1 = require("../emitter");
 var collection_1 = require("../collection");
 var document_1 = require("../document");
-var utils_1 = require("../utils");
-// if (!Object.prototype.renameProperty) {
-//     /**
-//      * Renames an object property.
-//      * 
-//      * @method Object#renameProperty
-//      * 
-//      * @param {String} oldName - The name of the property to rename
-//      * @param {String} newName - The new name of the property
-//      * 
-//      * @returns {this} The called object
-//      */
-//     Object.defineProperty(
-//         Object.prototype, 
-//         "renameProperty",
-//         {
-//             writable : false, // Cannot alter this property
-//             enumerable : false, // Will not show up in a for-in loop.
-//             configurable : false, // Cannot be deleted via the delete operator
-//             value : function (oldName, newName) {
-//                 // Do nothing if some name is missing or is not an string
-//                 if (!_.isString(oldName) || !_.isString(newName)) {
-//                     return this;
-//                 }
-//                 // Do nothing if the names are the same
-//                 if (oldName == newName) {
-//                     return this;
-//                 }
-//                 // Check for the old property name to 
-//                 // avoid a ReferenceError in strict mode.
-//                 if (this.hasOwnProperty(oldName)) {
-//                     this[newName] = this[oldName];
-//                     delete this[oldName];
-//                 }
-//                 return this;
-//             }
-//         }
-//     );
-// }
-var ConnectionHelper = (function () {
-    function ConnectionHelper() {
-        this._pool = [];
-    }
-    ConnectionHelper.prototype.addConnection = function (name, id, instance) {
-        if (!this.hasConnection(name)) {
-            this._pool.push({ name: name, id: id, instance: instance });
-        }
-    };
-    ConnectionHelper.prototype.getConnection = function (name) {
-        for (var _i = 0, _a = this._pool; _i < _a.length; _i++) {
-            var conn = _a[_i];
-            if (conn.name === name) {
-                return conn;
-            }
-        }
-        return false;
-    };
-    ConnectionHelper.prototype.dropConnection = function (name) {
-        for (var i = 0; i < this._pool.length; i++) {
-            if (this._pool[i].name === name) {
-                this._pool.splice(i, 1);
-                return true;
-            }
-        }
-        return false;
-    };
-    ConnectionHelper.prototype.hasConnection = function (name) {
-        for (var _i = 0, _a = this._pool; _i < _a.length; _i++) {
-            var conn = _a[_i];
-            if (conn.name === name) {
-                return true;
-            }
-        }
-        return false;
-    };
-    /**
-     * Validates the database name
-     *
-     * @method MongoPortable#_validateDatabaseName
-     * @private
-     *
-     * @param {String} databaseName - The name of the database to validate
-     *
-     * @return {Boolean} "true" if the name is valid
-     */
-    ConnectionHelper.prototype.validateDatabaseName = function (name) {
-        var logger = jsw_logger_1.JSWLogger.instance;
-        if (!_.isString(name))
-            logger.throw("database name must be a string");
-        if (name.length === 0)
-            logger.throw("database name cannot be the empty string");
-        var invalidChars = [" ", ".", "$", "/", "\\"];
-        for (var i = 0; i < invalidChars.length; i++) {
-            if (name.indexOf(invalidChars[i]) != -1) {
-                logger.throw("database names cannot contain the character \"" + invalidChars[i] + "\"");
-            }
-        }
-        return true;
-    };
-    return ConnectionHelper;
-}());
+var index_1 = require("../utils/index");
 /**
  * MongoPortable
  *
@@ -129,7 +35,7 @@ var ConnectionHelper = (function () {
  *
  * @param {string} databaseName - Name of the database.
  */
-var MongoPortable = (function (_super) {
+var MongoPortable = /** @class */ (function (_super) {
     __extends(MongoPortable, _super);
     function MongoPortable(databaseName, options) {
         var _this = _super.call(this, options || new Options_1.Options()) || this;
@@ -444,10 +350,10 @@ var MongoPortable = (function (_super) {
                     to: toCollection
                 });
                 var renamed = this._collections[fromCollection].rename(toCollection);
-                utils_1.Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
+                index_1.Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
                 // this._collections.renameProperty(fromCollection, toCollection);
                 // this.renameProperty(fromCollection, toCollection);
-                utils_1.Utils.renameObjectProperty(this, fromCollection, toCollection);
+                index_1.Utils.renameObjectProperty(this, fromCollection, toCollection);
                 if (callback && _.isFunction(callback))
                     callback(null, renamed);
                 return renamed;
@@ -630,9 +536,9 @@ var MongoPortable = (function (_super) {
         //     callback(err, result);
         // });
     };
+    MongoPortable._connHelper = new index_1.ConnectionHelper();
     return MongoPortable;
 }(emitter_1.EventEmitter));
-MongoPortable._connHelper = new ConnectionHelper();
 exports.MongoPortable = MongoPortable;
-
+// export { MongoPortable }; 
 //# sourceMappingURL=MongoPortable.js.map
