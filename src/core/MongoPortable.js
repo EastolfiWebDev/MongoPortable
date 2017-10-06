@@ -46,16 +46,18 @@ var MongoPortable = /** @class */ (function (_super) {
          */
         _this.createCollection = _this.collection;
         _this.logger = jsw_logger_1.JSWLogger.instance;
-        _this._collections = {};
-        _this._stores = [];
-        // Check ddbb name format
-        MongoPortable._connHelper.validateDatabaseName(databaseName);
-        // FIXME: Temp patch until I figure out how far I want to take the implementation;
+        // If we have already this instance, return it
         if (MongoPortable._connHelper.hasConnection(databaseName)) {
-            _this.logger.throw("The database name \"" + databaseName + "\" is already in use");
+            return MongoPortable._connHelper.getConnection(databaseName).instance;
         }
-        _this._databaseName = databaseName;
-        MongoPortable._connHelper.addConnection(databaseName, new document_1.ObjectId(), _this);
+        else {
+            _this._collections = {};
+            _this._stores = [];
+            // Check ddbb name format
+            MongoPortable._connHelper.validateDatabaseName(databaseName);
+            _this._databaseName = databaseName;
+            MongoPortable._connHelper.addConnection(databaseName, new document_1.ObjectId(), _this);
+        }
         return _this;
     }
     MongoPortable.prototype.emit = function (name, args) {
