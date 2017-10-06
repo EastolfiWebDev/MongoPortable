@@ -117,10 +117,9 @@ var ConnectionHelper = /** @class */ (function () {
      */
     ConnectionHelper.prototype.validateDatabaseName = function (name) {
         var logger = jsw_logger_1.JSWLogger.instance;
-        if (!_.isString(name))
-            logger.throw("database name must be a string");
-        if (name.length === 0)
-            logger.throw("database name cannot be the empty string");
+        if (_.isNil(name) || !_.isString(name) || name.length === 0) {
+            logger.throw("database name must be a non empty string");
+        }
         var invalidChars = [" ", ".", "$", "/", "\\"];
         for (var i = 0; i < invalidChars.length; i++) {
             if (name.indexOf(invalidChars[i]) != -1) {
