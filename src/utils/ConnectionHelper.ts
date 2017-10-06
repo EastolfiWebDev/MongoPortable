@@ -72,9 +72,9 @@ export class ConnectionHelper {
     validateDatabaseName(name: string): boolean {
         let logger = JSWLogger.instance;
         
-        if (!_.isString(name)) logger.throw("database name must be a string");
-    
-        if (name.length === 0) logger.throw("database name cannot be the empty string");
+		if (_.isNil(name) || !_.isString(name) || name.length === 0) {
+			logger.throw("database name must be a non empty string");
+		}
     
         let invalidChars = [" ", ".", "$", "/", "\\"];
         for(let i = 0; i < invalidChars.length; i++) {
