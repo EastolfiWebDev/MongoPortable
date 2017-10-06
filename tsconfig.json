@@ -8,6 +8,12 @@
 		"emitDecoratorMetadata": true,
 		"lib": [ "es2015", "dom" ],
 		"noImplicitAny": false,
-		"suppressImplicitAnyIndexErrors": true
-	}
+		"suppressImplicitAnyIndexErrors": true,
+		"baseUrl": ".",
+		"downlevelIteration": true
+	},
+	"exclude": [
+		"node_modules/",
+		"test/"
+	]
 }
