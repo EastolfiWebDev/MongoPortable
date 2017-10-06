@@ -41,22 +41,22 @@ export class MongoPortable extends EventEmitter {
     constructor(databaseName: string, options: Options) {
         super(options || new Options());
         
-        this.logger = JSWLogger.instance;
-        
-        this._collections = {};
-        this._stores = [];
-        
-        // Check ddbb name format
-        MongoPortable._connHelper.validateDatabaseName(databaseName);
-    
-        // FIXME: Temp patch until I figure out how far I want to take the implementation;
-        if (MongoPortable._connHelper.hasConnection(databaseName)) {
-            this.logger.throw(`The database name "${databaseName}" is already in use`);
-        }
-    
-        this._databaseName = databaseName;
-    
-        MongoPortable._connHelper.addConnection(databaseName, new ObjectId(), this);
+		this.logger = JSWLogger.instance;
+		
+		// If we have already this instance, return it
+		if (MongoPortable._connHelper.hasConnection(databaseName)) {
+			return MongoPortable._connHelper.getConnection(databaseName).instance;
+        } else {
+			this._collections = {};
+			this._stores = [];
+			
+			// Check ddbb name format
+			MongoPortable._connHelper.validateDatabaseName(databaseName);
+		
+			this._databaseName = databaseName;
+		
+			MongoPortable._connHelper.addConnection(databaseName, new ObjectId(), this);
+		}
     }
     
     emit(name: string, args: Object) {
