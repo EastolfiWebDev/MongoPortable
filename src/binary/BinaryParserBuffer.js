@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 /**
@@ -12,7 +13,7 @@ var jsw_logger_1 = require("jsw-logger");
  *
  * @classdesc BinaryParserBuffer - based on ({@link http://jsfromhell.com/classes/binary-parser Binary Parser}) by Jonas Raoni Soares Silva
  */
-var BinaryParserBuffer = (function () {
+var BinaryParserBuffer = /** @class */ (function () {
     function BinaryParserBuffer(bigEndian, buffer) {
         this.buffer = [];
         this.logger = jsw_logger_1.JSWLogger.instance;
@@ -61,5 +62,4 @@ var BinaryParserBuffer = (function () {
     return BinaryParserBuffer;
 }());
 exports.BinaryParserBuffer = BinaryParserBuffer;
-
 //# sourceMappingURL=BinaryParserBuffer.js.map

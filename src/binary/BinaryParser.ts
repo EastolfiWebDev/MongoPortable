@@ -11,16 +11,16 @@ for (var i = 0; i < 64; i++) {
     maxBits[i] = Math.pow(2, i);
 }
 
-class BinaryParser {
+export class BinaryParser {
     protected logger: JSWLogger;
     
-    private bigEndian: string;
+    private bigEndian: boolean;
     private allowExceptions: boolean;
     
-    constructor(bigEndian?: string, allowExceptions: boolean = true) {
+    constructor(bigEndian: boolean = false, allowExceptions: boolean = true) {
         this.logger = JSWLogger.instance;
     
-        this.bigEndian = bigEndian || "";
+        this.bigEndian = bigEndian;
         this.allowExceptions = allowExceptions;
     }
     
@@ -31,14 +31,14 @@ class BinaryParser {
      * 
      * @return {String} The 12 byte id binary string.
      */
-    generate12string() {
+    generate12string(): string {
         let time9bytes = Date.now().toString(32);
         let rnd3bytes = this.encodeInt(parseInt((Math.random() * 0xFFFFFF).toString(), 10), 24, false);
         
         return time9bytes + rnd3bytes;
     }
     
-    decodeFloat(data: string|number, precisionBits: number, exponentBits: number) {
+    decodeFloat(data: string|number, precisionBits: number, exponentBits: number): number {
         var b = new BinaryParserBuffer(this.bigEndian, data);
         
         b.checkBuffer(precisionBits + exponentBits + 1);
@@ -53,11 +53,36 @@ class BinaryParser {
         do {
             for (var byteValue = b.buffer[ ++curByte ], startBit = precisionBits % 8 || 8, mask = 1 << startBit; mask >>= 1; ( byteValue & mask ) && ( significand += 1 / divisor ), divisor *= 2 );
         } while (precisionBits -= startBit);
-        
-        return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
+		
+		return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
+		
+		/*if (exponent == (bias << 1) + 1) {
+			if (significand) {
+				return NaN;
+			} else {
+				if (signal) {
+					return -Infinity;
+				} else {
+					return +Infinity;
+				}
+			}
+		} else {
+			let part1 = ( 1 + signal * -2 );
+			
+			if (exponent || significand) {
+				if (!exponent) {
+					return part1 * (Math.pow( 2, -bias + 1 ) * significand);
+				} else {
+					return part1 * (Math.pow( 2, exponent - bias ) * ( 1 + significand ));
+				}
+			} else {
+				// return return part1 * (0);
+				return 0;
+			}
+		}*/
     }
     
-    decodeFloat_(data: string|number, precisionBits: number, exponentBits: number) {
+    /*decodeFloat_(data: string|number, precisionBits: number, exponentBits: number): number {
         var b = new BinaryParserBuffer(this.bigEndian, data);
     
         b.checkBuffer(precisionBits + exponentBits + 1);
@@ -91,7 +116,7 @@ class BinaryParser {
             precisionBits -= startBit
         } while (precisionBits);
         
-        
+        // return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
     
         if ( exponent == ( bias << 1 ) + 1 ) {
         	if (significand) {
@@ -112,12 +137,9 @@ class BinaryParser {
         	
         	return ( 1 + signal * -2 ) * (_mod);
         }
+    }*/
     
-    
-        // return exponent == ( bias << 1 ) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity : ( 1 + signal * -2 ) * ( exponent || significand ? !exponent ? Math.pow( 2, -bias + 1 ) * significand : Math.pow( 2, exponent - bias ) * ( 1 + significand ) : 0 );
-    }
-    
-    decodeInt(data: string|number, bits: number, signed: boolean, forceBigEndian?: boolean) {
+    decodeInt(data: string|number, bits: number, signed: boolean, forceBigEndian?: boolean): number {
         var b = new BinaryParserBuffer(this.bigEndian || forceBigEndian, data)
             , x = b.readBits(0, bits)
             , max = maxBits[bits]; //max = Math.pow( 2, bits );
@@ -127,20 +149,21 @@ class BinaryParser {
             : x;
     }
     
-    decodeInt_(data: string|number, bits: number, signed: boolean, forceBigEndian?: boolean) {
+    /*decodeInt_(data: string|number, bits: number, signed: boolean, forceBigEndian?: boolean): number {
         var b = new BinaryParserBuffer(this.bigEndian || forceBigEndian, data),
             x = b.readBits(0, bits),
             max = maxBits[bits]; //max = Math.pow( 2, bits );
     
         return signed && x >= max / 2 ? x - max : x;
-    }
+    }*/
     
-    encodeFloat(data: string|number, precisionBits: number, exponentBits: number) {
+    encodeFloat(data: /*string|*/number, precisionBits: number, exponentBits: number): string {
         var bias = maxBits[exponentBits - 1] - 1
             , minExp = -bias + 1
             , maxExp = bias
             , minUnnormExp = minExp - precisionBits
-            , n = parseFloat(_.toString(data))
+            //, n = parseFloat(_.toString(data))
+			, n = data
             , status = isNaN(n) || n == -Infinity || n == +Infinity ? n : 0
             , exp = 0
             , len = 2 * bias + 1 + precisionBits + 3
@@ -215,8 +238,8 @@ class BinaryParser {
         
         return (this.bigEndian ? r.reverse() : r).join("");
     }
-    
-    encodeFloat_(data: string|number, precisionBits: number, exponentBits: number) {
+    /*
+    encodeFloat_(data: string|number, precisionBits: number, exponentBits: number): string {
         var bias = maxBits[exponentBits - 1] - 1,
             minExp = -bias + 1,
             maxExp = bias,
@@ -337,8 +360,8 @@ class BinaryParser {
       
         return (this.bigEndian ? r.reverse() : r).join("");
     }
-    
-    encodeInt(data: number, bits: number, signed: boolean, forceBigEndian?: boolean) {
+    */
+    encodeInt(data: number, bits: number, signed: boolean, forceBigEndian?: boolean): string {
         var max = maxBits[bits];
         
         if (data >= max || data < -(max / 2)) {
@@ -357,7 +380,7 @@ class BinaryParser {
         return ((this.bigEndian || forceBigEndian) ? r.reverse() : r).join("");
     }
     
-    encodeInt_(data: number, bits: number, signed: boolean, forceBigEndian?: boolean) {
+    /*encodeInt_(data: number, bits: number, signed: boolean, forceBigEndian?: boolean): string {
         var max = maxBits[bits];
         data = data - 0;    // Ensure a number
         
@@ -385,56 +408,56 @@ class BinaryParser {
         }
         
         return ((this.bigEndian || forceBigEndian) ? r.reverse() : r).join("");
-    }
+    }*/
     
-    toSmall    ( data: number ){ return this.decodeInt( data,  8, true  ); }
-    fromSmall  ( data: number ){ return this.encodeInt( data,  8, true  ); }
-    toByte     ( data: number ){ return this.decodeInt( data,  8, false ); }
-    fromByte   ( data: number ){ return this.encodeInt( data,  8, false ); }
-    toShort    ( data: number ){ return this.decodeInt( data, 16, true  ); }
-    fromShort  ( data: number ){ return this.encodeInt( data, 16, true  ); }
-    toWord     ( data: number ){ return this.decodeInt( data, 16, false ); }
-    fromWord   ( data: number ){ return this.encodeInt( data, 16, false ); }
-    toInt      ( data: number ){ return this.decodeInt( data, 32, true  ); }
-    fromInt    ( data: number ){ return this.encodeInt( data, 32, true  ); }
-    toLong     ( data: number ){ return this.decodeInt( data, 64, true  ); }
-    fromLong   ( data: number ){ return this.encodeInt( data, 64, true  ); }
-    toDWord    ( data: number ){ return this.decodeInt( data, 32, false ); }
-    fromDWord  ( data: number ){ return this.encodeInt( data, 32, false ); }
-    toQWord    ( data: number ){ return this.decodeInt( data, 64, true ); }
-    fromQWord  ( data: number ){ return this.encodeInt( data, 64, true ); }
-    toFloat    ( data: number ){ return this.decodeFloat( data, 23, 8   ); }
-    fromFloat  ( data: number ){ return this.encodeFloat( data, 23, 8   ); }
-    toDouble   ( data: number ){ return this.decodeFloat( data, 52, 11  ); }
-    fromDouble ( data: number ){ return this.encodeFloat( data, 52, 11  ); }
+    toSmall    ( data: number|string ): number { return this.decodeInt( data,  8, true  ); }
+    fromSmall  ( data: number ): string { return this.encodeInt( data,  8, true  ); }
+    toByte     ( data: number|string ): number { return this.decodeInt( data,  8, false ); }
+    fromByte   ( data: number ): string { return this.encodeInt( data,  8, false ); }
+    toShort    ( data: number|string ): number { return this.decodeInt( data, 16, true  ); }
+    fromShort  ( data: number ): string { return this.encodeInt( data, 16, true  ); }
+    toWord     ( data: number|string ): number { return this.decodeInt( data, 16, false ); }
+    fromWord   ( data: number ): string { return this.encodeInt( data, 16, false ); }
+    toInt      ( data: number|string ): number { return this.decodeInt( data, 32, true  ); }
+    fromInt    ( data: number ): string { return this.encodeInt( data, 32, true  ); }
+    toLong     ( data: number|string ): number { return this.decodeInt( data, 64, true  ); }
+    fromLong   ( data: number ): string { return this.encodeInt( data, 64, true  ); }
+    toDWord    ( data: number|string ): number { return this.decodeInt( data, 32, false ); }
+    fromDWord  ( data: number ): string { return this.encodeInt( data, 32, false ); }
+    toQWord    ( data: number|string ): number { return this.decodeInt( data, 64, true ); }
+    fromQWord  ( data: number ): string { return this.encodeInt( data, 64, true ); }
+    toFloat    ( data: number|string ): number { return this.decodeFloat( data, 23, 8   ); }
+    fromFloat  ( data: number ): string { return this.encodeFloat( data, 23, 8   ); }
+    toDouble   ( data: number|string ): number { return this.decodeFloat( data, 52, 11  ); }
+    fromDouble ( data: number ): string { return this.encodeFloat( data, 52, 11  ); }
     
     // Static access to methods
-    static toSmall      ( data: number ) { return (new BinaryParser()).toSmall(data); }
-    static fromSmall    ( data: number ) { return (new BinaryParser()).fromSmall(data); }
-    static toByte       ( data: number ) { return (new BinaryParser()).toByte(data); }
-    static fromByte     ( data: number ) { return (new BinaryParser()).fromByte(data); }
-    static toShort      ( data: number ) { return (new BinaryParser()).toShort(data); }
-    static fromShort    ( data: number ) { return (new BinaryParser()).fromShort(data); }
-    static toWord       ( data: number ) { return (new BinaryParser()).toWord(data); }
-    static fromWord     ( data: number ) { return (new BinaryParser()).fromWord(data); }
-    static toInt        ( data: number ) { return (new BinaryParser()).toInt(data); }
-    static fromInt      ( data: number ) { return (new BinaryParser()).fromInt(data); }
-    static toLong       ( data: number ) { return (new BinaryParser()).toLong(data); }
-    static fromLong     ( data: number ) { return (new BinaryParser()).fromLong(data); }
-    static toDWord      ( data: number ) { return (new BinaryParser()).toDWord(data); }
-    static fromDWord    ( data: number ) { return (new BinaryParser()).fromDWord(data); }
-    static toQWord      ( data: number ) { return (new BinaryParser()).toQWord(data); }
-    static fromQWord    ( data: number ) { return (new BinaryParser()).fromQWord(data); }
-    static toFloat      ( data: number ) { return (new BinaryParser()).toFloat(data); }
-    static fromFloat    ( data: number ) { return (new BinaryParser()).fromFloat(data); }
-    static toDouble     ( data: number ) { return (new BinaryParser()).toDouble(data); }
-    static fromDouble   ( data: number ) { return (new BinaryParser()).fromDouble(data); }
+    static toSmall      ( data: number|string ): number { return (new BinaryParser()).toSmall(data); }
+    static fromSmall    ( data: number ): string { return (new BinaryParser()).fromSmall(data); }
+    static toByte       ( data: number|string ): number { return (new BinaryParser()).toByte(data); }
+    static fromByte     ( data: number ): string { return (new BinaryParser()).fromByte(data); }
+    static toShort      ( data: number|string ): number { return (new BinaryParser()).toShort(data); }
+    static fromShort    ( data: number ): string { return (new BinaryParser()).fromShort(data); }
+    static toWord       ( data: number|string ): number { return (new BinaryParser()).toWord(data); }
+    static fromWord     ( data: number ): string { return (new BinaryParser()).fromWord(data); }
+    static toInt        ( data: number|string ): number { return (new BinaryParser()).toInt(data); }
+    static fromInt      ( data: number ): string { return (new BinaryParser()).fromInt(data); }
+    static toLong       ( data: number|string ): number { return (new BinaryParser()).toLong(data); }
+    static fromLong     ( data: number ): string { return (new BinaryParser()).fromLong(data); }
+    static toDWord      ( data: number|string ): number { return (new BinaryParser()).toDWord(data); }
+    static fromDWord    ( data: number ): string { return (new BinaryParser()).fromDWord(data); }
+    static toQWord      ( data: number|string ): number { return (new BinaryParser()).toQWord(data); }
+    static fromQWord    ( data: number ): string { return (new BinaryParser()).fromQWord(data); }
+    static toFloat      ( data: number|string ): number { return (new BinaryParser()).toFloat(data); }
+    static fromFloat    ( data: number ): string { return (new BinaryParser()).fromFloat(data); }
+    static toDouble     ( data: number|string ): number { return (new BinaryParser()).toDouble(data); }
+    static fromDouble   ( data: number ): string { return (new BinaryParser()).fromDouble(data); }
     
     // Factor out the encode so it can be shared by add_header and push_int32
-    encode_int32(number, asArray) {
+    encode_int32(num: number, asArray: boolean = false): Array<string>|string {
         var a, b, c, d, unsigned;
         
-        unsigned = (number < 0) ? (number + 0x100000000) : number;
+        unsigned = (num < 0) ? (num + 0x100000000) : num;
         a = Math.floor(unsigned / 0xffffff);
         
         unsigned &= 0xffffff;
@@ -449,12 +472,12 @@ class BinaryParser {
         return asArray ? [chr(a), chr(b), chr(c), chr(d)] : chr(a) + chr(b) + chr(c) + chr(d);
     }
     
-    static encode_int32 ( number, asArray ) { return (new BinaryParser()).encode_int32(number, asArray); }
+    static encode_int32 ( num: number, asArray: boolean = false ): Array<string>|string { return (new BinaryParser()).encode_int32(num, asArray); }
     
-    encode_int64(number) {
+    encode_int64(num: number): string {
         var a, b, c, d, e, f, g, h, unsigned;
         
-        unsigned = (number < 0) ? (number + 0x10000000000000000) : number;
+        unsigned = (num < 0) ? (num + 0x10000000000000000) : num;
         a = Math.floor(unsigned / 0xffffffffffffff);
         
         unsigned &= 0xffffffffffffff;
@@ -481,14 +504,14 @@ class BinaryParser {
         return chr(a) + chr(b) + chr(c) + chr(d) + chr(e) + chr(f) + chr(g) + chr(h);
     }
     
-    static encode_int64 ( number ) { return (new BinaryParser()).encode_int64(number); }
+    static encode_int64 ( num: number ): string { return (new BinaryParser()).encode_int64(num); }
     
     /**
      * UTF8 methods
      */
     
     // Take a raw binary string and return a utf8 string
-    decode_utf8(binaryStr) {
+    decode_utf8(binaryStr: string): string {
         var len = binaryStr.length,
             decoded = '',
             i = 0,
@@ -521,18 +544,18 @@ class BinaryParser {
         return decoded;
     }
     
-    static decode_utf8 ( binaryStr ) { return (new BinaryParser()).decode_utf8(binaryStr); }
+    static decode_utf8 ( binaryStr: string ): string { return (new BinaryParser()).decode_utf8(binaryStr); }
     
     // Encode a cstring
-    encode_cstring(s) {
+    encode_cstring(s: string|number): string {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/escape
-        return encodeURIComponent(encodeURIComponent(s)) + this.fromByte(0);
+        return encodeURIComponent(encodeURIComponent(`${s}`)) + this.fromByte(0);
     }
     
-    static encode_cstring ( s ) { return (new BinaryParser()).encode_cstring(s); }
+    static encode_cstring ( s: string|number ): string { return (new BinaryParser()).encode_cstring(s); }
     
     // Take a utf8 string and return a binary string
-    encode_utf8(s) {
+    encode_utf8(s: string): string {
         var a = "",
             c;
     
@@ -554,75 +577,71 @@ class BinaryParser {
         return a;
     }
     
-    static encode_utf8 ( s ) { return (new BinaryParser()).encode_utf8(s); }
+    static encode_utf8 ( s: string ): string { return (new BinaryParser()).encode_utf8(s); }
     
-    hprint(s) {
-        var number;
+    hprint(s: string): number {
+        var num;
     
         for (var i = 0, len = s.length; i < len; i++) {
             if (s.charCodeAt(i) < 32) {
-                number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
+                num = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                this.logger.silly(number + " ");
+                this.logger.silly(num + " ");
             } else {
-                number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
+                num = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                this.logger.silly(number + " ");
+                this.logger.silly(num + " ");
             }
         }
         
         this.logger.silly("\n\n");
         
-        return number;
+        return num;
     }
     
-    static hprint ( s ) { return (new BinaryParser()).hprint(s); }
+    static hprint ( s: string ): number { return (new BinaryParser()).hprint(s); }
     
-    ilprint(s) {
-        var number;
+    ilprint(s: string): number {
+        var num;
     
         for (var i = 0, len = s.length; i < len; i++) {
             if (s.charCodeAt(i) < 32) {
-                number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
+                num = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
                 
-                this.logger.silly(number + " ");
+                this.logger.silly(num + " ");
             } else {
-                number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
+                num = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(10) : s.charCodeAt(i).toString(10);
                 
-                this.logger.silly(number + " ");
+                this.logger.silly(num + " ");
             }
         }
         
         this.logger.silly("\n\n");
         
-        return number;
+        return num;
     }
     
-    static ilprint ( s ) { return (new BinaryParser()).ilprint(s); }
+    static ilprint ( s: string ): number { return (new BinaryParser()).ilprint(s); }
     
-    hlprint(s) {
-        var number;
+    hlprint(s: string): number {
+        var num;
         
         for (var i = 0, len = s.length; i < len; i++) {
             if (s.charCodeAt(i) < 32) {
-                number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
+                num = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                this.logger.silly(number + " ");
+                this.logger.silly(num + " ");
             } else {
-                number = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
+                num = s.charCodeAt(i) <= 15 ? "0" + s.charCodeAt(i).toString(16) : s.charCodeAt(i).toString(16);
                 
-                this.logger.silly(number + " ");
+                this.logger.silly(num + " ");
             }
         }
         
         this.logger.silly("\n\n");
         
-        return number;
+        return num;
     }
     
-    static hlprint ( s ) { return (new BinaryParser()).hlprint(s); }
+    static hlprint ( s: string ): number { return (new BinaryParser()).hlprint(s); }
 }
-
-
-
-export { BinaryParser };
