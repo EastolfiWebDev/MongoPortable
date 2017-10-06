@@ -1,3 +1,2 @@
-import { Utils } from "./Utils";
-
-export { Utils };
+export * from "./ConnectionHelper";
+export * from "./Utils";
