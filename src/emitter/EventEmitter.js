@@ -1,7 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var EventEmitter = (function () {
+var EventEmitter = /** @class */ (function () {
     function EventEmitter(options) {
         this.logger = jsw_logger_1.JSWLogger.getInstance(options.log || {});
     }
@@ -29,5 +30,4 @@ var EventEmitter = (function () {
     return EventEmitter;
 }());
 exports.EventEmitter = EventEmitter;
-
 //# sourceMappingURL=EventEmitter.js.map
