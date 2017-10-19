@@ -1,1 +1,1 @@
-{"version":3,"sources":["core/index.ts"],"names":[],"mappings":";AAAA,iDAAuD;AAG9C,sDAAa;AAFtB,qCAAiD;AAEzB,oCAAO","file":"index.js","sourcesContent":["import { MongoPortable }        from \"./MongoPortable\";\nimport { Options }              from \"./Options\";\n\nexport { MongoPortable, Options };"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,iDAAuD;AAG9C,wBAHA,6BAAa,CAGA;AAFtB,qCAAiD;AAEzB,kBAFf,iBAAO,CAEe"}

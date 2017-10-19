@@ -252,7 +252,7 @@ export class MongoPortable extends EventEmitter {
      * 
      * @returns {Collection}
      */
-    collection(collectionName, options, callback) {
+    collection(collectionName, options, callback?) {
         var existing = false;
         // var collection;
         // var collectionFullName =  self.databaseName + "." + collectionName;
@@ -373,7 +373,7 @@ export class MongoPortable extends EventEmitter {
      * 
      * @returns {Boolean|Collection} The collection if renamed successfully or false if not
      */
-    renameCollection(fromCollection, toCollection, callback) {
+    renameCollection(fromCollection, toCollection, callback?) {
         if (_.isString(fromCollection) && _.isString(toCollection) && fromCollection !== toCollection) {
             // Execute the command, return the new renamed collection if successful
             Collection.checkCollectionName(toCollection);
