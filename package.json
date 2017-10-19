@@ -90,8 +90,9 @@
   },
   "scripts": {
     "test.old": "gulp test",
-    "test": "mocha test/unit/utils/*.spec.ts",
-    "test.coverage": "nyc mocha test/unit/utils/*.spec.ts",
+    "test": "mocha test/unit/**/*.spec.ts",
+	"test.full": "npm run build && npm run test",
+    "test.coverage": "nyc mocha test/unit/**/*.spec.ts",
     "build": "tsc -p ./tsconfig.json"
   },
   "repository": {
