@@ -1,1 +1,1 @@
-{"version":3,"sources":["aggregation/index.ts"],"names":[],"mappings":";AAAA,6CAA4C;AAEnC,gDAAW","file":"index.js","sourcesContent":["import { Aggregation } from \"./Aggregation\";\n\nexport { Aggregation };"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,6CAA4C;AAEnC,sBAFA,yBAAW,CAEA"}
