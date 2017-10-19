@@ -1,14 +1,15 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var SelectorMatcher_1 = require("./SelectorMatcher");
 var document_1 = require("../document");
-var Clause = (function () {
+var Clause = /** @class */ (function () {
     function Clause() {
     }
     return Clause;
 }());
-var Selector = (function () {
+var Selector = /** @class */ (function () {
     function Selector(selector, type) {
         if (type === void 0) { type = Selector.MATCH_SELECTOR; }
         this.logger = jsw_logger_1.JSWLogger.instance;
@@ -247,6 +248,15 @@ var Selector = (function () {
         else if (_.isArray(spec)) {
             // Join the array with spaces, and treat it as a spaced-separated string
             return this.compileSort(spec.join(" "));
+            // for (var i = 0; i < spec.length; i++) {
+            //     if (_.isString(spec[i])) {
+            //         keys.push(spec[i]);
+            //         asc.push(true);
+            //     } else {
+            //         keys.push(spec[i][0]);
+            //         asc.push(spec[i][1] !== "desc");
+            //     }
+            // }
         }
         else if (_.isPlainObject(spec)) {
             // TODO Nested path -> .sort({ "field1.field12": "asc" })
@@ -391,12 +401,11 @@ var Selector = (function () {
     Selector.matches = function (selector, doc) {
         return (new Selector(selector)).test(doc);
     };
+    Selector.MATCH_SELECTOR = "match";
+    Selector.SORT_SELECTOR = "sort";
+    Selector.FIELD_SELECTOR = "field";
+    Selector.AGG_FIELD_SELECTOR = "project";
     return Selector;
 }());
-Selector.MATCH_SELECTOR = "match";
-Selector.SORT_SELECTOR = "sort";
-Selector.FIELD_SELECTOR = "field";
-Selector.AGG_FIELD_SELECTOR = "project";
 exports.Selector = Selector;
-
 //# sourceMappingURL=Selector.js.map

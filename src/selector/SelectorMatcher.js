@@ -1,7 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var SelectorMatcher = (function () {
+var SelectorMatcher = /** @class */ (function () {
     function SelectorMatcher(selector) {
         this.clauses = selector.clauses;
         this.logger = jsw_logger_1.JSWLogger.instance;
@@ -200,6 +201,7 @@ var SelectorMatcher = (function () {
                 return 1;
             if (_.isSymbol(b))
                 return -1;
+            // TODO Integer, Date and Timestamp
         }
         if (_.isNumber(a))
             return a - b;
@@ -558,6 +560,11 @@ var BsonTypes = {
         { alias: "timestamp", number: 17, order: 11, isType: _.isDate },
         { alias: "regex", number: 11, order: 12, isType: _.isRegExp },
         { alias: "maxKey", number: 127, order: 13, isType: null }
+        // 		undefined 6
+        // 		dbPointer
+        // 		javascript
+        // 		javascriptWithScope
+        // 		function
     ],
     getByAlias: function (alias) {
         for (var i = 0; i < this._types.length; i++) {
@@ -585,5 +592,4 @@ var BsonTypes = {
         jsw_logger_1.JSWLogger.instance.throw("Unaccepted BSON type");
     }
 };
-
 //# sourceMappingURL=SelectorMatcher.js.map
