@@ -1,7 +1,7 @@
 import * as _           from "lodash";
 import { JSWLogger }    from "jsw-logger";
 
-class SelectorMatcher {
+export class SelectorMatcher {
     protected logger: JSWLogger;
     
     clauses;
@@ -706,5 +706,3 @@ var BsonTypes = {
         JSWLogger.instance.throw("Unaccepted BSON type");
 	}
 };
-
-export { SelectorMatcher };

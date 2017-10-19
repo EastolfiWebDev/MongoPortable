@@ -1,1 +1,1 @@
-{"version":3,"sources":["selector/index.ts"],"names":[],"mappings":";AAAA,uCAAkD;AAGzC,uCAAQ;AAFjB,qDAAyD;AAEtC,4DAAe","file":"index.js","sourcesContent":["import { Selector }             from \"./Selector\";\nimport { SelectorMatcher }      from \"./SelectorMatcher\";\n\nexport { Selector, SelectorMatcher };"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,uCAAkD;AAGzC,mBAHA,mBAAQ,CAGA;AAFjB,qDAAyD;AAEtC,0BAFV,iCAAe,CAEU"}

@@ -3,7 +3,7 @@ import { JSWLogger }            from "jsw-logger";
 
 import { SelectorMatcher }      from "./SelectorMatcher";
 
-import { ObjectId }             from "../document";
+import { ObjectId }             from "../document/index";
 
 
 class Clause {
@@ -13,7 +13,7 @@ class Clause {
     value: any;
 }
 
-class Selector {
+export class Selector {
     protected logger: JSWLogger;
     
     static MATCH_SELECTOR = "match";
@@ -472,5 +472,3 @@ class Selector {
         return (new Selector(selector)).test(doc);
     }
 }
-
-export { Selector };
