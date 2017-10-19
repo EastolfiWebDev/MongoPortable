@@ -45,7 +45,7 @@ var getObjectSize = function(obj) {
  * @classdesc Collection class that maps a MongoDB-like collection
  */
 var database = null;
-class Collection /*extends EventEmitter*/ {
+export class Collection /*extends EventEmitter*/ {
     protected logger: JSWLogger;
     
     name;
@@ -1307,5 +1307,3 @@ var _ensureFindParams = function(params) {
     
     return params;
 };
-
-export { Collection };

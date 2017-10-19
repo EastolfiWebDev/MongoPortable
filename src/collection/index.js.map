@@ -1,1 +1,1 @@
-{"version":3,"sources":["collection/index.ts"],"names":[],"mappings":";AAAA,mCAA4C;AAGvB,iCAAM;AAF3B,2CAAgD;AAEvC,6CAAU","file":"index.js","sourcesContent":["import { Cursor }           from \"./Cursor\";\nimport { Collection }       from \"./Collection\";\n\nexport { Collection, Cursor };"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,mCAA4C;AAGvB,iBAHZ,eAAM,CAGY;AAF3B,2CAAgD;AAEvC,qBAFA,uBAAU,CAEA"}

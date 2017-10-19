@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var Cursor_1 = require("./Cursor");
@@ -37,7 +38,7 @@ var getObjectSize = function (obj) {
  * @classdesc Collection class that maps a MongoDB-like collection
  */
 var database = null;
-var Collection /*extends EventEmitter*/ = (function () {
+var Collection = /** @class */ (function () {
     // var Collection = function(db, collectionName, options) {
     /**
      * @param {MongoPortable} db - Additional options
@@ -762,6 +763,7 @@ var Collection /*extends EventEmitter*/ = (function () {
                 }
             }
             else {
+                // Error
             }
         };
         if (!(this instanceof Collection))
@@ -807,21 +809,21 @@ var Collection /*extends EventEmitter*/ = (function () {
             jsw_logger_1.JSWLogger.instance.throw("collection names must not start or end with '.'");
         }
     };
+    // emit(name, args) {
+    //     super.emit(name, args, database._stores);
+    // }
+    /**
+     * @ignore
+     */
+    Collection._noCreateModifiers = {
+        $unset: true,
+        $pop: true,
+        $rename: true,
+        $pull: true,
+        $pullAll: true
+    };
     return Collection;
 }());
-// emit(name, args) {
-//     super.emit(name, args, database._stores);
-// }
-/**
- * @ignore
- */
-Collection._noCreateModifiers = {
-    $unset: true,
-    $pop: true,
-    $rename: true,
-    $pull: true,
-    $pullAll: true
-};
 exports.Collection = Collection;
 var _applyModifier = function (_docUpdate, key, val) {
     var doc = _.cloneDeep(_docUpdate);
@@ -833,6 +835,11 @@ var _applyModifier = function (_docUpdate, key, val) {
         var value = val[keypath];
         var keyparts = keypath.split('.');
         _modify(doc, keyparts, value, key);
+        // var no_create = !!Collection._noCreateModifiers[key];
+        // var forbid_array = (key === "$rename");
+        // var target = Collection._findModTarget(_docUpdate, keyparts, no_create, forbid_array);
+        // var field = keyparts.pop();
+        // mod(target, field, value, keypath, _docUpdate);
     }
     return doc;
 };
@@ -1112,5 +1119,4 @@ var _ensureFindParams = function (params) {
     }
     return params;
 };
-
 //# sourceMappingURL=Collection.js.map
