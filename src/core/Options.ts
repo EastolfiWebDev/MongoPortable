@@ -1,5 +1,3 @@
-class Options {
+export class Options {
     log: Object;
 }
-
-export { Options };

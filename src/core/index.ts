@@ -1,4 +1,2 @@
-import { MongoPortable }        from "./MongoPortable";
-import { Options }              from "./Options";
-
-export { MongoPortable, Options };
+export * from "./MongoPortable";
+export * from "./Options";
