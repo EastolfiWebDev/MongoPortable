@@ -3,10 +3,12 @@ import { JSWLogger }    from "jsw-logger";
 
 import { Options }      from "../core";
 
-class EventEmitter {
+export class EventEmitter {
     protected logger: JSWLogger;
     
     constructor(options: Options) {
+		options = options || new Options();
+		
         this.logger = JSWLogger.getInstance(options.log || {});
     }
     
@@ -36,5 +38,3 @@ class EventEmitter {
         });
     }
 }
-
-export { EventEmitter };
