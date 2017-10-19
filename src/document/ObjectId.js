@@ -1,7 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var binary_1 = require("../binary");
+var index_1 = require("../binary/index");
 /**
  * Machine id.
  *
@@ -26,6 +27,7 @@ try {
         pid = process.pid;
 }
 catch (e) {
+    // "process" does not exists -> keep the value from Math.random
 }
 /**
  * ObjectId
@@ -40,12 +42,12 @@ catch (e) {
  *
  * @param {string|number} id - Can be a 24 byte hex string, a 12 byte binary string or a Number.
  */
-var ObjectId = (function () {
+var ObjectId = /** @class */ (function () {
     function ObjectId(id) {
         // if (!(this instanceof ObjectId)) return new ObjectId(id, _hex);
         this._bsontype = "ObjectId";
         this.logger = jsw_logger_1.JSWLogger.instance;
-        this.binaryParser = new binary_1.BinaryParser();
+        this.binaryParser = new index_1.BinaryParser();
         if (_.isNil(id)) {
             this.id = this.generate();
         }
@@ -253,7 +255,7 @@ var ObjectId = (function () {
         for (var index = 0; index < len; index += 2) {
             string = hexString.substr(index, 2);
             number = parseInt(string, 16);
-            result += new binary_1.BinaryParser().fromByte(number);
+            result += new index_1.BinaryParser().fromByte(number);
         }
         return new ObjectId(result);
     };
@@ -268,7 +270,7 @@ var ObjectId = (function () {
      * @returns {ObjectId} The created ObjectId
      */
     ObjectId.createFromTime = function (time) {
-        var binaryParser = new binary_1.BinaryParser();
+        var binaryParser = new index_1.BinaryParser();
         var id = binaryParser.encodeInt(time, 32, true, true) + binaryParser.encodeInt(0, 64, true, true);
         return new ObjectId(id);
     };
@@ -283,9 +285,8 @@ var ObjectId = (function () {
     ObjectId.createPk = function () {
         return new ObjectId();
     };
+    ObjectId.index = 0;
     return ObjectId;
 }());
-ObjectId.index = 0;
 exports.ObjectId = ObjectId;
-
 //# sourceMappingURL=ObjectId.js.map
