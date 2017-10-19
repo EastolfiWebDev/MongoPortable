@@ -1,3 +1,1 @@
-import { Aggregation } from "./Aggregation";
-
-export { Aggregation };
+export * from "./Aggregation";
