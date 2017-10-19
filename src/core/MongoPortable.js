@@ -24,7 +24,7 @@ var Options_1 = require("./Options");
 var emitter_1 = require("../emitter");
 var collection_1 = require("../collection");
 var document_1 = require("../document");
-var index_1 = require("../utils/index");
+var utils_1 = require("../utils");
 /**
  * MongoPortable
  *
@@ -352,10 +352,10 @@ var MongoPortable = /** @class */ (function (_super) {
                     to: toCollection
                 });
                 var renamed = this._collections[fromCollection].rename(toCollection);
-                index_1.Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
+                utils_1.Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
                 // this._collections.renameProperty(fromCollection, toCollection);
                 // this.renameProperty(fromCollection, toCollection);
-                index_1.Utils.renameObjectProperty(this, fromCollection, toCollection);
+                utils_1.Utils.renameObjectProperty(this, fromCollection, toCollection);
                 if (callback && _.isFunction(callback))
                     callback(null, renamed);
                 return renamed;
@@ -538,7 +538,7 @@ var MongoPortable = /** @class */ (function (_super) {
         //     callback(err, result);
         // });
     };
-    MongoPortable._connHelper = new index_1.ConnectionHelper();
+    MongoPortable._connHelper = new utils_1.ConnectionHelper();
     return MongoPortable;
 }(emitter_1.EventEmitter));
 exports.MongoPortable = MongoPortable;

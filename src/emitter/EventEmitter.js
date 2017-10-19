@@ -2,8 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
+var core_1 = require("../core");
 var EventEmitter = /** @class */ (function () {
     function EventEmitter(options) {
+        options = options || new core_1.Options();
         this.logger = jsw_logger_1.JSWLogger.getInstance(options.log || {});
     }
     EventEmitter.prototype.emit = function (event, args, stores) {

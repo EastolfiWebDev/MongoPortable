@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("./src/core");
 exports.MongoPortable = core_1.MongoPortable;
 try {
@@ -7,5 +8,4 @@ try {
     }
 }
 catch (e) { }
-
 //# sourceMappingURL=index.js.map

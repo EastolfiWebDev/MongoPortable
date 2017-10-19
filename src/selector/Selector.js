@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var SelectorMatcher_1 = require("./SelectorMatcher");
-var document_1 = require("../document");
+var index_1 = require("../document/index");
 var Clause = /** @class */ (function () {
     function Clause() {
     }
@@ -126,7 +126,7 @@ var Selector = /** @class */ (function () {
                 clause.type = "operator_object";
             }
         }
-        else if (value instanceof document_1.ObjectId) {
+        else if (value instanceof index_1.ObjectId) {
             this.logger.debug("clause of type ObjectId -> String");
             clause.type = "string";
             clause.value = value.toString();

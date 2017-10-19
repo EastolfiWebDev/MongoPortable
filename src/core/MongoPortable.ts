@@ -14,7 +14,7 @@ import { Options }          from "./Options";
 import { EventEmitter }     			from "../emitter";
 import { Collection }       			from "../collection";
 import { ObjectId }         			from "../document";
-import { Utils, ConnectionHelper } 		from "../utils/index";
+import { Utils, ConnectionHelper } 		from "../utils";
 
 /**
  * MongoPortable
