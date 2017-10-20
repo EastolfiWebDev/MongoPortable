@@ -61,7 +61,7 @@ var MongoPortable = /** @class */ (function (_super) {
         return _this;
     }
     MongoPortable.prototype.emit = function (name, args) {
-        _super.prototype.emit.call(this, name, args, this._stores);
+        return _super.prototype.emit.call(this, name, args, this._stores);
     };
     /**
      * Middleware functions

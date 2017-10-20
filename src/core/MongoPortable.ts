@@ -7,9 +7,10 @@
  * @license MIT Licensed
  */
 import * as _               			from "lodash";
+import * as Promise         			from "promise";
 import { JSWLogger }        			from "jsw-logger";
 
-import { Options }          from "./Options";
+import { Options }          			from "./Options";
 
 import { EventEmitter }     			from "../emitter";
 import { Collection }       			from "../collection";
@@ -59,8 +60,8 @@ export class MongoPortable extends EventEmitter {
 		}
     }
     
-    emit(name: string, args: Object) {
-        super.emit(name, args, this._stores);
+    emit(name: string, args: Object): Promise<void> {
+        return super.emit(name, args, this._stores);
     }
     
     /**
