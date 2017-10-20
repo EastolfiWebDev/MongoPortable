@@ -19,8 +19,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @license MIT Licensed
  */
 var _ = require("lodash");
+var Promise = require("promise");
 var jsw_logger_1 = require("jsw-logger");
-var Options_1 = require("./Options");
 var emitter_1 = require("../emitter");
 var collection_1 = require("../collection");
 var document_1 = require("../document");
@@ -38,7 +38,7 @@ var utils_1 = require("../utils");
 var MongoPortable = /** @class */ (function (_super) {
     __extends(MongoPortable, _super);
     function MongoPortable(databaseName, options) {
-        var _this = _super.call(this, options || new Options_1.Options()) || this;
+        var _this = _super.call(this, options || { log: {} }) || this;
         /**
          * Alias for {@link MongoPortable#collection}
          *
@@ -203,8 +203,7 @@ var MongoPortable = /** @class */ (function (_super) {
         }
         if (_.isNil(options))
             options = {};
-        if (!options.namesOnly)
-            options.namesOnly = true;
+        options.namesOnly = true;
         return this.collections(options, callback);
     };
     /**
@@ -242,21 +241,25 @@ var MongoPortable = /** @class */ (function (_super) {
      *
      * @fires {@link MongoStore#createCollection}
      *
-     * @returns {Collection}
+     * @returns {Promise<Collection>}
      */
     MongoPortable.prototype.collection = function (collectionName, options, callback) {
-        var existing = false;
-        // var collection;
-        // var collectionFullName =  self.databaseName + "." + collectionName;
-        if (_.isFunction(options)) {
-            callback = options;
-            options = {};
-        }
-        else {
-            options = options || {};
-        }
-        // Collection already in memory, lets create it
-        if (this._collections[collectionName]) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var existing = true;
+            // var collection;
+            // var collectionFullName =  self.databaseName + "." + collectionName;
+            if (_.isFunction(options)) {
+                callback = options;
+                options = {};
+            }
+            else {
+                options = options || {};
+            }
+            if (!_this._collections[collectionName]) {
+                _this._collections[collectionName] = new collection_1.Collection(_this, collectionName /*, this.pkFactory*/ /*, options*/);
+                existing = false;
+            }
             /**
              * "createCollection" event.
              *
@@ -265,40 +268,29 @@ var MongoPortable = /** @class */ (function (_super) {
              * @property {Object} connection - Information about the current database connection
              * @property {Object} collection - Information about the collection created
              */
-            this.emit("createCollection", {
-                connection: this,
-                collection: this._collections[collectionName]
+            _this.emit("createCollection", {
+                connection: _this,
+                collection: _this._collections[collectionName]
+            }).then(function () {
+                if (!existing) {
+                    // Letting access the collection by <MongoPortable instance>.<COL_NAME>
+                    Object.defineProperty(MongoPortable.prototype, collectionName, {
+                        enumerable: true,
+                        configurable: true,
+                        writable: false,
+                        value: _this._collections[collectionName]
+                    });
+                }
+                // return self._collections[collectionName];
+                if (callback)
+                    callback(null, _this._collections[collectionName]);
+                resolve(_this._collections[collectionName]);
+            }).catch(function (error) {
+                if (callback)
+                    callback(error, null);
+                reject(error);
             });
-            existing = true;
-        }
-        else {
-            this._collections[collectionName] = new collection_1.Collection(this, collectionName /*, this.pkFactory*/ /*, options*/);
-            /**
-             * "createCollection" event.
-             *
-             * @event MongoPortable~createCollection
-             *
-             * @property {Object} connection - Information about the current database connection
-             * @property {Object} collection - Information about the collection created
-             */
-            this.emit("createCollection", {
-                connection: this,
-                collection: this._collections[collectionName]
-            });
-        }
-        if (!existing) {
-            // Letting access the collection by <MongoPortable instance>.<COL_NAME>
-            Object.defineProperty(MongoPortable.prototype, collectionName, {
-                enumerable: true,
-                configurable: true,
-                writable: false,
-                value: this._collections[collectionName]
-            });
-        }
-        // return self._collections[collectionName];
-        if (callback)
-            callback(this._collections[collectionName]);
-        return this._collections[collectionName];
+        });
     };
     /**
      * Drop a collection from the database, removing it permanently. New accesses will create a new collection.
@@ -308,27 +300,35 @@ var MongoPortable = /** @class */ (function (_super) {
      * @param {String} collectionName - The name of the collection we wish to drop.
      * @param {Function} [callback=null] - Callback function to be called at the end with the results
      *
-     * @returns {Boolean} "true" if dropped successfully
+     * @returns {Promise<Boolean>} Promise with "true" if dropped successfully
      */
     MongoPortable.prototype.dropCollection = function (collectionName, callback) {
-        if (this._collections[collectionName]) {
-            // Drop the collection
-            this.emit("dropCollection", {
-                conn: this,
-                collection: this._collections[collectionName]
-            });
-            delete this._collections[collectionName];
-            if (callback && _.isFunction(callback))
-                callback();
-            return true;
-        }
-        else {
-            var msg = "No collection found";
-            this.logger.error(msg);
-            if (callback && _.isFunction(callback))
-                callback(new Error(msg));
-            return false;
-        }
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (_this._collections[collectionName]) {
+                // Drop the collection
+                _this.emit("dropCollection", {
+                    conn: _this,
+                    collection: _this._collections[collectionName]
+                }).then(function () {
+                    delete _this._collections[collectionName];
+                    if (callback && _.isFunction(callback))
+                        callback(null, true);
+                    resolve(true);
+                }).catch(function (error) {
+                    if (callback && _.isFunction(callback))
+                        callback(error, false);
+                    reject(error);
+                });
+            }
+            else {
+                var error = new Error("No collection found");
+                _this.logger.throw(error);
+                if (callback && _.isFunction(callback))
+                    callback(error, false);
+                reject(error);
+            }
+        });
     };
     /**
      * Rename a collection.
@@ -339,42 +339,50 @@ var MongoPortable = /** @class */ (function (_super) {
      * @param {String} toCollection - The new name of the collection.
      * @param {Function} [callback=null] - Callback function to be called at the end with the results
      *
-     * @returns {Boolean|Collection} The collection if renamed successfully or false if not
+     * @returns {Promise<Collection>} Promise with the renamed collection
      */
     MongoPortable.prototype.renameCollection = function (fromCollection, toCollection, callback) {
-        if (_.isString(fromCollection) && _.isString(toCollection) && fromCollection !== toCollection) {
-            // Execute the command, return the new renamed collection if successful
-            collection_1.Collection.checkCollectionName(toCollection);
-            if (this._collections[fromCollection]) {
-                this.emit("renameCollection", {
-                    conn: this,
-                    from: fromCollection,
-                    to: toCollection
-                });
-                var renamed = this._collections[fromCollection].rename(toCollection);
-                utils_1.Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
-                // this._collections.renameProperty(fromCollection, toCollection);
-                // this.renameProperty(fromCollection, toCollection);
-                utils_1.Utils.renameObjectProperty(this, fromCollection, toCollection);
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (!_.isString(fromCollection) || !_.isString(toCollection) || fromCollection === toCollection) {
+                var error = new Error("You should pass two different string names");
+                _this.logger.throw(error);
                 if (callback && _.isFunction(callback))
-                    callback(null, renamed);
-                return renamed;
+                    callback(error, null);
+                reject(error);
             }
             else {
-                var msg = "No collection found";
-                this.logger.error(msg);
-                if (callback && _.isFunction(callback))
-                    callback(new Error(msg), null);
-                return false;
+                collection_1.Collection.checkCollectionName(toCollection);
+                if (_this._collections[fromCollection]) {
+                    _this.emit("renameCollection", {
+                        conn: _this,
+                        from: fromCollection,
+                        to: toCollection
+                    }).then(function () {
+                        var renamed = _this._collections[fromCollection].rename(toCollection);
+                        utils_1.Utils.renameObjectProperty(_this._collections, fromCollection, toCollection);
+                        // this._collections.renameProperty(fromCollection, toCollection);
+                        // this.renameProperty(fromCollection, toCollection);
+                        utils_1.Utils.renameObjectProperty(_this, fromCollection, toCollection);
+                        if (callback && _.isFunction(callback))
+                            callback(null, renamed);
+                        resolve(renamed);
+                    }).catch(function (error) {
+                        _this.logger.throw(error);
+                        if (callback && _.isFunction(callback))
+                            callback(error, null);
+                        reject(error);
+                    });
+                }
+                else {
+                    var error = new Error("No collection found");
+                    _this.logger.throw(error);
+                    if (callback && _.isFunction(callback))
+                        callback(error, null);
+                    reject(error);
+                }
             }
-        }
-        else {
-            var msg = "The params are invalid";
-            this.logger.error(msg);
-            if (callback && _.isFunction(callback))
-                callback(new Error(msg), null);
-            return false;
-        }
+        });
     };
     /**
      * Creates an index on the collection.
@@ -495,27 +503,31 @@ var MongoPortable = /** @class */ (function (_super) {
      *
      * @param {Function} [callback=null] - Callback function to be called at the end with the results
      *
-     * @return {Boolean} "true" if dropped successfully
+     * @return {Promise<Boolean>} Promise with "true" if dropped successfully
      */
     MongoPortable.prototype.dropDatabase = function (callback) {
-        if (MongoPortable._connHelper.hasConnection(this._databaseName)) {
-            this.emit("dropDatabase", {
-                conn: this
-            });
-            MongoPortable._connHelper.dropConnection(this._databaseName);
-            this._collections = [];
-            this._stores = [];
-            if (callback && _.isFunction(callback))
-                callback(null, true);
-            return true;
-        }
-        else {
-            var msg = "That database no longer exists";
-            this.logger.error(msg);
-            if (callback && _.isFunction(callback))
-                callback(new Error(msg), false);
-            return false;
-        }
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (MongoPortable._connHelper.hasConnection(_this._databaseName)) {
+                _this.emit("dropDatabase", {
+                    conn: _this
+                }).then(function () {
+                });
+                MongoPortable._connHelper.dropConnection(_this._databaseName);
+                _this._collections = [];
+                _this._stores = [];
+                if (callback && _.isFunction(callback))
+                    callback(null, true);
+                resolve(true);
+            }
+            else {
+                var error = new Error("That database no longer exists");
+                _this.logger.throw(error);
+                if (callback && _.isFunction(callback))
+                    callback(error, false);
+                reject(error);
+            }
+        });
     };
     /**
      * Dereference a dbref, against a db
@@ -542,5 +554,4 @@ var MongoPortable = /** @class */ (function (_super) {
     return MongoPortable;
 }(emitter_1.EventEmitter));
 exports.MongoPortable = MongoPortable;
-// export { MongoPortable }; 
 //# sourceMappingURL=MongoPortable.js.map

@@ -2,18 +2,20 @@ import * as _           from "lodash";
 import * as Promise     from "promise";
 import { JSWLogger }    from "jsw-logger";
 
-import { Options }      from "../core";
-
 export class EventEmitter {
     protected logger: JSWLogger;
+    options: any = {
+        log: {}
+    };
     
-    constructor(options: Options) {
-		options = options || new Options();
+    constructor(options: any = {}) {
 		
-        this.logger = JSWLogger.getInstance(options.log || {});
+		this.options.autoRejectTimeout = options.autoRejectTimeout || 60000;
+		
+        this.logger = JSWLogger.getInstance(this.options.log);
     }
     
-    emit(event:string, args:Object, stores: Array<Object|Function>): Promise<void> {
+    emit(event:string, args:Object, stores: Array<Object|Function> = []): Promise<void> {
         if (_.isNil(event) || !_.isString(event)) {
             throw new Error("Parameter \"event\" must be an string");
         }
@@ -34,18 +36,22 @@ export class EventEmitter {
         let storesToEmit = stores.length;
         
         return new Promise((resolve, reject) => {
+            if (stores.length === 0) resolve();
+            
             let storesEmitted = 0;
             
             // add to options
             let timeout = setTimeout(() => {
                 reject();
-            }, 60000);
+            }, this.options.autoRejectTimeout);
             
             // Send event to all the stores registered
-            _.forEach(stores, store => {
+            for (let store of stores) {
                 // Watch out
                 if (_.isFunction(store[event])) {
-                    store[event](args).then(() => {
+                    
+                    store[event](args)
+                    .then(() => {
                         storesEmitted++;
                         
                         // Watch out
@@ -56,7 +62,7 @@ export class EventEmitter {
                         }
                     });
                 }
-            });
+            }
         });
     }
 }
