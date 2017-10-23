@@ -157,11 +157,13 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<Object>} Returns a promise with the inserted document
      */
     insert = function (doc, options, callback?): Promise<any> {
+        const self = this;
+        
 		return new Promise((resolve, reject) => {
 			// REJECT
-			if (_.isNil(doc)) this.logger.throw("doc parameter required");
+			if (_.isNil(doc)) self.logger.throw("doc parameter required");
         
-			if (!_.isPlainObject(doc)) this.logger.throw("doc must be an object");
+			if (!_.isPlainObject(doc)) self.logger.throw("doc must be an object");
 			
 			if (_.isNil(options)) options = {};
 			
@@ -170,7 +172,7 @@ export class Collection /*extends EventEmitter*/ {
 				options = {};
 			}
 			
-			if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+			if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
 			
 			// Creating a safe copy of the document
 			var _doc = _.cloneDeep(doc);
@@ -188,8 +190,8 @@ export class Collection /*extends EventEmitter*/ {
 			_doc.timestamp = new ObjectId().generationTime;
 			
 			// Reverse
-			this.doc_indexes[_.toString(_doc._id)] = this.docs.length;
-			this.docs.push(_doc);
+			self.doc_indexes[_.toString(_doc._id)] = self.docs.length;
+			self.docs.push(_doc);
 			
 			/**
 			 * "insert" event.
@@ -199,8 +201,8 @@ export class Collection /*extends EventEmitter*/ {
 			 * @param {Object} collection - Information about the collection
 			 * @param {Object} doc - Information about the document inserted
 			 */
-			this.emit("insert", {
-				collection: this,
+			self.emit("insert", {
+				collection: self,
 				doc: _doc
 			}).then(() => {
 			    if (callback) callback(null, _doc);
@@ -228,10 +230,12 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<Array<Object>>} Returns a promise with the inserted documents
      */
     bulkInsert = function (docs, options, callback?) {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
-            if (_.isNil(docs)) this.logger.throw("docs parameter required");
+            if (_.isNil(docs)) self.logger.throw("docs parameter required");
             
-            if (!_.isArray(docs)) this.logger.throw("docs must be an array");
+            if (!_.isArray(docs)) self.logger.throw("docs must be an array");
             
             if (_.isNil(options)) options = {};
             
@@ -240,14 +244,14 @@ export class Collection /*extends EventEmitter*/ {
                 options = {};
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
             
             var promises = [];
             
             for (let i = 0; i < docs.length; i++) {
                 let doc = docs[i];
                 
-                promises.push(this.insert(doc, options));
+                promises.push(self.insert(doc, options));
             }
             
             Promise.all(promises)
@@ -282,6 +286,8 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<Array<Object>|Cursor>} Returns a promise with the documents (or cursor if "options.forceFetch" set to true)
      */
     find = function (selection, fields, options, callback?) {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             let params = _ensureFindParams({
                 selection: selection, 
@@ -304,12 +310,12 @@ export class Collection /*extends EventEmitter*/ {
              * @property {Object} selector - The selection of the query
              * @property {Object} fields - The fields showed in the query
              */
-            this.emit("find", {
-                collection: this,
+            self.emit("find", {
+                collection: self,
                 selector: selection,
                 fields: fields
             }).then(() => {
-                var cursor = new Cursor(this.docs, selection, fields, options);
+                var cursor = new Cursor(self.docs, selection, fields, options);
                 
                 // Pass the cursor fetched to the callback
                 if (options.forceFetch) {
@@ -349,6 +355,8 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<Object>} Returns a promise with the first matching document of the collection
      */
     findOne = function (selection, fields, options, callback?): Promise<any> {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             let params = _ensureFindParams({
                 selection: selection, 
@@ -371,12 +379,12 @@ export class Collection /*extends EventEmitter*/ {
              * @property {Object} selector - The selection of the query
              * @property {Object} fields - The fields showed in the query
              */
-            this.emit("findOne", {
-                collection: this,
+            self.emit("findOne", {
+                collection: self,
                 selector: selection,
                 fields: fields
             }).then(() => {
-                var cursor = new Cursor(this.docs, selection, fields, options);
+                var cursor = new Cursor(self.docs, selection, fields, options);
                 
                 var res = null;
                 
@@ -427,10 +435,12 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<Object>} Returns a promise with the update/insert (if upsert=true) information
      */
     update = function (selection, update, options, callback?): Promise<any> {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             if (_.isNil(selection)) selection = {};
             
-            if (_.isNil(update)) this.logger.throw("You must specify the update operation");
+            if (_.isNil(update)) self.logger.throw("You must specify the update operation");
             
             if (_.isNil(options)) {
                 options = {
@@ -439,9 +449,9 @@ export class Collection /*extends EventEmitter*/ {
                 };
             }
             
-            if (_.isFunction(selection)) this.logger.throw("You must specify the update operation");
+            if (_.isFunction(selection)) self.logger.throw("You must specify the update operation");
             
-            if (_.isFunction(update)) this.logger.throw("You must specify the update operation");
+            if (_.isFunction(update)) self.logger.throw("You must specify the update operation");
             
             if (_.isFunction(options)) {
                 callback = options;
@@ -455,19 +465,19 @@ export class Collection /*extends EventEmitter*/ {
                 };
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
         
             var res = null;
         
             // var docs = null;
             if (options.multi) {
-                // docs = this.find(selection, null, { forceFetch: true });
-                this.find(selection, null, { forceFetch: true })
+                // docs = self.find(selection, null, { forceFetch: true });
+                self.find(selection, null, { forceFetch: true })
                 .then(onDocsFound)
                 .catch(doReject);
             } else {
-                // docs = this.findOne(selection);
-                this.findOne(selection)
+                // docs = self.findOne(selection);
+                self.findOne(selection)
                 .then(onDocsFound)
                 .catch(doReject);
             }
@@ -483,7 +493,7 @@ export class Collection /*extends EventEmitter*/ {
                 
                 if ((<Array<Object>>docs).length === 0) {
                     if (options.upsert) {
-                        /*var inserted = */this.insert(update)
+                        /*var inserted = */self.insert(update)
                         .then((inserted) => {
                             doResolve({
                                 updated: {
@@ -541,9 +551,9 @@ export class Collection /*extends EventEmitter*/ {
                             }
                             
                             if (options.updateAsMongo) {
-                                if (hasModifier && !modifier) this.logger.throw("All update fields must be an update operator");
+                                if (hasModifier && !modifier) self.logger.throw("All update fields must be an update operator");
                                 
-                                if (!hasModifier && options.multi) this.logger.throw("You can not update several documents when no update operators are included");
+                                if (!hasModifier && options.multi) self.logger.throw("You can not update several documents when no update operators are included");
                                 
                                 if (hasModifier) override = false;
                                 
@@ -564,7 +574,7 @@ export class Collection /*extends EventEmitter*/ {
                             // Must ignore fields starting with '$', '.'...
                             for (let key in update) {
                                 if (key.substr(0, 1) === '$' || /\./g.test(key)) {
-                                    this.logger.warn(`The field ${key} can not begin with '$' or contain '.'`);
+                                    self.logger.warn(`The field ${key} can not begin with '$' or contain '.'`);
                                 } else {
                                     _docUpdate[key] = update[key];
                                 }
@@ -582,10 +592,10 @@ export class Collection /*extends EventEmitter*/ {
                                         if (key !== '_id') {
                                             _docUpdate[key] = val;
                                         } else {
-                                            this.logger.warn("The field '_id' can not be updated");
+                                            self.logger.warn("The field '_id' can not be updated");
                                         }
                                     } else {
-                                        this.logger.warn(`The document does not contains the field ${key}`);
+                                        self.logger.warn(`The document does not contains the field ${key}`);
                                     }
                                 }
                             }
@@ -593,8 +603,8 @@ export class Collection /*extends EventEmitter*/ {
                         
                         updatedDocs.push(_docUpdate);
                         
-                        let idx = this.doc_indexes[_docUpdate._id];
-                        this.docs[idx] = _docUpdate;
+                        let idx = self.doc_indexes[_docUpdate._id];
+                        self.docs[idx] = _docUpdate;
                     }
                     
                     /**
@@ -607,8 +617,8 @@ export class Collection /*extends EventEmitter*/ {
                      * @property {Object} modifier - The modifier used in the query
                      * @property {Object} docs - The updated/inserted documents information
                      */
-                    this.emit("update", {
-                        collection: this,
+                    self.emit("update", {
+                        collection: self,
                         selector: selection,
                         modifier: update,
                         docs: updatedDocs
@@ -674,6 +684,8 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<Array<Obejct>>} Promise with the deleted documents
      */
     remove = function (selection, options, callback?): Promise<Object[]> {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             if (_.isNil(selection)) selection = {};
             
@@ -690,7 +702,7 @@ export class Collection /*extends EventEmitter*/ {
             if (_.isNil(options)) options = { justOne: false };
             
             // If we are not passing a selection and we are not removing just one, is the same as a drop
-            if (getObjectSize(selection) === 0 && !options.justOne) return this.drop(options, callback);
+            if (getObjectSize(selection) === 0 && !options.justOne) return self.drop(options, callback);
             
             // Check special case where we are using an objectId
             if(selection instanceof ObjectId) {
@@ -699,16 +711,16 @@ export class Collection /*extends EventEmitter*/ {
                 };
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
             
-            /*var cursor = */this.find(selection)
+            /*var cursor = */self.find(selection)
             .then((cursor) => {
                 var docs = [];
                 cursor.forEach(doc => {
-                    var idx = this.doc_indexes[doc._id];
+                    var idx = self.doc_indexes[doc._id];
                     
-                    delete this.doc_indexes[doc._id];
-                    this.docs.splice(idx, 1);
+                    delete self.doc_indexes[doc._id];
+                    self.docs.splice(idx, 1);
                     
                     docs.push(doc);
                 });
@@ -722,8 +734,8 @@ export class Collection /*extends EventEmitter*/ {
                  * @property {Object} selector - The selection of the query
                  * @property {Object} docs - The deleted documents information
                  */
-                this.emit("remove", {
-                    collection: this,
+                self.emit("remove", {
+                    collection: self,
                     selector: selection,
                     docs: docs
                 }).then(() => {
@@ -773,6 +785,8 @@ export class Collection /*extends EventEmitter*/ {
      * @returns {Promise<void>} Promise that resolves when the collection is dropped
      */
     drop = function(options, callback?): Promise<void> {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             if (_.isNil(options)) options = {};
             
@@ -781,15 +795,15 @@ export class Collection /*extends EventEmitter*/ {
                 options = {};
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
             
-            this.doc_indexes = {};
-            this.docs = [];
+            self.doc_indexes = {};
+            self.docs = [];
             
             if (options.dropIndexes) {} // TODO
             
-            this.emit("dropCollection", {
-                collection: this,
+            self.emit("dropCollection", {
+                collection: self,
                 indexes: !!options.dropIndexes
             }).then(() => {
                 if (callback) callback(null, true);
@@ -855,24 +869,26 @@ export class Collection /*extends EventEmitter*/ {
     * @ignore
     */
     backup = function (backupID, callback?): Promise<any> {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             if (_.isFunction(backupID)) {
                 callback = backupID;
                 backupID = new ObjectId().toString();
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
         
-            this.snapshots[backupID] = _.cloneDeep(this.docs);
+            self.snapshots[backupID] = _.cloneDeep(self.docs);
             
-            this.emit("snapshot", {
-                collection: this,
+            self.emit("snapshot", {
+                collection: self,
                 backupID: backupID,
-                documents: this.snapshots[backupID] 
+                documents: self.snapshots[backupID] 
             }).then(() => {
                 var result = {
                     backupID: backupID,
-                    documents: this.snapshots[backupID]
+                    documents: self.snapshots[backupID]
                 };
                 
                 if (callback) callback(null, result);
@@ -946,42 +962,44 @@ export class Collection /*extends EventEmitter*/ {
     * @ignore
     */
     restore = function (backupID, callback): Promise<String> {
+        const self = this;
+        
         return new Promise((resolve, reject) => {
             if (_.isFunction(backupID)) {
                 callback = backupID;
                 backupID = null;
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
             
-            var snapshotCount = getObjectSize(this.snapshots);
+            var snapshotCount = getObjectSize(self.snapshots);
             var backupData = null;
         
             if (snapshotCount === 0) {
-                this.logger.throw("There is no snapshots");
+                self.logger.throw("There is no snapshots");
             } else {
                 if (!backupID) {
                     if (snapshotCount === 1) {
-                        this.logger.info("No backupID passed. Restoring the only snapshot");
+                        self.logger.info("No backupID passed. Restoring the only snapshot");
                         
                         // Retrieve the only snapshot
-                        for (let key in this.snapshots) backupID = key;
+                        for (let key in self.snapshots) backupID = key;
                     } else {
-                        this.logger.throw("The are several snapshots. Please specify one backupID");
+                        self.logger.throw("The are several snapshots. Please specify one backupID");
                     }
                 }
             }
             
-            backupData = this.snapshots[backupID];
+            backupData = self.snapshots[backupID];
                     
             if (!backupData) {
-                this.logger.throw(`Unknown Backup ID: ${backupID}`);
+                self.logger.throw(`Unknown Backup ID: ${backupID}`);
             }
         
-            this.docs = backupData;
+            self.docs = backupData;
             
-            this.emit("restore", {
-                collection: this,
+            self.emit("restore", {
+                collection: self,
                 backupID: backupID
             }).then(() => {
                 if (callback) callback(null, backupID);
