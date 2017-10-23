@@ -60,7 +60,21 @@ export class EventEmitter {
                             
                             resolve();
                         }
+                    }).catch(error => {
+                        clearTimeout(timeout);
+                        
+                        reject(error);
                     });
+                } else {
+                    // Skip store call
+                    storesEmitted++;
+                    
+                    // Watch out
+                    if (storesEmitted === storesToEmit) {
+                        clearTimeout(timeout);
+                        
+                        resolve();
+                    }
                 }
             }
         });

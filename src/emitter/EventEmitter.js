@@ -61,7 +61,19 @@ var EventEmitter = /** @class */ (function () {
                                 clearTimeout(timeout);
                                 resolve();
                             }
+                        }).catch(function (error) {
+                            clearTimeout(timeout);
+                            reject(error);
                         });
+                    }
+                    else {
+                        // Skip store call
+                        storesEmitted++;
+                        // Watch out
+                        if (storesEmitted === storesToEmit) {
+                            clearTimeout(timeout);
+                            resolve();
+                        }
                     }
                 }
             }
