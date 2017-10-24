@@ -176,7 +176,7 @@ var Collection = /** @class */ (function () {
          * @param {Number} [options.skip] - Number of documents to be skipped
          * @param {Number} [options.limit] - Max number of documents to display
          * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
-         * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
+         * @param {Boolean} [options.doNotFetch=false] - If set to'"true" returns the cursor not fetched
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
@@ -211,16 +211,16 @@ var Collection = /** @class */ (function () {
                 }).then(function () {
                     var cursor = new Cursor_1.Cursor(self.docs, selection, fields, options);
                     // Pass the cursor fetched to the callback
-                    if (options.forceFetch) {
+                    if (options.doNotFecth) {
+                        if (callback)
+                            callback(null, cursor);
+                        resolve(cursor);
+                    }
+                    else {
                         var docs = cursor.fetch();
                         if (callback)
                             callback(null, docs);
                         resolve(docs);
-                    }
-                    else {
-                        if (callback)
-                            callback(null, cursor);
-                        resolve(cursor);
                     }
                 }).catch(function (error) {
                     if (callback)

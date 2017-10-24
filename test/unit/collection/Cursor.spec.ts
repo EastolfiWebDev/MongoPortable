@@ -89,10 +89,10 @@ describe("Cursor", function() {
     describe("#Managing", function() {
         before(function(done) {
             db.collection(TEST_COLL).then(coll => {
-                Promise.all([
-                    coll.insert(TEST_DOC),
-                    coll.insert({ stringField: 'second', numberField: 2 }),
-                    coll.insert({ stringField: 'third', numberField: 3 })
+                coll.bulkInsert([
+                    TEST_DOC,
+                    { stringField: 'second', numberField: 2 },
+                    { stringField: 'third', numberField: 3 }
                 ]).then(docs => {
                     expect(docs).to.have.length(3);
                     
