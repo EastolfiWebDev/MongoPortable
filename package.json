@@ -93,6 +93,7 @@
     "test": "mocha test/unit/**/*.spec.ts",
 	  "test.full": "npm run build && npm run test",
     "test.coverage": "nyc mocha test/unit/**/*.spec.ts",
+    "test.coveralls": "nyc report --reporter=text-lcov | coveralls",
     "build": "tsc -p ./tsconfig.json"
   },
   "repository": {
