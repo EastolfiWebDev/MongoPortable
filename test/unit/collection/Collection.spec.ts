@@ -35,6 +35,8 @@ var db = null;
 
 
 describe("Collection", function() {
+    this.timeout(process.env.MOCHA_TIMEOUT || 2000);
+    
     before(function() {
         db = new MongoPortable(TEST_DDBB, null);
     });
