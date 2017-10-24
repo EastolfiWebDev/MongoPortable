@@ -1,4 +1,5 @@
 import { MongoPortable } from "./src/core";
+import { BaseStore } from "./src/store"
 
 try {
     if (window) {
@@ -6,4 +7,4 @@ try {
     }
 } catch(e) { /* window not found -> not a browser environment */ }
 
-export { MongoPortable };
+export { MongoPortable, BaseStore };
