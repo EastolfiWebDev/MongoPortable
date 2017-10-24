@@ -1064,6 +1064,7 @@ export class Collection /*extends EventEmitter*/ {
             }
         } else {
             // Error
+            return null;
         }
     }
     

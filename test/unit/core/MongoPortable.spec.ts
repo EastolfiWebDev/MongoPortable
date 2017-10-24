@@ -1,5 +1,6 @@
 import "mocha";
 import { expect } from "chai";
+import * as Promise from "promise";
 
 import { TestHelper } from "../../helper/index";
 import { MongoPortable } from "../../../src/core/index";
@@ -89,76 +90,81 @@ describe("MongoPortable", function() {
         describe("- Creation", function() {
             it("should be able to create a collection", function(done) {
                 // Returning value way
-                var coll = db.collection(TEST_COLL);
-                
-                expect(coll).to.exist;
-                
-                expect(coll.name).to.be.equal(TEST_COLL);
-                
-                // Callback way
-                db.collection(TEST_COLL, function(coll2) {
-                    expect(coll2).to.exist;
+                db.collection(TEST_COLL).then(coll => {
+                    expect(coll).to.exist;
                     
-                    expect(coll2.name).to.be.equal(TEST_COLL);
+                    expect(coll.name).to.be.equal(TEST_COLL);
                     
                     done();
                 });
             });
+            /*
+            it("should be able to create a collection (callback)", function(done) {
+                db.collection(TEST_COLL, function(coll) {
+                    expect(coll).to.exist;
+                    
+                    expect(coll.name).to.be.equal(TEST_COLL);
+                    
+                    done();
+                });
+            });*/
         });
         
         describe("- Obtaining", function() {
             it("should be able to obtain all the collections", function(done) {
                 // Returning value
-                db.collection(TEST_COLL);
-                
-                var collections = db.collections();
-                
-                expect(collections).to.exist;
-                expect(collections[0].name).to.be.equal(TEST_COLL);
-                
-                // Collections Names Only
-                collections = db.collectionNames();
-                
-                expect(collections).to.exist;
-                expect(collections[0]).to.be.equal(TEST_COLL);
-                
-                // Callback
-                db.collections(function(cols) {
-                    expect(cols).to.exist;
-                    expect(cols[0].name).to.be.equal(TEST_COLL);
+                db.collection(TEST_COLL).then(coll => {
+                    var collections = db.collections();
                     
-                    done();
+                    expect(collections).to.exist;
+                    expect(collections[0].name).to.be.equal(TEST_COLL);
+                    
+                    // Collections Names Only
+                    collections = db.collectionNames();
+                    
+                    expect(collections).to.exist;
+                    expect(collections[0]).to.be.equal(TEST_COLL);
+                    
+                    // Callback
+                    db.collections(function(cols) {
+                        expect(cols).to.exist;
+                        expect(cols[0].name).to.be.equal(TEST_COLL);
+                        
+                        done();
+                    });
                 });
             });
-            
+            /*
             it("should be able to obtain a collection", function(done) {
                 // Returning value
-                var coll = db.collection(TEST_COLL);
-                
-                expect(coll).to.exist;
-                expect(coll.name).to.be.equal(TEST_COLL);
-                
-                coll = db.collections({collectionName: TEST_COLL});
-                
-                expect(coll).to.exist;
-                expect(coll[0].name).to.be.equal(TEST_COLL);
-                
-                // Collection Names Only
-                coll = db.collectionNames({collectionName: TEST_COLL});
-                
-                expect(coll).to.exist;
-                expect(coll[0]).to.be.equal(TEST_COLL);
-                
-                // Callback
-                db.collection(TEST_COLL, function(coll2) {
-                    expect(coll2).to.exist;
-                    
-                    expect(coll2.name).to.be.equal(TEST_COLL);
-                    
-                    done();
+                db.collection(TEST_COLL).then(coll => {
+                    expect(coll).to.exist;
+					expect(coll.name).to.be.equal(TEST_COLL);
+					
+					coll = db.collections({collectionName: TEST_COLL});
+					
+					expect(coll).to.exist;
+					expect(coll[0].name).to.be.equal(TEST_COLL);
+					
+					// Collection Names Only
+					coll = db.collectionNames({collectionName: TEST_COLL});
+					
+					expect(coll).to.exist;
+					expect(coll[0]).to.be.equal(TEST_COLL);
+					
+					// Callback
+					db.collection(TEST_COLL, function(coll2) {
+						expect(coll2).to.exist;
+						
+						expect(coll2.name).to.be.equal(TEST_COLL);
+						
+						done();
+					});
                 });
+                
+                
             });
-            
+            */
             it("should be able to obtain a collection directly", function() {
                 var coll = db[TEST_COLL];
                 
@@ -189,40 +195,46 @@ describe("MongoPortable", function() {
         describe("- Drop", function() {
             it("should be able to drop a collection", function(done) {
                 // Returning value way
-                var coll = db.collection(TEST_COLL);
+                db.collection(TEST_COLL).then(coll => {
+					expect(coll).to.exist;
                 
-                expect(coll).to.exist;
-                
-                var dropped = db.dropCollection(TEST_COLL);
-                
-                expect(dropped).to.be.true;
-                
-                expect(db.collectionNames()).to.be.eql([]);
-                
-                // Callback way
-                db.dropCollection(TEST_COLL, function(error) {
-                    expect(error).to.exist;
-                    
-                    done();
-                });
+					db.dropCollection(TEST_COLL).then(dropped => {
+						expect(dropped).to.be.true;
+					
+						expect(db.collectionNames()).to.be.eql([]);
+						
+						done();
+						/*
+						// Callback way
+						db.dropCollection(TEST_COLL, function(error) {
+							expect(error).to.exist;
+							
+							done();
+						});
+						*/
+					});
+				});
             });
         });
-        /*
+        
         describe("- Rename", function() {
             it("should be able to rename a collection", function(done) {
                 // Returning value way
-                var coll = db.collection(TEST_COLL);
+                db.collection(TEST_COLL).then(coll => {
+					expect(coll).to.exist;
                 
-                expect(coll).to.exist;
+					db.renameCollection(TEST_COLL, "coll_2").then(renamed => {
+						expect(renamed).to.exist;
+						expect(renamed.name).to.be.equal("coll_2");
+						
+						// expect(db._collections["coll_2"]).to.exist;
+						
+						done();
+					});
+				});
                 
-                var renamed = db.renameCollection(TEST_COLL, "coll_2");
-                //console.log(db._collections);
-                expect(renamed).to.exist;
-                expect(renamed.name).to.be.equal("coll_2");
-                
-                expect(db._collections["coll_2"]).to.exist;
-                
-                // // Callback way
+                /*
+                // Callback way
                 db.renameCollection("coll_2", TEST_COLL, function(error, renamed) {
                     expect(error).to.not.exist;
                     
@@ -233,8 +245,9 @@ describe("MongoPortable", function() {
                     
                     done();
                 });
+				*/
             });
-        });*/
+        });
     });
     
     describe.skip("#Indexes", function() {
@@ -317,12 +330,25 @@ describe("MongoPortable", function() {
         });
         
         describe("- Stores", function() {
-            it("should be able to add a custom store", function(done) {
+            it("should be able to add a custom store", function(/*done*/) {
+                let fnc = function(data) {
+					expect(data).to.have.property("result");
+					
+					return Promise.resolve();
+				};
+				let store1 = function() {
+					this.test = fnc;
+				};
+				let store2 = {
+					test: fnc
+				};
+				
                 var totalCalls = 3;
                 
                 // Middleware
-                db.use('store', {
+                db.use('store', store2/*{
                     createCollection: function(params) {
+						console.log(params);
                         expect(params.connection).to.exist;
                         expect(params.collection).to.exist;
                         
@@ -335,11 +361,12 @@ describe("MongoPortable", function() {
                             totalCalls--;
                         }
                     }
-                });
+                }*/);
                 
                 // Direct function
-                db.addStore(function() {
+                db.addStore(store1/*function() {
                     this.createCollection = function(params) {
+						console.log(params);
                         expect(params.connection).to.exist;
                         expect(params.collection).to.exist;
                         
@@ -352,11 +379,12 @@ describe("MongoPortable", function() {
                             totalCalls--;
                         }
                     };
-                });
+                }*/);
                 
                 // As an object
-                db.addStore({
+                db.addStore(store2/*{
                     createCollection: function(params) {
+						console.log(params);
                         expect(params.connection).to.exist;
                         expect(params.collection).to.exist;
                         
@@ -369,29 +397,57 @@ describe("MongoPortable", function() {
                             totalCalls--;
                         }
                     }
-                });
-                
-                db.collection(TEST_COLL);
+                }*/);
+                /*
+                db.collection(TEST_COLL).then(coll => {
+                    expect(coll).to.exist;
+                    
+                    done();
+                });*/
             });
         });
         
         describe("- Events", function() {
-            it("should be able fire custom events", function(/*done*/) {
-                db.addStore({
-                    test1: function(params) {
-                        expect(params).to.exist;
-                        expect(params).to.be.eql({});
-                    },
+            it("should be able fire custom events", function(done) {
+                TestHelper.assertThrown(() => {
+				// let emitter = new EventEmitter({ autoRejectTimeout: 1500 });
+				
+				let fnc = function(data) {
+					expect(data).to.have.property("result");
+					
+					return Promise.resolve();
+				};
+				let store1 = function() {
+					this.test = fnc;
+				};
+				let store2 = {
+					test: fnc
+				};
+				
+				db.emit("test", { result: "OK" }, [new store1(), store2])
+				.then(() => {
+					done();
+				}).catch(error => {
+					expect(error).to.not.exist;
+					
+					done();
+				});
+			}, false);
+                // db.addStore({
+                //     test1: function(params) {
+                //         expect(params).to.exist;
+                //         expect(params).to.be.eql({});
+                //     },
                     
-                    test2: function(params, cb) {
-                        expect(params).to.exist;
-                        expect(params).to.be.eql({});
+                //     test2: function(params, cb) {
+                //         expect(params).to.exist;
+                //         expect(params).to.be.eql({});
                         
-                        cb(true);
-                    }
-                });
+                //         cb(true);
+                //     }
+                // });
                 
-                db.emit('test1');
+                // db.emit('test1');
                 
                 // db.emit('test2', function(success) {
                 //     expect(success).to.be.true;
@@ -403,18 +459,25 @@ describe("MongoPortable", function() {
         
         describe("- Drop", function() {
             it("should be able to drop the database", function(done) {
-                var dropped = db.dropDatabase();
-                
-                expect(dropped).to.be.true;
-                expect(db._collections).to.be.eql([]);
-                //expect(MongoPortable._connHelper.hasConnection(db._databaseName)).to.be.false;
-                
-                db.dropDatabase(function(error, success) {
-                    expect(error).to.exist;
-                    expect(success).to.be.false;
+                db.dropDatabase().then(dropped => {
+                    expect(dropped).to.be.true;
+                    expect(db._collections).to.be.eql([]);
+                    //expect(MongoPortable._connHelper.hasConnection(db._databaseName)).to.be.false;
                     
-                    done();
+                    db.dropDatabase()
+                    .then(dropped => {
+                        // should not be reached
+                        expect(true).to.be.false;
+                        
+                        done();
+                    })
+                    .catch(error => {
+                        expect(error).to.exist;
+                        
+                        done();
+                    });
                 });
+                
             });
         });
     });
@@ -493,7 +556,7 @@ describe("MongoPortable", function() {
                 expect(thrown).to.be.true;
             }
         });
-        
+        /*
         it("should fail when renaming an unexisting collection or with wrong parameters", function() {
             var _db = new MongoPortable("TEST_RENAME", null);
             
@@ -503,7 +566,7 @@ describe("MongoPortable", function() {
             
             expect(_db.renameCollection("NON_EXISTING", null)).to.be.false;
         });
-        
+        */
         it("it sould fail when creating a ddbb with invalids characters in the name", function() {
             var thrown = false;
             

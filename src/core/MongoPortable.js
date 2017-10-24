@@ -360,13 +360,18 @@ var MongoPortable = /** @class */ (function (_super) {
                         to: toCollection
                     }).then(function () {
                         var renamed = _this._collections[fromCollection].rename(toCollection);
-                        utils_1.Utils.renameObjectProperty(_this._collections, fromCollection, toCollection);
-                        // this._collections.renameProperty(fromCollection, toCollection);
-                        // this.renameProperty(fromCollection, toCollection);
-                        utils_1.Utils.renameObjectProperty(_this, fromCollection, toCollection);
-                        if (callback && _.isFunction(callback))
-                            callback(null, renamed);
-                        resolve(renamed);
+                        if (renamed) {
+                            utils_1.Utils.renameObjectProperty(_this._collections, fromCollection, toCollection);
+                            // this._collections.renameProperty(fromCollection, toCollection);
+                            // this.renameProperty(fromCollection, toCollection);
+                            utils_1.Utils.renameObjectProperty(_this, fromCollection, toCollection);
+                            if (callback && _.isFunction(callback))
+                                callback(null, renamed);
+                            resolve(renamed);
+                        }
+                        else {
+                            reject(new Error("Could not rename collection"));
+                        }
                     }).catch(function (error) {
                         _this.logger.throw(error);
                         if (callback && _.isFunction(callback))
@@ -512,13 +517,13 @@ var MongoPortable = /** @class */ (function (_super) {
                 _this.emit("dropDatabase", {
                     conn: _this
                 }).then(function () {
+                    MongoPortable._connHelper.dropConnection(_this._databaseName);
+                    _this._collections = [];
+                    _this._stores = [];
+                    if (callback && _.isFunction(callback))
+                        callback(null, true);
+                    resolve(true);
                 });
-                MongoPortable._connHelper.dropConnection(_this._databaseName);
-                _this._collections = [];
-                _this._stores = [];
-                if (callback && _.isFunction(callback))
-                    callback(null, true);
-                resolve(true);
             }
             else {
                 var error = new Error("That database no longer exists");

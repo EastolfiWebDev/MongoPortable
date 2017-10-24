@@ -868,6 +868,7 @@ var Collection = /** @class */ (function () {
             }
             else {
                 // Error
+                return null;
             }
         };
         if (!(this instanceof Collection))

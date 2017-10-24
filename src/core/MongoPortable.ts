@@ -386,14 +386,19 @@ export class MongoPortable extends EventEmitter {
 						to: toCollection
 					}).then(() => {
 						var renamed = this._collections[fromCollection].rename(toCollection);
-						Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
-						// this._collections.renameProperty(fromCollection, toCollection);
-						// this.renameProperty(fromCollection, toCollection);
-						Utils.renameObjectProperty(this, fromCollection, toCollection);
 						
-						if (callback && _.isFunction(callback)) callback(null, renamed);
-						
-						resolve(renamed);
+						if (renamed) {
+    						Utils.renameObjectProperty(this._collections, fromCollection, toCollection);
+    						// this._collections.renameProperty(fromCollection, toCollection);
+    						// this.renameProperty(fromCollection, toCollection);
+    						Utils.renameObjectProperty(this, fromCollection, toCollection);
+    						
+    						if (callback && _.isFunction(callback)) callback(null, renamed);
+    						
+    						resolve(renamed);
+						} else {
+						    reject(new Error("Could not rename collection"));
+						}
 					}).catch((error) => {
 						this.logger.throw(error);
 						
@@ -546,17 +551,15 @@ export class MongoPortable extends EventEmitter {
 				this.emit("dropDatabase", {
 					conn: this
 				}).then(() => {
-					
+    				MongoPortable._connHelper.dropConnection(this._databaseName);
+    				
+    				this._collections = [];
+    				this._stores = [];
+    				
+    				if (callback && _.isFunction(callback)) callback(null, true);
+    				
+    				resolve(true);
 				});
-				
-				MongoPortable._connHelper.dropConnection(this._databaseName);
-				
-				this._collections = [];
-				this._stores = [];
-				
-				if (callback && _.isFunction(callback)) callback(null, true);
-				
-				resolve(true);
 			} else {
 				let error = new Error("That database no longer exists");
 				
