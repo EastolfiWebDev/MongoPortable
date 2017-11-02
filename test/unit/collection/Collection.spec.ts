@@ -429,7 +429,7 @@ describe("Collection", function() {
                             { stringField: "yep8", numberField: 9 }
                         ]).then(docs => {
                             done();
-                        })
+                        });
                     });
                 });
                 
@@ -976,8 +976,8 @@ describe("Collection", function() {
             });
         });
         
-        describe.skip(" - Delete", function() {
-            it("should be able to remove a document", function(done) {
+        describe(" - Delete", function() {
+            it.skip("should be able to remove a document", function(done) {
                 var coll = db.collection(TEST_COLL);
                 
                 var removed = coll.remove({stringField: "yes"});
@@ -1004,8 +1004,53 @@ describe("Collection", function() {
                     done();
                 });
             });
+			
+			it("should be able to remove all documents", function(done) {
+				let docsToInsert = [];
+				let numDocs = 50;
+				
+				for (let i = 1; i <= numDocs; i++) {
+					docsToInsert.push({ numberField: i });
+				}
+				
+                db.collection("TEST_COLL_DELETE").then(coll => {
+					coll.bulkInsert(docsToInsert).then(inserted => {
+						expect(inserted).to.exist;
+						expect(inserted).to.have.length(numDocs);
+						
+						coll.remove({}).then(removed => {
+							expect(removed).to.exist;
+							expect(removed).to.have.length(numDocs);
+							
+							// var doc = coll.findOne({stringField: "yes"});
+							coll.find().then(docs => {
+								expect(docs).to.exist;
+								expect(removed).to.have.length(0);
+							
+								done();
+							}).catch(error => {
+								expect(error).to.not.exists;
+								
+								done();
+							});
+						}).catch(error => {
+							expect(error).to.not.exists;
+							
+							done();
+						});
+					}).catch(error => {
+						expect(error).to.not.exists;
+						
+						done();
+					});
+				}).catch(error => {
+					expect(error).to.not.exists;
+					
+					done();
+				});
+            });
             
-            it("should be able to remove all documents", function(done) {
+            it.skip("should be able to destroy all documents", function(done) {
                 var coll = db.collection(TEST_COLL);
                 
                 coll.destroy(function (error, removed) {
@@ -1022,7 +1067,7 @@ describe("Collection", function() {
                 });
             });
             
-            it("should be able to drop the collection", function(done) {
+            it.skip("should be able to drop the collection", function(done) {
                 var coll = db.collection(TEST_COLL);
                 
                 coll.drop(function (error, removed) {

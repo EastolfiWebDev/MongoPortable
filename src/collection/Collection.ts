@@ -685,71 +685,78 @@ export class Collection /*extends EventEmitter*/ {
      */
     remove = function (selection, options, callback?): Promise<Object[]> {
         const self = this;
+		
+		if (_.isNil(selection)) selection = {};
+		
+		if (_.isFunction(selection)) {
+			callback = selection;
+			selection = {};
+		}
+		
+		if (_.isFunction(options)) {
+			callback = options;
+			options = {};
+		}
+		
+		if (_.isNil(options)) options = { justOne: false };
         
-        return new Promise((resolve, reject) => {
-            if (_.isNil(selection)) selection = {};
-            
-            if (_.isFunction(selection)) {
-                callback = selection;
-                selection = {};
-            }
-            
-            if (_.isFunction(options)) {
-                callback = options;
-                options = {};
-            }
-            
-            if (_.isNil(options)) options = { justOne: false };
-            
-            // If we are not passing a selection and we are not removing just one, is the same as a drop
-            if (getObjectSize(selection) === 0 && !options.justOne) return self.drop(options, callback);
-            
-            // Check special case where we are using an objectId
-            if(selection instanceof ObjectId) {
-                selection = {
-                    _id: selection
-                };
-            }
-            
-            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
-            
-            /*var cursor = */self.find(selection)
-            .then((cursor) => {
-                var docs = [];
-                cursor.forEach(doc => {
-                    var idx = self.doc_indexes[doc._id];
-                    
-                    delete self.doc_indexes[doc._id];
-                    self.docs.splice(idx, 1);
-                    
-                    docs.push(doc);
-                });
-                
-                /**
-                 * "remove" event.
-                 *
-                 * @event MongoPortable~remove
-                 * 
-                 * @property {Object} collection - Information about the collection
-                 * @property {Object} selector - The selection of the query
-                 * @property {Object} docs - The deleted documents information
-                 */
-                self.emit("remove", {
-                    collection: self,
-                    selector: selection,
-                    docs: docs
-                }).then(() => {
-                    if (callback) callback(null, docs);
-                    
-                    resolve(docs);
-                }).catch((error) => {
-                    if (callback) callback(error, null);
-                    
-                    reject(error);
-                });
-                
-            });
-        });
+		
+		// If we are not passing a selection and we are not removing just one, is the same as a drop
+		if (getObjectSize(selection) === 0 && !options.justOne) {
+			return self.drop(options, callback);
+		} else {
+			return new Promise((resolve, reject) => {
+				// Check special case where we are using an objectId
+				if(selection instanceof ObjectId) {
+					selection = {
+						_id: selection
+					};
+				}
+				
+				if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
+				
+				/*var cursor = */self.find(selection)
+				.then((cursor) => {
+					var docs = [];
+					cursor.forEach(doc => {
+						var idx = self.doc_indexes[doc._id];
+						
+						delete self.doc_indexes[doc._id];
+						self.docs.splice(idx, 1);
+						
+						docs.push(doc);
+					});
+					
+					/**
+					 * "remove" event.
+					 *
+					 * @event MongoPortable~remove
+					 * 
+					 * @property {Object} collection - Information about the collection
+					 * @property {Object} selector - The selection of the query
+					 * @property {Object} docs - The deleted documents information
+					 */
+					self.emit("remove", {
+						collection: self,
+						selector: selection,
+						docs: docs
+					}).then(() => {
+						if (callback) callback(null, docs);
+						
+						resolve(docs);
+					}).catch((error) => {
+						if (callback) callback(error, null);
+						
+						reject(error);
+					});
+					
+				}).catch(error => {
+					if (callback) callback(error, null);
+					
+					reject(error);
+				});
+			});
+		}
     }
     
     /**
@@ -757,7 +764,7 @@ export class Collection /*extends EventEmitter*/ {
      * 
      * @method Collection#delete
      */
-    delete = function (selection, options, callback?) {
+    delete = function (selection, options, callback?): Promise<Object[]> {
         return this.remove(selection, options, callback);
     }
      
@@ -766,7 +773,7 @@ export class Collection /*extends EventEmitter*/ {
      * 
      * @method Collection#destroy
      */
-    destroy = function (selection, options, callback?) {
+    destroy = function (selection, options, callback?): Promise<Object[]> {
         return this.remove(selection, options, callback);
     }
     
@@ -782,9 +789,9 @@ export class Collection /*extends EventEmitter*/ {
      * 
      * @param {Function} [callback=null] - Callback function to be called at the end with the results
      * 
-     * @returns {Promise<void>} Promise that resolves when the collection is dropped
+     * @returns {Promise<Object[]>} Promise with the deleted documents
      */
-    drop = function(options, callback?): Promise<void> {
+    drop = function(options, callback?): Promise<Object[]> {
         const self = this;
         
         return new Promise((resolve, reject) => {
@@ -795,25 +802,35 @@ export class Collection /*extends EventEmitter*/ {
                 options = {};
             }
             
-            if (!_.isNil(callback) && !_.isFunction(callback)) self.logger.throw("callback must be a function");
+            if (!_.isNil(callback) && !_.isFunction(callback)) {
+				self.logger.throw("callback must be a function");
+			}
             
-            self.doc_indexes = {};
-            self.docs = [];
+			self.find(null, null, { limit: -1 }).then(docs => {
+				self.doc_indexes = {};
+				self.docs = [];
+				
+				if (options.dropIndexes) {} // TODO
+				
+				self.emit("dropCollection", {
+					collection: self,
+					indexes: !!options.dropIndexes
+				}).then(() => {
+					if (callback) callback(null, docs);
+					
+					resolve(docs);
+				}).catch((error) => {
+					if (callback) callback(error, false);
+					
+					reject();
+				});
+			}).catch(error => {
+				if (callback) callback(error, false);
+					
+				reject();
+			});
+			
             
-            if (options.dropIndexes) {} // TODO
-            
-            self.emit("dropCollection", {
-                collection: self,
-                indexes: !!options.dropIndexes
-            }).then(() => {
-                if (callback) callback(null, true);
-                
-                resolve();
-            }).catch((error) => {
-                if (callback) callback(error, false);
-                
-                reject();
-            });
             
         });
     }
@@ -1356,8 +1373,6 @@ var _modifiers = {
 
 var _ensureFindParams = function(params) {
     // selection, fields, options, callback
-    if (_.isNil(params.selection)) params.selection = {};
-
     if (_.isNil(params.selection)) params.selection = {};
 
     if (_.isNil(params.fields)) params.fields = [];
