@@ -35,7 +35,7 @@ class Options {
  * @license MIT Licensed
  * @classdesc Cursor class that maps a MongoDB-like cursor
  */
-class Cursor {
+export class Cursor {
     protected logger: JSWLogger;
     
     documents;
@@ -681,7 +681,3 @@ var hasSorting = function(cursor) {
     
     return true;
 };
-
-
-
-export { Cursor };

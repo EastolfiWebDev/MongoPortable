@@ -1,4 +1,2 @@
-import { Selector }             from "./Selector";
-import { SelectorMatcher }      from "./SelectorMatcher";
-
-export { Selector, SelectorMatcher };
+export * from "./Selector";
+export * from "./SelectorMatcher";

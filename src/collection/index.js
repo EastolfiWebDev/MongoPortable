@@ -1,7 +1,8 @@
 "use strict";
-var Cursor_1 = require("./Cursor");
-exports.Cursor = Cursor_1.Cursor;
-var Collection_1 = require("./Collection");
-exports.Collection = Collection_1.Collection;
-
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("./Cursor"));
+__export(require("./Collection"));
 //# sourceMappingURL=index.js.map

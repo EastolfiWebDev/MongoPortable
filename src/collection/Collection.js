@@ -1,5 +1,7 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
+var Promise = require("promise");
 var jsw_logger_1 = require("jsw-logger");
 var Cursor_1 = require("./Cursor");
 var aggregation_1 = require("../aggregation");
@@ -37,7 +39,7 @@ var getObjectSize = function (obj) {
  * @classdesc Collection class that maps a MongoDB-like collection
  */
 var database = null;
-var Collection /*extends EventEmitter*/ = (function () {
+var Collection = /** @class */ (function () {
     // var Collection = function(db, collectionName, options) {
     /**
      * @param {MongoPortable} db - Additional options
@@ -61,56 +63,62 @@ var Collection /*extends EventEmitter*/ = (function () {
          * @param {Object} doc - Document to be inserted
          * @param {Object} [options] - Additional options
          *
-         * @param {Boolean} [options.chain=false] - If set to "true" returns this instance, so it can be chained with other methods
-         *
          * @param {Function} [callback=null] Callback function to be called at the end with the results
          *
-         * @returns {Object|Collection} If "options.chain" set to "true" returns this instance, otherwise returns the inserted document
+         * @returns {Promise<Object>} Returns a promise with the inserted document
          */
         this.insert = function (doc, options, callback) {
-            if (_.isNil(doc))
-                this.logger.throw("doc parameter required");
-            if (!_.isPlainObject(doc))
-                this.logger.throw("doc must be an object");
-            if (_.isNil(options))
-                options = {};
-            if (_.isFunction(options)) {
-                callback = options;
-                options = {};
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            // Creating a safe copy of the document
-            var _doc = _.cloneDeep(doc);
-            // If the document comes with a number ID, parse it to String
-            if (_.isNumber(_doc._id)) {
-                _doc._id = _.toString(_doc._id);
-            }
-            if (_.isNil(_doc._id) || (!(_doc._id instanceof document_1.ObjectId) && (!_.isString(_doc._id) || !_doc._id.length))) {
-                _doc._id = new document_1.ObjectId();
-            }
-            // Add options to more dates
-            _doc.timestamp = new document_1.ObjectId().generationTime;
-            // Reverse
-            this.doc_indexes[_.toString(_doc._id)] = this.docs.length;
-            this.docs.push(_doc);
-            /**
-             * "insert" event.
-             *
-             * @event MongoPortable~insert
-             *
-             * @param {Object} collection - Information about the collection
-             * @param {Object} doc - Information about the document inserted
-             */
-            this.emit('insert', {
-                collection: this,
-                doc: _doc
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                // REJECT
+                if (_.isNil(doc))
+                    self.logger.throw("doc parameter required");
+                if (!_.isPlainObject(doc))
+                    self.logger.throw("doc must be an object");
+                if (_.isNil(options))
+                    options = {};
+                if (_.isFunction(options)) {
+                    callback = options;
+                    options = {};
+                }
+                if (!_.isNil(callback) && !_.isFunction(callback))
+                    self.logger.throw("callback must be a function");
+                // Creating a safe copy of the document
+                var _doc = _.cloneDeep(doc);
+                // If the document comes with a number ID, parse it to String
+                if (_.isNumber(_doc._id)) {
+                    _doc._id = _.toString(_doc._id);
+                }
+                if (_.isNil(_doc._id) || (!(_doc._id instanceof document_1.ObjectId) && (!_.isString(_doc._id) || !_doc._id.length))) {
+                    _doc._id = new document_1.ObjectId();
+                }
+                // Add options to more dates
+                _doc.timestamp = new document_1.ObjectId().generationTime;
+                // Reverse
+                self.doc_indexes[_.toString(_doc._id)] = self.docs.length;
+                self.docs.push(_doc);
+                /**
+                 * "insert" event.
+                 *
+                 * @event MongoPortable~insert
+                 *
+                 * @param {Object} collection - Information about the collection
+                 * @param {Object} doc - Information about the document inserted
+                 */
+                self.emit("insert", {
+                    collection: self,
+                    doc: _doc
+                }).then(function () {
+                    if (callback)
+                        callback(null, _doc);
+                    resolve(_doc);
+                }).catch(function (error) {
+                    // EXCEPTION UTIL
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                });
             });
-            if (callback)
-                callback(null, _doc);
-            if (options.chain)
-                return this;
-            return _doc;
         };
         /**
          * Inserts several documents into the collection
@@ -120,35 +128,41 @@ var Collection /*extends EventEmitter*/ = (function () {
          * @param {Array} docs - Documents to be inserted
          * @param {Object} [options] - Additional options
          *
-         * @param {Boolean} [options.chain=false] - If set to "true" returns this instance, so it can be chained with other methods
-         *
          * @param {Function} [callback=null] Callback function to be called at the end with the results
          *
-         * @returns {Object|Collection} If "options.chain" set to "true" returns this instance, otherwise returns the inserted document
+         * @returns {Promise<Array<Object>>} Returns a promise with the inserted documents
          */
         this.bulkInsert = function (docs, options, callback) {
-            if (_.isNil(docs))
-                this.logger.throw("docs parameter required");
-            if (!_.isArray(docs))
-                this.logger.throw("docs must be an array");
-            if (_.isNil(options))
-                options = {};
-            if (_.isFunction(options)) {
-                callback = options;
-                options = {};
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            var _docs = [];
-            for (var i = 0; i < docs.length; i++) {
-                var doc = docs[i];
-                _docs.push(this.insert(doc, options));
-            }
-            if (callback)
-                callback(null, _docs);
-            if (options.chain)
-                return this;
-            return _docs;
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                if (_.isNil(docs))
+                    self.logger.throw("docs parameter required");
+                if (!_.isArray(docs))
+                    self.logger.throw("docs must be an array");
+                if (_.isNil(options))
+                    options = {};
+                if (_.isFunction(options)) {
+                    callback = options;
+                    options = {};
+                }
+                if (!_.isNil(callback) && !_.isFunction(callback))
+                    self.logger.throw("callback must be a function");
+                var promises = [];
+                for (var i = 0; i < docs.length; i++) {
+                    var doc = docs[i];
+                    promises.push(self.insert(doc, options));
+                }
+                Promise.all(promises)
+                    .then(function (_docs) {
+                    if (callback)
+                        callback(null, _docs);
+                    resolve(docs);
+                }).catch(function (error) {
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                });
+            });
         };
         /**
          * Finds all matching documents
@@ -162,48 +176,58 @@ var Collection /*extends EventEmitter*/ = (function () {
          * @param {Number} [options.skip] - Number of documents to be skipped
          * @param {Number} [options.limit] - Max number of documents to display
          * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
-         * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
+         * @param {Boolean} [options.doNotFetch=false] - If set to'"true" returns the cursor not fetched
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
-         * @returns {Array|Cursor} If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
+         * @returns {Promise<Array<Object>|Cursor>} Returns a promise with the documents (or cursor if "options.forceFetch" set to true)
          */
         this.find = function (selection, fields, options, callback) {
-            var params = _ensureFindParams({
-                selection: selection,
-                fields: fields,
-                options: options,
-                callback: callback
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                var params = _ensureFindParams({
+                    selection: selection,
+                    fields: fields,
+                    options: options,
+                    callback: callback
+                });
+                selection = params.selection;
+                fields = params.fields;
+                options = params.options;
+                callback = params.callback;
+                /**
+                 * "find" event.
+                 *
+                 * @event MongoPortable~find
+                 *
+                 * @property {Object} collection - Information about the collection
+                 * @property {Object} selector - The selection of the query
+                 * @property {Object} fields - The fields showed in the query
+                 */
+                self.emit("find", {
+                    collection: self,
+                    selector: selection,
+                    fields: fields
+                }).then(function () {
+                    var cursor = new Cursor_1.Cursor(self.docs, selection, fields, options);
+                    // Pass the cursor fetched to the callback
+                    if (options.doNotFecth) {
+                        if (callback)
+                            callback(null, cursor);
+                        resolve(cursor);
+                    }
+                    else {
+                        var docs = cursor.fetch();
+                        if (callback)
+                            callback(null, docs);
+                        resolve(docs);
+                    }
+                }).catch(function (error) {
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                });
             });
-            selection = params.selection;
-            fields = params.fields;
-            options = params.options;
-            callback = params.callback;
-            /**
-             * "find" event.
-             *
-             * @event MongoPortable~find
-             *
-             * @property {Object} collection - Information about the collection
-             * @property {Object} selector - The selection of the query
-             * @property {Object} fields - The fields showed in the query
-             */
-            this.emit('find', {
-                collection: this,
-                selector: selection,
-                fields: fields
-            });
-            var cursor = new Cursor_1.Cursor(this.docs, selection, fields, options);
-            // Pass the cursor fetched to the callback
-            // Add [options.noFetchCallback = true]
-            if (callback)
-                callback(null, cursor.fetch());
-            if (options.forceFetch) {
-                return cursor.fetch();
-            }
-            else {
-                return cursor;
-            }
         };
         /**
          * Finds the first matching document
@@ -220,43 +244,49 @@ var Collection /*extends EventEmitter*/ = (function () {
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
-         * @returns {Object} Returns the first matching document of the collection
+         * @returns {Promise<Object>} Returns a promise with the first matching document of the collection
          */
         this.findOne = function (selection, fields, options, callback) {
-            var params = _ensureFindParams({
-                selection: selection,
-                fields: fields,
-                options: options,
-                callback: callback
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                var params = _ensureFindParams({
+                    selection: selection,
+                    fields: fields,
+                    options: options,
+                    callback: callback
+                });
+                selection = params.selection;
+                fields = params.fields;
+                options = params.options;
+                callback = params.callback;
+                /**
+                 * "findOne" event.
+                 *
+                 * @event MongoPortable~findOne
+                 *
+                 * @property {Object} collection - Information about the collection
+                 * @property {Object} selector - The selection of the query
+                 * @property {Object} fields - The fields showed in the query
+                 */
+                self.emit("findOne", {
+                    collection: self,
+                    selector: selection,
+                    fields: fields
+                }).then(function () {
+                    var cursor = new Cursor_1.Cursor(self.docs, selection, fields, options);
+                    var res = null;
+                    if (cursor.hasNext()) {
+                        res = cursor.next();
+                    }
+                    if (callback)
+                        callback(null, res);
+                    resolve(res);
+                }).catch(function (error) {
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                });
             });
-            selection = params.selection;
-            fields = params.fields;
-            options = params.options;
-            callback = params.callback;
-            /**
-             * "findOne" event.
-             *
-             * @event MongoPortable~findOne
-             *
-             * @property {Object} collection - Information about the collection
-             * @property {Object} selector - The selection of the query
-             * @property {Object} fields - The fields showed in the query
-             */
-            this.emit('findOne', {
-                collection: this,
-                selector: selection,
-                fields: fields
-            });
-            var cursor = new Cursor_1.Cursor(this.docs, selection, fields, options);
-            var res = null;
-            if (cursor.hasNext()) {
-                res = cursor.next();
-            }
-            // Pass the cursor fetched to the callback
-            // Add [options.noFetchCallback = true]
-            if (callback)
-                callback(null, res);
-            return res;
         };
         /**
          * Updates one or many documents
@@ -286,177 +316,222 @@ var Collection /*extends EventEmitter*/ = (function () {
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
-         * @returns {Object} Object with the update/insert (if upsert=true) information
+         * @returns {Promise<Object>} Returns a promise with the update/insert (if upsert=true) information
          */
         this.update = function (selection, update, options, callback) {
-            if (_.isNil(selection))
-                selection = {};
-            if (_.isNil(update))
-                this.logger.throw("You must specify the update operation");
-            if (_.isNil(options)) {
-                options = {
-                    skip: 0,
-                    limit: 15 // for no limit pass [options.limit = -1]
-                };
-            }
-            if (_.isFunction(selection))
-                this.logger.throw("You must specify the update operation");
-            if (_.isFunction(update))
-                this.logger.throw("You must specify the update operation");
-            if (_.isFunction(options)) {
-                callback = options;
-                options = {};
-            }
-            // Check special case where we are using an objectId
-            if (selection instanceof document_1.ObjectId) {
-                selection = {
-                    _id: selection
-                };
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            var res = null;
-            var docs = null;
-            if (options.multi) {
-                docs = this.find(selection, null, { forceFetch: true });
-            }
-            else {
-                docs = this.findOne(selection);
-            }
-            if (_.isNil(docs)) {
-                docs = [];
-            }
-            if (!_.isArray(docs)) {
-                docs = [docs];
-            }
-            if (docs.length === 0) {
-                if (options.upsert) {
-                    var inserted = this.insert(update);
-                    res = {
-                        updated: {
-                            documents: null,
-                            count: 0
-                        },
-                        inserted: {
-                            documents: [inserted],
-                            count: 1
-                        }
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                if (_.isNil(selection))
+                    selection = {};
+                if (_.isNil(update))
+                    self.logger.throw("You must specify the update operation");
+                if (_.isNil(options)) {
+                    options = {
+                        skip: 0,
+                        limit: 15 // for no limit pass [options.limit = -1]
                     };
+                }
+                if (_.isFunction(selection))
+                    self.logger.throw("You must specify the update operation");
+                if (_.isFunction(update))
+                    self.logger.throw("You must specify the update operation");
+                if (_.isFunction(options)) {
+                    callback = options;
+                    options = {};
+                }
+                // Check special case where we are using an objectId
+                if (selection instanceof document_1.ObjectId) {
+                    selection = {
+                        _id: selection
+                    };
+                }
+                if (!_.isNil(callback) && !_.isFunction(callback))
+                    self.logger.throw("callback must be a function");
+                var res = null;
+                // var docs = null;
+                if (options.multi) {
+                    // docs = self.find(selection, null, { forceFetch: true });
+                    self.find(selection, null, { forceFetch: true })
+                        .then(onDocsFound)
+                        .catch(doReject);
                 }
                 else {
-                    // No documents found
-                    res = {
-                        updated: {
-                            documents: null,
-                            count: 0
-                        },
-                        inserted: {
-                            documents: null,
-                            count: 0
-                        }
-                    };
+                    // docs = self.findOne(selection);
+                    self.findOne(selection)
+                        .then(onDocsFound)
+                        .catch(doReject);
                 }
-            }
-            else {
-                var updatedDocs = [];
-                for (var i = 0; i < docs.length; i++) {
-                    var doc = docs[i];
-                    var override = null;
-                    var hasModifier = false;
-                    for (var key in update) {
-                        // IE7 doesn't support indexing into strings (eg, key[0] or key.indexOf('$') ), so use substr.
-                        // Testing over the first letter:
-                        //      Bests result with 1e8 loops => key[0](~3s) > substr(~5s) > regexp(~6s) > indexOf(~16s)
-                        var modifier = (key.substr(0, 1) === '$');
-                        if (modifier) {
-                            hasModifier = true;
-                        }
-                        if (options.updateAsMongo) {
-                            if (hasModifier && !modifier)
-                                this.logger.throw("All update fields must be an update operator");
-                            if (!hasModifier && options.multi)
-                                this.logger.throw("You can not update several documents when no update operators are included");
-                            if (hasModifier)
-                                override = false;
-                            if (!hasModifier)
-                                override = true;
+                function onDocsFound(docs) {
+                    if (_.isNil(docs)) {
+                        docs = [];
+                    }
+                    if (!_.isArray(docs)) {
+                        docs = [docs];
+                    }
+                    if (docs.length === 0) {
+                        if (options.upsert) {
+                            /*var inserted = */ self.insert(update)
+                                .then(function (inserted) {
+                                doResolve({
+                                    updated: {
+                                        documents: null,
+                                        count: 0
+                                    },
+                                    inserted: {
+                                        documents: [inserted],
+                                        count: 1
+                                    }
+                                });
+                            }).catch(doReject);
+                            // res = {
+                            //     updated: {
+                            //         documents: null,
+                            //         count: 0
+                            //     },
+                            //     inserted: {
+                            //         documents: [inserted],
+                            //         count: 1
+                            //     }
+                            // };
                         }
                         else {
-                            override = !!options.override;
-                        }
-                    }
-                    var _docUpdate = null;
-                    if (override) {
-                        // Overrides the document except for the "_id"
-                        _docUpdate = {
-                            _id: doc._id
-                        };
-                        // Must ignore fields starting with '$', '.'...
-                        for (var key in update) {
-                            if (key.substr(0, 1) === '$' || /\./g.test(key)) {
-                                this.logger.warn("The field " + key + " can not begin with '$' or contain '.'");
-                            }
-                            else {
-                                _docUpdate[key] = update[key];
-                            }
+                            // No documents found
+                            /*res = */ doResolve({
+                                updated: {
+                                    documents: null,
+                                    count: 0
+                                },
+                                inserted: {
+                                    documents: null,
+                                    count: 0
+                                }
+                            });
                         }
                     }
                     else {
-                        _docUpdate = _.cloneDeep(doc);
-                        for (var key in update) {
-                            var val = update[key];
-                            if (key.substr(0, 1) === '$') {
-                                _docUpdate = _applyModifier(_docUpdate, key, val);
-                            }
-                            else {
-                                if (!_.isNil(_docUpdate[key])) {
-                                    if (key !== '_id') {
-                                        _docUpdate[key] = val;
-                                    }
-                                    else {
-                                        this.logger.warn("The field '_id' can not be updated");
-                                    }
+                        var updatedDocs = [];
+                        for (var i = 0; i < docs.length; i++) {
+                            var doc = docs[i];
+                            var override = null;
+                            var hasModifier = false;
+                            for (var key in update) {
+                                // IE7 doesn't support indexing into strings (eg, key[0] or key.indexOf('$') ), so use substr.
+                                // Testing over the first letter:
+                                //      Bests result with 1e8 loops => key[0](~3s) > substr(~5s) > regexp(~6s) > indexOf(~16s)
+                                var modifier = (key.substr(0, 1) === '$');
+                                if (modifier) {
+                                    hasModifier = true;
+                                }
+                                if (options.updateAsMongo) {
+                                    if (hasModifier && !modifier)
+                                        self.logger.throw("All update fields must be an update operator");
+                                    if (!hasModifier && options.multi)
+                                        self.logger.throw("You can not update several documents when no update operators are included");
+                                    if (hasModifier)
+                                        override = false;
+                                    if (!hasModifier)
+                                        override = true;
                                 }
                                 else {
-                                    this.logger.warn("The document does not contains the field " + key);
+                                    override = !!options.override;
                                 }
                             }
+                            var _docUpdate = null;
+                            if (override) {
+                                // Overrides the document except for the "_id"
+                                _docUpdate = {
+                                    _id: doc._id
+                                };
+                                // Must ignore fields starting with '$', '.'...
+                                for (var key in update) {
+                                    if (key.substr(0, 1) === '$' || /\./g.test(key)) {
+                                        self.logger.warn("The field " + key + " can not begin with '$' or contain '.'");
+                                    }
+                                    else {
+                                        _docUpdate[key] = update[key];
+                                    }
+                                }
+                            }
+                            else {
+                                _docUpdate = _.cloneDeep(doc);
+                                for (var key in update) {
+                                    var val = update[key];
+                                    if (key.substr(0, 1) === '$') {
+                                        _docUpdate = _applyModifier(_docUpdate, key, val);
+                                    }
+                                    else {
+                                        if (!_.isNil(_docUpdate[key])) {
+                                            if (key !== '_id') {
+                                                _docUpdate[key] = val;
+                                            }
+                                            else {
+                                                self.logger.warn("The field '_id' can not be updated");
+                                            }
+                                        }
+                                        else {
+                                            self.logger.warn("The document does not contains the field " + key);
+                                        }
+                                    }
+                                }
+                            }
+                            updatedDocs.push(_docUpdate);
+                            var idx = self.doc_indexes[_docUpdate._id];
+                            self.docs[idx] = _docUpdate;
                         }
+                        /**
+                         * "update" event.
+                         *
+                         * @event MongoPortable~update
+                         *
+                         * @property {Object} collection - Information about the collection
+                         * @property {Object} selector - The selection of the query
+                         * @property {Object} modifier - The modifier used in the query
+                         * @property {Object} docs - The updated/inserted documents information
+                         */
+                        self.emit("update", {
+                            collection: self,
+                            selector: selection,
+                            modifier: update,
+                            docs: updatedDocs
+                        }).then(function () {
+                            doResolve({
+                                updated: {
+                                    documents: updatedDocs,
+                                    count: updatedDocs.length
+                                },
+                                inserted: {
+                                    documents: null,
+                                    count: 0
+                                }
+                            });
+                        }).catch(function (error) {
+                            doReject(error);
+                        });
+                        // res = {
+                        //     updated: {
+                        //         documents: updatedDocs,
+                        //         count: updatedDocs.length
+                        //     },
+                        //     inserted: {
+                        //         documents: null,
+                        //         count: 0
+                        //     }
+                        // };
                     }
-                    updatedDocs.push(_docUpdate);
-                    var idx = this.doc_indexes[_docUpdate._id];
-                    this.docs[idx] = _docUpdate;
+                    // if (callback) callback(null, res);
+                    // return res;
                 }
-                /**
-                 * "update" event.
-                 *
-                 * @event MongoPortable~update
-                 *
-                 * @property {Object} collection - Information about the collection
-                 * @property {Object} selector - The selection of the query
-                 * @property {Object} modifier - The modifier used in the query
-                 * @property {Object} docs - The updated/inserted documents information
-                 */
-                this.emit('update', {
-                    collection: this,
-                    selector: selection,
-                    modifier: update,
-                    docs: updatedDocs
-                });
-                res = {
-                    updated: {
-                        documents: updatedDocs,
-                        count: updatedDocs.length
-                    },
-                    inserted: {
-                        documents: null,
-                        count: 0
-                    }
-                };
-            }
-            if (callback)
-                callback(null, res);
-            return res;
+                function doResolve(result) {
+                    if (callback)
+                        callback(null, result);
+                    resolve(result);
+                }
+                function doReject(error) {
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                }
+            });
         };
         /**
          * Removes one or many documents
@@ -471,10 +546,10 @@ var Collection /*extends EventEmitter*/ = (function () {
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
-         * @returns {Object} Object with the deleted documents
+         * @returns {Promise<Array<Obejct>>} Promise with the deleted documents
          */
         this.remove = function (selection, options, callback) {
-            var _this = this;
+            var self = this;
             if (_.isNil(selection))
                 selection = {};
             if (_.isFunction(selection)) {
@@ -488,41 +563,57 @@ var Collection /*extends EventEmitter*/ = (function () {
             if (_.isNil(options))
                 options = { justOne: false };
             // If we are not passing a selection and we are not removing just one, is the same as a drop
-            if (getObjectSize(selection) === 0 && !options.justOne)
-                return this.drop(options, callback);
-            // Check special case where we are using an objectId
-            if (selection instanceof document_1.ObjectId) {
-                selection = {
-                    _id: selection
-                };
+            if (getObjectSize(selection) === 0 && !options.justOne) {
+                return self.drop(options, callback);
             }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            var cursor = this.find(selection);
-            var docs = [];
-            cursor.forEach(function (doc) {
-                var idx = _this.doc_indexes[doc._id];
-                delete _this.doc_indexes[doc._id];
-                _this.docs.splice(idx, 1);
-                docs.push(doc);
-            });
-            /**
-             * "remove" event.
-             *
-             * @event MongoPortable~remove
-             *
-             * @property {Object} collection - Information about the collection
-             * @property {Object} selector - The selection of the query
-             * @property {Object} docs - The deleted documents information
-             */
-            this.emit('remove', {
-                collection: this,
-                selector: selection,
-                docs: docs
-            });
-            if (callback)
-                callback(null, docs);
-            return docs;
+            else {
+                return new Promise(function (resolve, reject) {
+                    // Check special case where we are using an objectId
+                    if (selection instanceof document_1.ObjectId) {
+                        selection = {
+                            _id: selection
+                        };
+                    }
+                    if (!_.isNil(callback) && !_.isFunction(callback))
+                        self.logger.throw("callback must be a function");
+                    /*var cursor = */ self.find(selection)
+                        .then(function (cursor) {
+                        var docs = [];
+                        cursor.forEach(function (doc) {
+                            var idx = self.doc_indexes[doc._id];
+                            delete self.doc_indexes[doc._id];
+                            self.docs.splice(idx, 1);
+                            docs.push(doc);
+                        });
+                        /**
+                         * "remove" event.
+                         *
+                         * @event MongoPortable~remove
+                         *
+                         * @property {Object} collection - Information about the collection
+                         * @property {Object} selector - The selection of the query
+                         * @property {Object} docs - The deleted documents information
+                         */
+                        self.emit("remove", {
+                            collection: self,
+                            selector: selection,
+                            docs: docs
+                        }).then(function () {
+                            if (callback)
+                                callback(null, docs);
+                            resolve(docs);
+                        }).catch(function (error) {
+                            if (callback)
+                                callback(error, null);
+                            reject(error);
+                        });
+                    }).catch(function (error) {
+                        if (callback)
+                            callback(error, null);
+                        reject(error);
+                    });
+                });
+            }
         };
         /**
          * Alias for {@link Collection#remove}
@@ -552,27 +643,42 @@ var Collection /*extends EventEmitter*/ = (function () {
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
-         * @returns {Object} True when the collection is dropped
+         * @returns {Promise<Object[]>} Promise with the deleted documents
          */
         this.drop = function (options, callback) {
-            if (_.isNil(options))
-                options = {};
-            if (_.isFunction(options)) {
-                callback = options;
-                options = {};
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            this.doc_indexes = {};
-            this.docs = [];
-            if (options.dropIndexes) { } // TODO
-            this.emit('dropCollection', {
-                collection: this,
-                indexes: !!options.dropIndexes
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                if (_.isNil(options))
+                    options = {};
+                if (_.isFunction(options)) {
+                    callback = options;
+                    options = {};
+                }
+                if (!_.isNil(callback) && !_.isFunction(callback)) {
+                    self.logger.throw("callback must be a function");
+                }
+                self.find(null, null, { limit: -1 }).then(function (docs) {
+                    self.doc_indexes = {};
+                    self.docs = [];
+                    if (options.dropIndexes) { } // TODO
+                    self.emit("dropCollection", {
+                        collection: self,
+                        indexes: !!options.dropIndexes
+                    }).then(function () {
+                        if (callback)
+                            callback(null, docs);
+                        resolve(docs);
+                    }).catch(function (error) {
+                        if (callback)
+                            callback(error, false);
+                        reject();
+                    });
+                }).catch(function (error) {
+                    if (callback)
+                        callback(error, false);
+                    reject();
+                });
             });
-            if (callback)
-                callback(null, true);
-            return true;
         };
         /**
          * Insert or update a document. If the document has an "_id" is an update (with upsert), if not is an insert.
@@ -586,7 +692,7 @@ var Collection /*extends EventEmitter*/ = (function () {
          *
          * @param {Function} [callback=null] - Callback function to be called at the end with the results
          *
-         * @returns {Object} True when the collection is dropped
+         * @returns {Promise<Object>} Returns a promise with the inserted document or the update information
          */
         this.save = function (doc, options, callback) {
             if (_.isNil(doc) || _.isFunction(doc))
@@ -617,63 +723,68 @@ var Collection /*extends EventEmitter*/ = (function () {
         * @ignore
         */
         this.backup = function (backupID, callback) {
-            if (_.isFunction(backupID)) {
-                callback = backupID;
-                backupID = new document_1.ObjectId().toString();
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            this.snapshots[backupID] = _.cloneDeep(this.docs);
-            this.emit('snapshot', {
-                collection: this,
-                backupID: backupID,
-                documents: this.snapshots[backupID]
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                if (_.isFunction(backupID)) {
+                    callback = backupID;
+                    backupID = new document_1.ObjectId().toString();
+                }
+                if (!_.isNil(callback) && !_.isFunction(callback))
+                    self.logger.throw("callback must be a function");
+                self.snapshots[backupID] = _.cloneDeep(self.docs);
+                self.emit("snapshot", {
+                    collection: self,
+                    backupID: backupID,
+                    documents: self.snapshots[backupID]
+                }).then(function () {
+                    var result = {
+                        backupID: backupID,
+                        documents: self.snapshots[backupID]
+                    };
+                    if (callback)
+                        callback(null, result);
+                    resolve(result);
+                }).catch(function (error) {
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                });
             });
-            var result = {
-                backupID: backupID,
-                documents: this.snapshots[backupID]
-            };
-            if (callback)
-                callback(null, result);
-            return result;
         };
         // Lists available Backups
         /**
         * @ignore
         */
-        this.backups = function (callback) {
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
+        this.backups = function () {
+            // if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
             var backups = [];
             for (var id in this.snapshots) {
                 backups.push({ id: id, documents: this.snapshots[id] });
             }
-            if (callback)
-                callback(null, backups);
+            // if (callback) callback(null, backups);
             return backups;
         };
         // Lists available Backups
         /**
         * @ignore
         */
-        this.removeBackup = function (backupID, callback) {
-            if (_.isFunction(backupID)) {
-                callback = backupID;
-                backupID = null;
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            var result = false;
+        this.removeBackup = function (backupID /*, callback*/) {
+            // if (_.isFunction(backupID)) {
+            //     callback = backupID;
+            //     backupID = null;
+            // }
+            if (_.isNil(backupID))
+                this.logger.throw("backupID required");
+            // if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
+            var result = null;
             if (backupID) {
                 delete this.snapshots[_.toString(backupID)];
                 result = backupID;
+                // } else {
+                //     this.snapshots = {};
+                //     result = true;
             }
-            else {
-                this.snapshots = {};
-                result = true;
-            }
-            if (callback)
-                callback(null, result);
+            // if (callback) callback(null, result);
             return result;
         };
         // Restore the snapshot. If no snapshot exists, raise an exception;
@@ -681,42 +792,50 @@ var Collection /*extends EventEmitter*/ = (function () {
         * @ignore
         */
         this.restore = function (backupID, callback) {
-            if (_.isFunction(backupID)) {
-                callback = backupID;
-                backupID = null;
-            }
-            if (!_.isNil(callback) && !_.isFunction(callback))
-                this.logger.throw("callback must be a function");
-            var snapshotCount = getObjectSize(this.snapshots);
-            var backupData = null;
-            if (snapshotCount === 0) {
-                this.logger.throw("There is no snapshots");
-            }
-            else {
-                if (!backupID) {
-                    if (snapshotCount === 1) {
-                        this.logger.info("No backupID passed. Restoring the only snapshot");
-                        // Retrieve the only snapshot
-                        for (var key in this.snapshots)
-                            backupID = key;
-                    }
-                    else {
-                        this.logger.throw("The are several snapshots. Please specify one backupID");
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                if (_.isFunction(backupID)) {
+                    callback = backupID;
+                    backupID = null;
+                }
+                if (!_.isNil(callback) && !_.isFunction(callback))
+                    self.logger.throw("callback must be a function");
+                var snapshotCount = getObjectSize(self.snapshots);
+                var backupData = null;
+                if (snapshotCount === 0) {
+                    self.logger.throw("There is no snapshots");
+                }
+                else {
+                    if (!backupID) {
+                        if (snapshotCount === 1) {
+                            self.logger.info("No backupID passed. Restoring the only snapshot");
+                            // Retrieve the only snapshot
+                            for (var key in self.snapshots)
+                                backupID = key;
+                        }
+                        else {
+                            self.logger.throw("The are several snapshots. Please specify one backupID");
+                        }
                     }
                 }
-            }
-            backupData = this.snapshots[backupID];
-            if (!backupData) {
-                this.logger.throw("Unknown Backup ID: " + backupID);
-            }
-            this.docs = backupData;
-            this.emit('restore', {
-                collection: this,
-                backupID: backupID
+                backupData = self.snapshots[backupID];
+                if (!backupData) {
+                    self.logger.throw("Unknown Backup ID: " + backupID);
+                }
+                self.docs = backupData;
+                self.emit("restore", {
+                    collection: self,
+                    backupID: backupID
+                }).then(function () {
+                    if (callback)
+                        callback(null, backupID);
+                    resolve(backupID);
+                }).catch(function (error) {
+                    if (callback)
+                        callback(error, null);
+                    reject(error);
+                });
             });
-            if (callback)
-                callback(null);
-            return this;
         };
         /**
          * Calculates aggregate values for the data in a collection
@@ -762,6 +881,8 @@ var Collection /*extends EventEmitter*/ = (function () {
                 }
             }
             else {
+                // Error
+                return null;
             }
         };
         if (!(this instanceof Collection))
@@ -784,7 +905,7 @@ var Collection /*extends EventEmitter*/ = (function () {
         // this.opts = {}; // Default options
         // _.merge(this.opts, options);
         this.emit = function (name, args) {
-            db.emit(name, args);
+            return db.emit(name, args);
         };
     }
     /**
@@ -807,21 +928,24 @@ var Collection /*extends EventEmitter*/ = (function () {
             jsw_logger_1.JSWLogger.instance.throw("collection names must not start or end with '.'");
         }
     };
+    Collection.prototype.clearBackups = function () {
+        // TODO
+    };
+    // emit(name, args) {
+    //     super.emit(name, args, database._stores);
+    // }
+    /**
+     * @ignore
+     */
+    Collection._noCreateModifiers = {
+        $unset: true,
+        $pop: true,
+        $rename: true,
+        $pull: true,
+        $pullAll: true
+    };
     return Collection;
 }());
-// emit(name, args) {
-//     super.emit(name, args, database._stores);
-// }
-/**
- * @ignore
- */
-Collection._noCreateModifiers = {
-    $unset: true,
-    $pop: true,
-    $rename: true,
-    $pull: true,
-    $pullAll: true
-};
 exports.Collection = Collection;
 var _applyModifier = function (_docUpdate, key, val) {
     var doc = _.cloneDeep(_docUpdate);
@@ -833,6 +957,11 @@ var _applyModifier = function (_docUpdate, key, val) {
         var value = val[keypath];
         var keyparts = keypath.split('.');
         _modify(doc, keyparts, value, key);
+        // var no_create = !!Collection._noCreateModifiers[key];
+        // var forbid_array = (key === "$rename");
+        // var target = Collection._findModTarget(_docUpdate, keyparts, no_create, forbid_array);
+        // var field = keyparts.pop();
+        // mod(target, field, value, keypath, _docUpdate);
     }
     return doc;
 };
@@ -1068,8 +1197,6 @@ var _ensureFindParams = function (params) {
     // selection, fields, options, callback
     if (_.isNil(params.selection))
         params.selection = {};
-    if (_.isNil(params.selection))
-        params.selection = {};
     if (_.isNil(params.fields))
         params.fields = [];
     if (_.isNil(params.options)) {
@@ -1112,5 +1239,4 @@ var _ensureFindParams = function (params) {
     }
     return params;
 };
-
 //# sourceMappingURL=Collection.js.map

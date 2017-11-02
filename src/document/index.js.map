@@ -1,1 +1,1 @@
-{"version":3,"sources":["document/index.ts"],"names":[],"mappings":";AAAA,uCAA8C;AAGrC,uCAAQ;AAFjB,uCAA8C;AAE3B,uCAAQ","file":"index.js","sourcesContent":["import { Document }         from \"./Document\";\nimport { ObjectId }         from \"./ObjectId\";\n\nexport { Document, ObjectId };"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,gCAA6B;AAC7B,gCAA6B"}

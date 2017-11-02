@@ -1,7 +1,8 @@
 "use strict";
-var Selector_1 = require("./Selector");
-exports.Selector = Selector_1.Selector;
-var SelectorMatcher_1 = require("./SelectorMatcher");
-exports.SelectorMatcher = SelectorMatcher_1.SelectorMatcher;
-
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("./Selector"));
+__export(require("./SelectorMatcher"));
 //# sourceMappingURL=index.js.map

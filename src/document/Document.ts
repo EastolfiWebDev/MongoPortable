@@ -1,5 +1,3 @@
-class Document {
+export class Document {
     
 }
-
-export { Document };

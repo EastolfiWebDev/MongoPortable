@@ -1,3 +1,1 @@
-import { EventEmitter } from "./EventEmitter";
-
-export { EventEmitter };
+export * from "./EventEmitter";

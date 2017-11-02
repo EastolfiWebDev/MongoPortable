@@ -7,6 +7,10 @@ npm-debug.log
 test/coverage
 test/results
 
+.nyc_output
+coverage
+node_modules
+
 logs/*
 
 .publish

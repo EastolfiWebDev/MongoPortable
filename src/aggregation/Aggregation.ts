@@ -195,7 +195,7 @@ var do_project = function(documents, project_stage) {
     return Cursor.project(documents, project_stage, true);
 };
 
-class Aggregation {
+export class Aggregation {
     protected logger: JSWLogger;
     
     pipeline;
@@ -245,6 +245,3 @@ class Aggregation {
         return true;
     }
 }
-
-
-export { Aggregation };

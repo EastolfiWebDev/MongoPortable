@@ -1,1 +1,1 @@
-{"version":3,"sources":["document/Document.ts"],"names":[],"mappings":";AAAA;IAAA;IAEA,CAAC;IAAD,eAAC;AAAD,CAFA,AAEC,IAAA;AAEQ,4BAAQ","file":"Document.js","sourcesContent":["class Document {\n    \n}\n\nexport { Document };"]}
+{"version":3,"file":"Document.js","sourceRoot":"","sources":["Document.ts"],"names":[],"mappings":";;AAAA;IAAA;IAEA,CAAC;IAAD,eAAC;AAAD,CAAC,AAFD,IAEC;AAFY,4BAAQ"}

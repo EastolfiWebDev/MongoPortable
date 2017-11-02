@@ -1,7 +1,8 @@
 "use strict";
-var Document_1 = require("./Document");
-exports.Document = Document_1.Document;
-var ObjectId_1 = require("./ObjectId");
-exports.ObjectId = ObjectId_1.ObjectId;
-
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("./Document"));
+__export(require("./ObjectId"));
 //# sourceMappingURL=index.js.map

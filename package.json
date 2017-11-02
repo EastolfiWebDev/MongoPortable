@@ -1,6 +1,6 @@
 {
   "name": "mongo-portable",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Portable Pure JS MongoDB - Based on Monglodb (https://github.com/euforic/monglodb.git) by Christian Sullivan (http://RogueSynaptics.com)",
   "author": "Eduardo Astolfi <eastolfi91@gmail.com>",
   "keywords": [
@@ -25,8 +25,8 @@
     "exclude": [
       "**/node_modules/**",
       "src/**/*.d.ts",
-	  "src/**/index.ts",
-	  "index.ts"
+      "src/**/index.ts",
+      "index.ts"
     ],
     "extension": [
       ".js",
@@ -81,6 +81,7 @@
     "nyc": "10.1.2",
     "require-dir": "^0.3.1",
     "run-sequence": "^1.2.2",
+    "source-map-support": "^0.5.0",
     "ts-node": "^3.3.0",
     "tsconfig-paths": "^2.3.0",
     "typedoc": "^0.5.5",
@@ -89,9 +90,12 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
+    "doc": "gulp doc && gulp changelog",
     "test.old": "gulp test",
-    "test": "mocha test/unit/utils/*.spec.ts",
-    "test.coverage": "nyc mocha test/unit/utils/*.spec.ts",
+    "test": "mocha test/unit/**/*.spec.ts",
+    "test.full": "npm run build && npm run test",
+    "test.coverage": "nyc mocha test/unit/**/*.spec.ts",
+    "test.coveralls": "npm run test.coverage && nyc report --reporter=text-lcov | coveralls",
     "build": "tsc -p ./tsconfig.json"
   },
   "repository": {

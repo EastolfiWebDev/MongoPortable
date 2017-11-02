@@ -1,7 +1,7 @@
 import * as _               from "lodash";
 import { JSWLogger }        from "jsw-logger";
 
-import { BinaryParser }     from "../binary";
+import { BinaryParser }     from "../binary/index";
 
 /**
  * Machine id.
@@ -43,7 +43,7 @@ try {
  * 
  * @param {string|number} id - Can be a 24 byte hex string, a 12 byte binary string or a Number.
  */
-class ObjectId {
+export class ObjectId {
     protected logger: JSWLogger;
     
     private static cacheHexString: string;
@@ -334,5 +334,3 @@ class ObjectId {
         return new ObjectId();
     }
 }
-
-export { ObjectId };

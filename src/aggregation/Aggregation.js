@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @file Cursor.js - based on Monglo#Cursor ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
@@ -6,7 +7,7 @@
  * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
  * @license MIT Licensed
  */
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var selector_1 = require("../selector");
@@ -154,6 +155,8 @@ var do_group = function (documents, group_stage) {
         }
     }
     if (_.isPlainObject(new_id)) {
+        // complex_id
+        // do_complex_group();
     }
     else {
         // single_id
@@ -163,7 +166,7 @@ var do_group = function (documents, group_stage) {
 var do_project = function (documents, project_stage) {
     return collection_1.Cursor.project(documents, project_stage, true);
 };
-var Aggregation = (function () {
+var Aggregation = /** @class */ (function () {
     function Aggregation(pipeline) {
         this.logger = jsw_logger_1.JSWLogger.instance;
         this.pipeline = pipeline;
@@ -201,5 +204,4 @@ var Aggregation = (function () {
     return Aggregation;
 }());
 exports.Aggregation = Aggregation;
-
 //# sourceMappingURL=Aggregation.js.map
