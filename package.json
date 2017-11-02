@@ -89,6 +89,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
+	"doc": "gulp doc && gulp changelog",
     "test.old": "gulp test",
     "test": "mocha test/unit/**/*.spec.ts",
     "test.full": "npm run build && npm run test",
