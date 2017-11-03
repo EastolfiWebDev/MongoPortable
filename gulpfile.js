@@ -18,21 +18,6 @@ gulp.task("build", function(cb) {
     });
 });
 
-
-// Launch tests as a node module and browser
-gulp.task("test", function(cb) {
-    runSequence(
-        "test:app",             // build + test
-        "test:browser",         // build + bundle + test
-    function(error) {
-        if (error) {
-            console.log(error);
-        }
-        
-        cb(error);
-    });
-});
-
 // Creates the html docs, and the .md docs
 gulp.task("doc", function(cb) {
     runSequence(

@@ -94,6 +94,7 @@
     "doc.app": "gulp doc:app",
     "test.old": "gulp test",
     "test": "mocha test/unit/**/*.spec.ts",
+    "test.browser": "gulp test:browser",
     "test.full": "npm run build && npm run test",
     "test.coverage": "nyc mocha test/unit/**/*.spec.ts",
     "test.coveralls": "npm run test.coverage && nyc report --reporter=text-lcov | coveralls",
