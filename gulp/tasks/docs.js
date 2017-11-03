@@ -46,10 +46,14 @@ gulp.task("doc:app", function (cb) {
     		emitDecoratorMetadata: true,
     		noImplicitAny: false,
     		suppressImplicitAnyIndexErrors: true,
+			exclude: "**/**/index.ts",
+			excludeExternals: true,
     		
     		// typedoc
     		out: "docs",
     		json: "docs/out.json",
+			readme: "./README.md",
+			mode: "file",
     		
     		name: "Mongo Portable",
     		ignoreCompilerErrors: true, // true -> Cannot find name 'process'

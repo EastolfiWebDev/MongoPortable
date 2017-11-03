@@ -91,6 +91,7 @@
   },
   "scripts": {
     "doc": "gulp doc && gulp changelog",
+    "doc.app": "gulp doc:app",
     "test.old": "gulp test",
     "test": "mocha test/unit/**/*.spec.ts",
     "test.full": "npm run build && npm run test",
