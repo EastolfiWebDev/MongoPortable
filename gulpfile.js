@@ -22,8 +22,7 @@ gulp.task("build", function(cb) {
 gulp.task("doc", function(cb) {
     runSequence(
         "doc:app",              // generate html docs
-        "doc:api:files",        // generate MD docs (file/class)
-        "doc:api:full",         // generate MD docs (all class together)
+        "doc:api",        		// generate MD docs
     function(error) {
         if (error) {
             console.log(error);

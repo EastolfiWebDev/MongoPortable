@@ -85,6 +85,7 @@
     "ts-node": "^3.3.0",
     "tsconfig-paths": "^2.3.0",
     "typedoc": "^0.5.5",
+    "typedoc-plugin-markdown": "^1.0.11",
     "typescript": "^2.6.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
@@ -92,13 +93,16 @@
   "scripts": {
     "doc": "gulp doc && gulp changelog",
     "doc.app": "gulp doc:app",
+    "doc.api": "gulp doc:api",
     "test.old": "gulp test",
     "test": "mocha test/unit/**/*.spec.ts",
     "test.browser": "gulp test:browser",
     "test.full": "npm run build && npm run test",
     "test.coverage": "nyc mocha test/unit/**/*.spec.ts",
     "test.coveralls": "npm run test.coverage && nyc report --reporter=text-lcov | coveralls",
-    "build": "tsc -p ./tsconfig.json"
+    "build": "tsc -p ./tsconfig.json",
+    "build.w": "tsc -p ./tsconfig.json -w",
+    "build.compress": "gulp compress:app"
   },
   "repository": {
     "type": "git",
