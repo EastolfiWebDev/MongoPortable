@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -64,138 +62,175 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="jsw-logger">JSW-Logger</h1>
-				<p>Javascript logging module which writes in the console all warnings and erros</p>
-				<p><a href="https://www.npmjs.com/package/jsw-logger"><img src="https://img.shields.io/npm/v/jsw-logger.svg?label=Package%20Version" alt="Package Version"></a>
+				<h1 id="mongoportable">MongoPortable</h1>
+				<p>Solution for a MongoDB-like portable database.</p>
+				<p><a href="https://www.npmjs.com/package/mongo-portable"><img src="https://img.shields.io/npm/v/mongo-portable.svg?label=Package%20Version" alt="Package Version"></a>
 				<a href="https://nodejs.org/en/"><img src="https://img.shields.io/badge/node-v4.4.0-blue.svg?label=Node%20Version" alt="NodeJS Version"></a></p>
-				<p><a href="https://travis-ci.org/EastolfiWebDev/JSW-Logger"><img src="https://img.shields.io/travis/EastolfiWebDev/JSW-Logger.svg?label=linux" alt="Linux Build"></a>
-					<a href="https://ci.appveyor.com/project/eastolfi/jsw-logger"><img src="https://img.shields.io/appveyor/ci/eastolfi/jsw-logger/master.svg?label=windows" alt="Windows Build"></a>
-					<a href="https://coveralls.io/github/EastolfiWebDev/JSW-Logger?branch=master"><img src="https://coveralls.io/repos/github/EastolfiWebDev/JSW-Logger/badge.svg?branch=master" alt="Test Coverage"></a>
-					<a href="https://www.npmjs.com/package/jsw-logger"><img src="https://img.shields.io/npm/dt/jsw-logger.svg" alt="Downloads"></a>
-				<a href="http://jsw-logger.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/jsw-logger/badge/?version=latest" alt="Documentation Status"></a></p>
+				<p><a href="https://travis-ci.org/EastolfiWebDev/MongoPortable"><img src="https://img.shields.io/travis/EastolfiWebDev/MongoPortable.svg?label=linux" alt="Linux Build"></a>
+					<a href="https://ci.appveyor.com/project/eastolfi/mongoportable"><img src="https://img.shields.io/appveyor/ci/eastolfi/MongoPortable/master.svg?label=windows" alt="Windows Build"></a>
+				<a href="https://codeship.com/projects/174143"><img src="https://codeship.com/projects/d57e8820-5e10-0134-8b6d-42ae3f63aed8/status?branch=master" alt="Codeship Build"></a></p>
+				<p><a href="https://coveralls.io/github/EastolfiWebDev/MongoPortable?branch=master"><img src="https://coveralls.io/repos/github/EastolfiWebDev/MongoPortable/badge.svg?branch=master" alt="Test Coverage"></a>
+					<a href="https://www.npmjs.com/package/mongo-portable"><img src="https://img.shields.io/npm/dt/mongo-portable.svg" alt="Downloads"></a>
+				<a href="http://mongoportable.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/mongoportable/badge/?version=latest" alt="Documentation Status"></a></p>
+				<p>It handles the collections and documents in memory, and allow the use of stores for persistence.</p>
 				<h1 id="installation">Installation</h1>
-				<pre><code class="lang-shell">npm install --save jsw-logger
+				<pre><code class="lang-shell">npm install --save mongo-portable
 </code></pre>
-				<hr>
 				<h1 id="usage">Usage</h1>
-				<p>Currently, JSW-Logger can be used within a TypeScript based project, as a node dependency or directly in the browser.</p>
-				<h2 id="declaration-">Declaration:</h2>
-				<p>First we need to import the dependency:</p>
-				<h3 id="typescript">Typescript</h3>
-				<pre><code class="lang-ts"><span class="hljs-keyword">import</span> { JSWLogger } from <span class="hljs-string">"jsw-logger"</span>;
-</code></pre>
-				<h3 id="node-js">Node JS</h3>
-				<pre><code class="lang-js"><span class="hljs-keyword">var</span> JSWLogger = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsw-logger"</span>).JSWLogger;
-</code></pre>
-				<h3 id="browser">Browser</h3>
-				<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"path/to/deps/dist/jsw-logger.min.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-comment">&lt;!-- This exposes a global "JSWLogger" variable --&gt;</span>
-</code></pre>
-				<h2 id="instantiating">Instantiating</h2>
-				<p>We can instanciate the logger passing a bunch of options:</p>
-				<pre><code class="lang-js"><span class="hljs-keyword">var</span> Logger = JSWLogger.getInstance({
-    <span class="hljs-attr">level</span>: <span class="hljs-number">2</span>,   <span class="hljs-comment">// logs "info", "warn" and "error" by default</span>
-    hideAllLogs: <span class="hljs-literal">false</span>, <span class="hljs-comment">// hides messsages from being logged</span>
-    hideLevelLog: <span class="hljs-literal">false</span>,    <span class="hljs-comment">// hides the "LOG: " from the begining of the message</span>
-    throwError: <span class="hljs-literal">true</span>   <span class="hljs-comment">// throw an error when "Logger.throw"</span>
+				<pre><code class="lang-javascript"><span class="hljs-comment">// Declaring the module dependency</span>
+<span class="hljs-keyword">var</span> MongoPortable = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mongo-portable"</span>).MongoPortable;
+
+<span class="hljs-comment">// Instantiates a new ddbb object by passing a ddbb name</span>
+<span class="hljs-keyword">var</span> db = <span class="hljs-keyword">new</span> MongoPortable(<span class="hljs-string">"TEST"</span>);
+
+<span class="hljs-comment">// Creates a new collection named "users" </span>
+<span class="hljs-comment">//      (if it's already created, it will just return it instead)</span>
+<span class="hljs-keyword">var</span> users = db.collection(<span class="hljs-string">"users"</span>);
+
+<span class="hljs-comment">// Inserts a new document into the collection</span>
+<span class="hljs-keyword">var</span> <span class="hljs-built_in">document</span> = users.insert({ <span class="hljs-attr">name</span>: <span class="hljs-string">"John"</span>, <span class="hljs-attr">lastName</span>: <span class="hljs-string">"Abruzzi"</span> });
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">document</span>);  <span class="hljs-comment">// -&gt; { name: "John", lastName: "Abruzzi" }</span>
+
+<span class="hljs-comment">// Creates a cursor with the query information, ready to be fetched</span>
+<span class="hljs-keyword">var</span> cursor = users.find({ <span class="hljs-attr">name</span>: <span class="hljs-string">"John"</span> });
+
+<span class="hljs-comment">// Iterates over the cursor, obtaining each document that matchs the query</span>
+cursor.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">doc</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(doc);  <span class="hljs-comment">// -&gt; { name: "John", lastName: "Abruzzi" }</span>
 });
 </code></pre>
-				<p>Or we can retrieve the instance with the options by default:</p>
-				<pre><code class="lang-js"><span class="hljs-keyword">var</span> Logger = JSWLogger.instance;
+				<h1 id="modules">Modules</h1>
+				<p>The modules visibles for an application are <a href="#MongoPortable">MongoPortable</a>, <a href="#Collection">Collection</a> and <a href="#Cursor">Cursor</a>.</p>
+				<h2 id="mongoportable">MongoPortable</h2>
+				<p>Handles the database, collections and connections.</p>
+				<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/MongoPortable.md">here</a></p>
+				<h2 id="collection">Collection</h2>
+				<p>Handles the list of documents by using cursors.</p>
+				<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Collection.md">here</a></p>
+				<h2 id="cursor">Cursor</h2>
+				<p>Fetchs and access the documents to return them to the client.</p>
+				<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Cursor.md">here</a></p>
+				<hr>
+				<h1 id="stores">Stores</h1>
+				<h2 id="file-system-store">File System Store</h2>
+				<p>It is located in a separated module, so install it by:</p>
+				<pre><code class="lang-shell">npm install --save file-system-store
 </code></pre>
-				<p>Also, the options can only by setted when instantiating with the first way.
-					To change them, we should access the options object: <code>Logger.options.throwError = false</code>
-				Or we can drop the instance so we can regenerate it: <code>JSWLogger.__dropInstance()</code></p>
-				<blockquote>
-					<p>Note that as this is a singleton (can only be instantiated once), so if you drop the instance, it will be dropped for all</p>
-				</blockquote>
-				<h2 id="logging">Logging</h2>
-				<p>The level logging hierarchy is as follows:</p>
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Level</th>
-							<th>Method</th>
-							<th>Uses</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Silly</td>
-							<td>6</td>
-							<td>Logger.silly</td>
-							<td>Some dummy logs, less relevants than a debug</td>
-						</tr>
-						<tr>
-							<td>Debug</td>
-							<td>5</td>
-							<td>Logger.debug</td>
-							<td>For debugging purposes</td>
-						</tr>
-						<tr>
-							<td>Verbose</td>
-							<td>4</td>
-							<td>Logger.verbose</td>
-							<td>For extended log messages</td>
-						</tr>
-						<tr>
-							<td>Log</td>
-							<td>3</td>
-							<td>Logger.log</td>
-							<td>The standar logging</td>
-						</tr>
-						<tr>
-							<td>Info</td>
-							<td>2</td>
-							<td>Logger.info</td>
-							<td>To show relevant information messages</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td>Logger.inform</td>
-							<td>Works as an alias for &quot;info&quot;</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td>Logger.information</td>
-							<td>Worksas an alias for &quot;info&quot;</td>
-						</tr>
-						<tr>
-							<td>Warn</td>
-							<td>1</td>
-							<td>Logger.warn</td>
-							<td>To show application warnings</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td>Logger.warning</td>
-							<td>Works as an alias for &quot;warn&quot;</td>
-						</tr>
-						<tr>
-							<td>Error</td>
-							<td>0</td>
-							<td>Logger.error</td>
-							<td>To output error generated by the application</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td>Logger.throw</td>
-							<td>Same as &quot;error&quot;, but throws an Exception is configured to</td>
-						</tr>
-					</tbody>
-				</table>
-				<p>The lower we set the level whe instanciating, the less methods will output something. Eg.:</p>
-				<pre><code class="lang-js">Logger.debug(<span class="hljs-string">"Not shown"</span>); <span class="hljs-comment">// -&gt; outputs nothing, as the default is log (2)</span>
-Logger.info(<span class="hljs-string">"Some informative message"</span>); <span class="hljs-comment">// -&gt; INFO: Some informative message</span>
-<span class="hljs-comment">// Can use interpolation</span>
-Logger.warn(<span class="hljs-string">"Be careful %s!"</span>, <span class="hljs-string">"Ryan"</span>); <span class="hljs-comment">// -&gt; WARN: Be careful Ryan!</span>
-Logger.error(<span class="hljs-string">"Line %d doesn't compile"</span>, <span class="hljs-number">562</span>); <span class="hljs-comment">// -&gt; ERROR: Line 562 doesn't compile</span>
+				<p>And then use it in your application by adding it in your MongoPortable instance:</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> FileSystemStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">"file-system-store"</span>);
+db.addStore(FileSystemStore);
 </code></pre>
+				<p>or as a middleware:</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> FileSystemStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">"file-system-store"</span>);
+db.use(<span class="hljs-string">"store"</span>, FileSystemStore);
+</code></pre>
+				<p>View the package <a href="https://github.com/EastolfiWebDev/FileSystemStore">here</a> and read the full API documentation <a href="https://github.com/EastolfiWebDev/FileSystemStore/blob/master/api/FileSystemStore.md">here</a></p>
+				<hr>
+				<h2 id="to-do-list">TO-DO List</h2>
+				<h3 id="database-operations">Database Operations</h3>
+				<ul>
+					<li>[ ] DDBB<ul>
+							<li>[X] .use() (Middleware)</li>
+							<li>[X] .addStore()</li>
+							<li>[X] .dropDatabase()</li>
+							<li>[ ] Connections</li>
+						</ul>
+					</li>
+					<li>[ ] Collections<ul>
+							<li>[ ] .collectionsInfo()</li>
+							<li>[X] .collections()</li>
+							<li>[X] .collectionNames()</li>
+							<li>[X] .collection()</li>
+							<li>[X] .dropCollection()</li>
+							<li>[X] .renameCollection()</li>
+							<li>[X] .dropCollection()</li>
+							<li>[X] .dropCollection()</li>
+							<li>[X] .dropCollection()</li>
+						</ul>
+					</li>
+					<li>[ ] Indexes<ul>
+							<li>[ ] .createIndex()</li>
+							<li>[ ] .ensureIndex()</li>
+							<li>[ ] .dropIndex()</li>
+							<li>[ ] .reIndex()</li>
+							<li>[ ] .indexInformation()</li>
+						</ul>
+					</li>
+					<li>[ ] <a href="https://docs.mongodb.com/manual/reference/command/">db.runCommand()</a><ul>
+							<li>[ ] User Commands</li>
+							<li>[ ] Database Operations</li>
+							<li>[ ] Internal Commands</li>
+							<li>[ ] Testing Commands</li>
+							<li>[ ] Auditing Commands</li>
+						</ul>
+					</li>
+				</ul>
+				<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/MongoPortable.md">here</a></p>
+				<hr>
+				<h2 id="collection">Collection</h2>
+				<ul>
+					<li>[X] Creating<ul>
+							<li>[X] .insert()</li>
+						</ul>
+					</li>
+					<li>[X] Reading<ul>
+							<li>[X] .find()</li>
+							<li>[X] .findOne()</li>
+						</ul>
+					</li>
+					<li>[X] Updating<ul>
+							<li>[X] .update()</li>
+						</ul>
+					</li>
+					<li>[X] Deleting<ul>
+							<li>[X] .remove()</li>
+						</ul>
+					</li>
+				</ul>
+				<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Collection.md">here</a></p>
+				<hr>
+				<h2 id="cursor">Cursor</h2>
+				<ul>
+					<li>[X] Fetching<ul>
+							<li>[X] .rewind()</li>
+							<li>[X] .forEach()</li>
+							<li>[X] .map()</li>
+							<li>[X] .hasNext()</li>
+							<li>[X] .next()</li>
+							<li>[X] .fetchAll()</li>
+							<li>[X] .fetchOne()</li>
+							<li>[X] .count()</li>
+							<li>[X] .sort()</li>
+							<li>[X] .skip()</li>
+							<li>[X] .limit()</li>
+						</ul>
+					</li>
+					<li>[ ] Managing<ul>
+							<li>[ ] .batchSize()</li>
+							<li>[ ] .close()</li>
+							<li>[ ] .comment()</li>
+							<li>[ ] .explain()</li>
+							<li>[ ] .hint()</li>
+							<li>[ ] .itcount()</li>
+							<li>[ ] .maxScan()</li>
+							<li>[ ] .maxTimeMS()</li>
+							<li>[ ] .max()</li>
+							<li>[ ] .min()</li>
+							<li>[ ] .noCursorTimeout()</li>
+							<li>[ ] .objsLeftInBatch()</li>
+							<li>[ ] .pretty()</li>
+							<li>[ ] .readConcern()</li>
+							<li>[ ] .readPref()</li>
+							<li>[ ] .returnKey()</li>
+							<li>[ ] .showRecordId()</li>
+							<li>[ ] .size()</li>
+							<li>[ ] .snapshot()</li>
+							<li>[ ] .tailable()</li>
+							<li>[ ] .toArray()</li>
+						</ul>
+					</li>
+				</ul>
+				<p>Read the full API documentation <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/master/api/Cursor.md">here</a></p>
 				<hr>
 				<h1 id="license">License</h1>
 				<p>MIT</p>
@@ -207,88 +242,151 @@ Logger.error(<span class="hljs-string">"Line %d doesn't compile"</span>, <span c
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_aggregation_aggregation_.html">"src/aggregation/<wbr>Aggregation"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_aggregation_index_.html">"src/aggregation/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_binary_binaryparser_.html">"src/binary/<wbr>Binary<wbr>Parser"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_binary_binaryparserbuffer_.html">"src/binary/<wbr>Binary<wbr>Parser<wbr>Buffer"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_binary_index_.html">"src/binary/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_collection_collection_.html">"src/collection/<wbr>Collection"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_collection_cursor_.html">"src/collection/<wbr>Cursor"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_collection_index_.html">"src/collection/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_core_mongoportable_.html">"src/core/<wbr>Mongo<wbr>Portable"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_core_options_.html">"src/core/<wbr>Options"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_core_index_.html">"src/core/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_document_document_.html">"src/document/<wbr>Document"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_document_objectid_.html">"src/document/<wbr>Object<wbr>Id"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_document_index_.html">"src/document/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_emitter_eventemitter_.html">"src/emitter/<wbr>Event<wbr>Emitter"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_emitter_index_.html">"src/emitter/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_selector_selector_.html">"src/selector/<wbr>Selector"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_selector_selectormatcher_.html">"src/selector/<wbr>Selector<wbr>Matcher"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_selector_index_.html">"src/selector/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_utils_utils_.html">"src/utils/<wbr>Utils"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_src_utils_index_.html">"src/utils/index"</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_node_modules_jsw_logger_index_.html">"node_<wbr>modules/jsw-<wbr>logger/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_node_modules_jsw_logger_src_jsw_logger_.html">"node_<wbr>modules/jsw-<wbr>logger/src/JSW-<wbr><wbr>Logger"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_node_modules_jsw_logger_src_options_.html">"node_<wbr>modules/jsw-<wbr>logger/src/<wbr>Options"</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/aggregation.html" class="tsd-kind-icon">Aggregation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/basestore.html" class="tsd-kind-icon">Base<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/binaryparser.html" class="tsd-kind-icon">Binary<wbr>Parser</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-not-exported">
+						<a href="classes/binaryparserbuffer.html" class="tsd-kind-icon">Binary<wbr>Parser<wbr>Buffer</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-not-exported">
+						<a href="classes/clause.html" class="tsd-kind-icon">Clause</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/collection.html" class="tsd-kind-icon">Collection</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/connection.html" class="tsd-kind-icon">Connection</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/connectionhelper.html" class="tsd-kind-icon">Connection<wbr>Helper</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/cursor.html" class="tsd-kind-icon">Cursor</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/document.html" class="tsd-kind-icon">Document</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/eventemitter.html" class="tsd-kind-icon">Event<wbr>Emitter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/mongoportable.html" class="tsd-kind-icon">Mongo<wbr>Portable</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/objectid.html" class="tsd-kind-icon">Object<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-not-exported">
+						<a href="classes/options.html" class="tsd-kind-icon">Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/selector.html" class="tsd-kind-icon">Selector</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/selectormatcher.html" class="tsd-kind-icon">Selector<wbr>Matcher</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/utils.html" class="tsd-kind-icon">Utils</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iabstractstore.html" class="tsd-kind-icon">IAbstract<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#machine_id" class="tsd-kind-icon">MACHINE_<wbr>ID</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#checkforhexregexp" class="tsd-kind-icon">check<wbr>For<wbr>Hex<wbr>Reg<wbr>Exp</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#chr" class="tsd-kind-icon">chr</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#database" class="tsd-kind-icon">database</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#maxbits" class="tsd-kind-icon">max<wbr>Bits</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#pid" class="tsd-kind-icon">pid</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_applymodifier" class="tsd-kind-icon">_apply<wbr>Modifier</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_ensurefindparams" class="tsd-kind-icon">_ensure<wbr>Find<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-private tsd-is-not-exported">
+						<a href="globals.html#_getdocuments" class="tsd-kind-icon">_get<wbr>Documents</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_mapfields" class="tsd-kind-icon">_map<wbr>Fields</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_modify" class="tsd-kind-icon">_modify</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_testclause" class="tsd-kind-icon">_test<wbr>Clause</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_testlogicalclause" class="tsd-kind-icon">_test<wbr>Logical<wbr>Clause</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_testobjectclause" class="tsd-kind-icon">_test<wbr>Object<wbr>Clause</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_testoperatorclause" class="tsd-kind-icon">_test<wbr>Operator<wbr>Clause</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#_testoperatorconstraint" class="tsd-kind-icon">_test<wbr>Operator<wbr>Constraint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#do_complex_group" class="tsd-kind-icon">do_<wbr>complex_<wbr>group</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#do_group" class="tsd-kind-icon">do_<wbr>group</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#do_match" class="tsd-kind-icon">do_<wbr>match</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#do_project" class="tsd-kind-icon">do_<wbr>project</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#do_single_group" class="tsd-kind-icon">do_<wbr>single_<wbr>group</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#do_sort" class="tsd-kind-icon">do_<wbr>sort</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#getobjectsize" class="tsd-kind-icon">get<wbr>Object<wbr>Size</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-private tsd-is-not-exported">
+						<a href="globals.html#hassorting" class="tsd-kind-icon">has<wbr>Sorting</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#isvalidhexregexp" class="tsd-kind-icon">is<wbr>Valid<wbr>Hex<wbr>Reg<wbr>Exp</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#bsontypes" class="tsd-kind-icon">Bson<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#_modifiers" class="tsd-kind-icon">_modifiers</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#group_operators" class="tsd-kind-icon">group_<wbr>operators</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#stages" class="tsd-kind-icon">stages</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
