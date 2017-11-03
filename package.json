@@ -48,7 +48,8 @@
   },
   "dependencies": {
     "jsw-logger": "^1.2.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "promise": "^8.0.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.43",
