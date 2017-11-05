@@ -42,7 +42,7 @@ catch (e) {
  *
  * @param {string|number} id - Can be a 24 byte hex string, a 12 byte binary string or a Number.
  */
-var ObjectId = /** @class */ (function () {
+var ObjectId = (function () {
     function ObjectId(id) {
         // if (!(this instanceof ObjectId)) return new ObjectId(id, _hex);
         this._bsontype = "ObjectId";

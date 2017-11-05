@@ -13,7 +13,7 @@ var jsw_logger_1 = require("jsw-logger");
  *
  * @classdesc BinaryParserBuffer - based on ({@link http://jsfromhell.com/classes/binary-parser Binary Parser}) by Jonas Raoni Soares Silva
  */
-var BinaryParserBuffer = /** @class */ (function () {
+var BinaryParserBuffer = (function () {
     function BinaryParserBuffer(bigEndian, buffer) {
         this.buffer = [];
         this.logger = jsw_logger_1.JSWLogger.instance;

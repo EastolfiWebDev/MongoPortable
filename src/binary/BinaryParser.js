@@ -9,7 +9,7 @@ var maxBits = [];
 for (var i = 0; i < 64; i++) {
     maxBits[i] = Math.pow(2, i);
 }
-var BinaryParser = /** @class */ (function () {
+var BinaryParser = (function () {
     function BinaryParser(bigEndian, allowExceptions) {
         if (bigEndian === void 0) { bigEndian = false; }
         if (allowExceptions === void 0) { allowExceptions = true; }

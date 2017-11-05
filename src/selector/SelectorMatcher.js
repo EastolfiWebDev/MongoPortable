@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var SelectorMatcher = /** @class */ (function () {
+var SelectorMatcher = (function () {
     function SelectorMatcher(selector) {
         this.clauses = selector.clauses;
         this.logger = jsw_logger_1.JSWLogger.instance;

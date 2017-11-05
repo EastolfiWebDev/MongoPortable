@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("promise");
-var BaseStore = /** @class */ (function () {
+var BaseStore = (function () {
     function BaseStore() {
     }
     BaseStore.prototype.createCollection = function (event) {

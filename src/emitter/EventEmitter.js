@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var Promise = require("promise");
 var jsw_logger_1 = require("jsw-logger");
-var EventEmitter = /** @class */ (function () {
+var EventEmitter = (function () {
     function EventEmitter(options) {
         if (options === void 0) { options = {}; }
         this.options = {

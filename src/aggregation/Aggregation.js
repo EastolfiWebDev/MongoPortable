@@ -166,7 +166,7 @@ var do_group = function (documents, group_stage) {
 var do_project = function (documents, project_stage) {
     return collection_1.Cursor.project(documents, project_stage, true);
 };
-var Aggregation = /** @class */ (function () {
+var Aggregation = (function () {
     function Aggregation(pipeline) {
         this.logger = jsw_logger_1.JSWLogger.instance;
         this.pipeline = pipeline;

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var selector_1 = require("../selector");
-var Options = /** @class */ (function () {
+var Options = (function () {
     function Options(options) {
         this.__defaultOptions = {
             skip: 0,
@@ -29,7 +29,7 @@ var Options = /** @class */ (function () {
  * @license MIT Licensed
  * @classdesc Cursor class that maps a MongoDB-like cursor
  */
-var Cursor = /** @class */ (function () {
+var Cursor = (function () {
     /**
      * @param {MongoPortable} db - Additional options
      * @param {Array} documents - The list of documents

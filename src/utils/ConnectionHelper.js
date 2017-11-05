@@ -28,7 +28,7 @@ var __read = (this && this.__read) || function (o, n) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var Connection = /** @class */ (function () {
+var Connection = (function () {
     function Connection(pName, pId, pInstance) {
         this.name = pName;
         this.id = pId;
@@ -37,7 +37,7 @@ var Connection = /** @class */ (function () {
     return Connection;
 }());
 exports.Connection = Connection;
-var ConnectionHelper = /** @class */ (function () {
+var ConnectionHelper = (function () {
     function ConnectionHelper() {
         // private _pool: Array<{name: string, id: any, instance: MongoPortable}>;
         this._pool = [];

@@ -35,7 +35,7 @@ var utils_1 = require("../utils");
  *
  * @param {string} databaseName - Name of the database.
  */
-var MongoPortable = /** @class */ (function (_super) {
+var MongoPortable = (function (_super) {
     __extends(MongoPortable, _super);
     function MongoPortable(databaseName, options) {
         var _this = _super.call(this, options || { log: {} }) || this;

@@ -39,7 +39,7 @@ var getObjectSize = function (obj) {
  * @classdesc Collection class that maps a MongoDB-like collection
  */
 var database = null;
-var Collection = /** @class */ (function () {
+var Collection = (function () {
     // var Collection = function(db, collectionName, options) {
     /**
      * @param {MongoPortable} db - Additional options

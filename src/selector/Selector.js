@@ -4,12 +4,12 @@ var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
 var SelectorMatcher_1 = require("./SelectorMatcher");
 var index_1 = require("../document/index");
-var Clause = /** @class */ (function () {
+var Clause = (function () {
     function Clause() {
     }
     return Clause;
 }());
-var Selector = /** @class */ (function () {
+var Selector = (function () {
     function Selector(selector, type) {
         if (type === void 0) { type = Selector.MATCH_SELECTOR; }
         this.logger = jsw_logger_1.JSWLogger.instance;
