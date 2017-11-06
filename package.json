@@ -80,6 +80,7 @@
     "source-map-support": "^0.5.0",
     "ts-node": "^3.3.0",
     "tsconfig-paths": "^2.3.0",
+    "tslint": "^5.8.0",
     "typedoc": "^0.9.0",
     "typedoc-plugin-markdown": "^1.0.11",
     "typescript": "^2.6.1",
@@ -98,7 +99,8 @@
     "test.coveralls": "npm run test.coverage && nyc report --reporter=text-lcov | coveralls",
     "build": "tsc -p ./tsconfig.json",
     "build.w": "tsc -p ./tsconfig.json -w",
-    "build.compress": "gulp compress:app"
+    "build.compress": "gulp compress:app",
+	"lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",
