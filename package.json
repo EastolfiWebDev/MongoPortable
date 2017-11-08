@@ -101,7 +101,9 @@
     "build": "tsc -p ./tsconfig.json",
     "build.w": "tsc -p ./tsconfig.json -w",
     "build.compress": "gulp compress:app",
-    "lint": "tslint -c tslint.json 'src/utils/*.ts'"
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint.fix": "tslint -c tslint.json 'src/**/*.ts' --fix",
+    "format": "tsfmt -r"
   },
   "repository": {
     "type": "git",
