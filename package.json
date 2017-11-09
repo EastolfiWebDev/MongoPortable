@@ -14,6 +14,9 @@
     "node"
   ],
   "main": "index.js",
+  "bin": {
+	"mongo-portable": "./commands/index.js"
+  },
   "directories": {
     "doc": "doc",
     "test": "test"
