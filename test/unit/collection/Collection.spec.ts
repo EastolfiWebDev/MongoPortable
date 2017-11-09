@@ -107,7 +107,7 @@ describe("Collection", function() {
             it("should be able to save an existing document", function(done) {
                 db.collection(TEST_COLL).then(coll => {
                     // update / upsert
-                    coll.save({ _id: 12345, stringField: "save" }, function(error, updatedInfo) {
+                    coll.save({ _id: 12345, stringField: "save" }).then((updatedInfo) => {
                         expect(updatedInfo).to.exist;
                         expect(updatedInfo.updated).to.exist;
                         expect(updatedInfo.inserted).to.exist;
