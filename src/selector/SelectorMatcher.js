@@ -1,8 +1,18 @@
 "use strict";
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var SelectorMatcher = (function () {
+var _ = require("lodash");
+var SelectorMatcher = /** @class */ (function () {
     function SelectorMatcher(selector) {
         this.clauses = selector.clauses;
         this.logger = jsw_logger_1.JSWLogger.instance;
@@ -15,40 +25,50 @@ var SelectorMatcher = (function () {
             this.logger.throw("Parameter \"document\" required");
         }
         this.logger.debug("document -> not null");
-        for (var i = 0; i < this.clauses.length; i++) {
-            var clause = this.clauses[i];
-            if (clause.kind === "function") {
-                this.logger.debug("clause -> function");
-                _match = clause.value.call(null, document);
+        try {
+            for (var _a = __values(this.clauses), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var clause = _b.value;
+                if (clause.kind === "function") {
+                    this.logger.debug("clause -> function");
+                    _match = clause.value.call(null, document);
+                }
+                else if (clause.kind === "plain") {
+                    this.logger.debug("clause -> plain on field \"" + clause.key + "\" and value = " + JSON.stringify(clause.value));
+                    _match = testClause(clause, document[clause.key]);
+                    this.logger.debug("clause result -> " + _match);
+                }
+                else if (clause.kind === "object") {
+                    this.logger.debug("clause -> object on field \"" + clause.key.join(".") + "\" and value = " + JSON.stringify(clause.value));
+                    _match = testObjectClause(clause, document, _.clone(clause.key).reverse());
+                    this.logger.debug("clause result -> " + _match);
+                }
+                else if (clause.kind === "operator") {
+                    this.logger.debug("clause -> operator \"" + clause.key + "\"");
+                    _match = testLogicalClause(clause, document, clause.key);
+                    this.logger.debug("clause result -> " + _match);
+                }
+                // If any test case fails, the document will not match
+                if (_match === false /* || <string>_match === "false"*/) {
+                    this.logger.debug("the document do not matches");
+                    return false;
+                }
             }
-            else if (clause.kind === "plain") {
-                this.logger.debug("clause -> plain on field \"" + clause.key + "\" and value = " + JSON.stringify(clause.value));
-                _match = _testClause(clause, document[clause.key]);
-                this.logger.debug("clause result -> " + _match);
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
             }
-            else if (clause.kind === "object") {
-                this.logger.debug("clause -> object on field \"" + clause.key.join(".") + "\" and value = " + JSON.stringify(clause.value));
-                _match = _testObjectClause(clause, document, _.clone(clause.key).reverse());
-                this.logger.debug("clause result -> " + _match);
-            }
-            else if (clause.kind === "operator") {
-                this.logger.debug("clause -> operator \"" + clause.key + "\"");
-                _match = _testLogicalClause(clause, document, clause.key);
-                this.logger.debug("clause result -> " + _match);
-            }
-            // If any test case fails, the document will not match
-            if (_match === false /* || <string>_match === "false"*/) {
-                this.logger.debug("the document do not matches");
-                return false;
-            }
+            finally { if (e_1) throw e_1.error; }
         }
         // Everything matches
         this.logger.debug("the document matches");
         return true;
+        var e_1, _c;
     };
-    SelectorMatcher.all = function (array, value) {
+    SelectorMatcher.all = function (arr, value) {
         // $all is only meaningful on arrays
-        if (!(array instanceof Array)) {
+        if (!(arr instanceof Array)) {
             return false;
         }
         // TODO should use a canonicalizing representation, so that we
@@ -62,57 +82,96 @@ var SelectorMatcher = (function () {
                 remaining++;
             }
         });
-        for (var i = 0; i < array.length; i++) {
-            var hash = JSON.stringify(array[i]);
-            if (parts[hash]) {
-                delete parts[hash];
-                remaining--;
-                if (0 === remaining)
-                    return true;
+        try {
+            for (var arr_1 = __values(arr), arr_1_1 = arr_1.next(); !arr_1_1.done; arr_1_1 = arr_1.next()) {
+                var item = arr_1_1.value;
+                var hash = JSON.stringify(item);
+                if (parts[hash]) {
+                    delete parts[hash];
+                    remaining--;
+                    if (0 === remaining) {
+                        return true;
+                    }
+                }
             }
         }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (arr_1_1 && !arr_1_1.done && (_a = arr_1.return)) _a.call(arr_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
         return false;
+        var e_2, _a;
     };
-    SelectorMatcher.in = function (array, value) {
-        if (!_.isObject(array)) {
-            // optimization: use scalar equality (fast)
-            for (var i = 0; i < value.length; i++) {
-                if (array === value[i]) {
-                    return true;
+    SelectorMatcher.in = function (arr, value) {
+        if (!_.isObject(arr)) {
+            try {
+                // optimization: use scalar equality (fast)
+                for (var value_1 = __values(value), value_1_1 = value_1.next(); !value_1_1.done; value_1_1 = value_1.next()) {
+                    var item = value_1_1.value;
+                    if (arr === item) {
+                        return true;
+                    }
                 }
+            }
+            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+            finally {
+                try {
+                    if (value_1_1 && !value_1_1.done && (_a = value_1.return)) _a.call(value_1);
+                }
+                finally { if (e_3) throw e_3.error; }
             }
             return false;
         }
         else {
-            // nope, have to use deep equality
-            for (var i = 0; i < value.length; i++) {
-                if (SelectorMatcher.equal(array, value[i])) {
-                    return true;
+            try {
+                // nope, have to use deep equality
+                for (var value_2 = __values(value), value_2_1 = value_2.next(); !value_2_1.done; value_2_1 = value_2.next()) {
+                    var item = value_2_1.value;
+                    if (SelectorMatcher.equal(arr, item)) {
+                        return true;
+                    }
                 }
+            }
+            catch (e_4_1) { e_4 = { error: e_4_1 }; }
+            finally {
+                try {
+                    if (value_2_1 && !value_2_1.done && (_b = value_2.return)) _b.call(value_2);
+                }
+                finally { if (e_4) throw e_4.error; }
             }
             return false;
         }
+        var e_3, _a, e_4, _b;
     };
     // deep equality test: use for literal document and array matches
-    SelectorMatcher.equal = function (array, qval) {
-        var match = function (a, b) {
+    SelectorMatcher.equal = function (arr, qval) {
+        var match = function (valA, valB) {
             // scalars
-            if (_.isNumber(a) || _.isString(a) || _.isBoolean(a) || _.isNil(a))
-                return a === b;
-            if (_.isFunction(a))
-                return false; // Not allowed yet
-            // OK, typeof a === "object"
-            if (!_.isObject(b))
+            if (_.isNumber(valA) || _.isString(valA) || _.isBoolean(valA) || _.isNil(valA)) {
+                return valA === valB;
+            }
+            if (_.isFunction(valA)) {
                 return false;
+            } // Not allowed yet
+            // OK, typeof valA === "object"
+            if (!_.isObject(valB)) {
+                return false;
+            }
             // arrays
-            if (_.isArray(a)) {
-                if (!_.isArray(b))
+            if (_.isArray(valA)) {
+                if (!_.isArray(valB)) {
                     return false;
-                if (a.length !== b.length)
+                }
+                if (valA.length !== valB.length) {
                     return false;
-                for (var i_1 = 0; i_1 < a.length; i_1++) {
-                    if (!match(a[i_1], b[i_1]))
+                }
+                for (var i = 0; i < valA.length; i++) {
+                    if (!match(valA[i], valB[i])) {
                         return false;
+                    }
                 }
                 return true;
             }
@@ -133,23 +192,47 @@ var SelectorMatcher = (function () {
             // the ecmascript spec but in practice most implementations
             // preserve it. (The exception is Chrome, which preserves it
             // usually, but not for keys that parse as ints.)
-            var b_keys = [];
-            for (var array in b) {
-                b_keys.push(b[array]);
+            var bKeys = [];
+            try {
+                for (var _a = __values(Object.keys(valB)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                    var item = _b.value;
+                    bKeys.push(valB[item]);
+                }
             }
-            var i = 0;
-            for (var array_1 in a) {
-                if (i >= b_keys.length)
-                    return false;
-                if (!match(a[array_1], b_keys[i]))
-                    return false;
-                i++;
+            catch (e_5_1) { e_5 = { error: e_5_1 }; }
+            finally {
+                try {
+                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                }
+                finally { if (e_5) throw e_5.error; }
             }
-            if (i !== b_keys.length)
+            var index = 0;
+            try {
+                for (var _d = __values(Object.keys(valA)), _e = _d.next(); !_e.done; _e = _d.next()) {
+                    var item = _e.value;
+                    if (index >= bKeys.length) {
+                        return false;
+                    }
+                    if (!match(valA[item], bKeys[index])) {
+                        return false;
+                    }
+                    index++;
+                }
+            }
+            catch (e_6_1) { e_6 = { error: e_6_1 }; }
+            finally {
+                try {
+                    if (_e && !_e.done && (_f = _d.return)) _f.call(_d);
+                }
+                finally { if (e_6) throw e_6.error; }
+            }
+            if (index !== bKeys.length) {
                 return false;
+            }
             return true;
+            var e_5, _c, e_6, _f;
         };
-        return match(array, qval);
+        return match(arr, qval);
     };
     // if x is not an array, true iff f(x) is true. if x is an array,
     // true iff f(y) is true for any y in x.
@@ -158,13 +241,25 @@ var SelectorMatcher = (function () {
     // treat their arguments.
     SelectorMatcher.matches = function (value, func) {
         if (_.isArray(value)) {
-            for (var i = 0; i < value.length; i++) {
-                if (func(value[i]))
-                    return true;
+            try {
+                for (var value_3 = __values(value), value_3_1 = value_3.next(); !value_3_1.done; value_3_1 = value_3.next()) {
+                    var item = value_3_1.value;
+                    if (func(item)) {
+                        return true;
+                    }
+                }
+            }
+            catch (e_7_1) { e_7 = { error: e_7_1 }; }
+            finally {
+                try {
+                    if (value_3_1 && !value_3_1.done && (_a = value_3.return)) _a.call(value_3);
+                }
+                finally { if (e_7) throw e_7.error; }
             }
             return false;
         }
         return func(value);
+        var e_7, _a;
     };
     // like _matches, but if x is an array, it"s true not only if f(y)
     // is true for some y in x, but also if f(x) is true.
@@ -173,10 +268,10 @@ var SelectorMatcher = (function () {
     // 4}, {x: [4]}, or {x: {$in: [1,2,3]}}.
     SelectorMatcher.matches_plus = function (value, func) {
         // if (_.isArray(value)) {
-        //     for (var i = 0; i < value.length; i++) {
-        //         if (func(value[i])) return true;
-        //     }
-        //     // fall through!
+        // 	 for (var i = 0; i < value.length; i++) {
+        // 		 if (func(value[i])) return true;
+        // 	 }
+        // 	 // fall through!
         // }
         // return func(value);
         return SelectorMatcher.matches(value, func) || func(value);
@@ -184,62 +279,87 @@ var SelectorMatcher = (function () {
     // compare two values of unknown type according to BSON ordering
     // semantics. (as an extension, consider "undefined" to be less than
     // any other value.)
-    // return negative if a is less, positive if b is less, or 0 if equal
-    SelectorMatcher.cmp = function (a, b) {
-        if (_.isUndefined(a))
-            return b === undefined ? 0 : -1;
-        if (_.isUndefined(b))
+    // return negative if v is less, positive if valueB is less, or 0 if equal
+    SelectorMatcher.cmp = function (valueA, valueB) {
+        if (_.isUndefined(valueA)) {
+            return valueB === undefined ? 0 : -1;
+        }
+        if (_.isUndefined(valueB)) {
             return 1;
-        var aType = BsonTypes.getByValue(a);
-        var bType = BsonTypes.getByValue(b);
-        if (aType.order !== bType.order)
+        }
+        var aType = BSON_TYPES.getByValue(valueA);
+        var bType = BSON_TYPES.getByValue(valueB);
+        if (aType.order !== bType.order) {
             return aType.order < bType.order ? -1 : 1;
+        }
         // Same sort order, but distinct value type
         if (aType.number !== bType.number) {
             // Currently, Symbols can not be sortered in JS, so we are setting the Symbol as greater
-            if (_.isSymbol(a))
+            if (_.isSymbol(valueA)) {
                 return 1;
-            if (_.isSymbol(b))
+            }
+            if (_.isSymbol(valueB)) {
                 return -1;
+            }
             // TODO Integer, Date and Timestamp
         }
-        if (_.isNumber(a))
-            return a - b;
-        if (_.isString(a))
-            return a < b ? -1 : (a === b ? 0 : 1);
-        if (_.isBoolean(a)) {
-            if (a)
-                return b ? 0 : 1;
-            return b ? -1 : 0;
+        if (_.isNumber(valueA)) {
+            return valueA - valueB;
         }
-        if (_.isArray(a)) {
+        if (_.isString(valueA)) {
+            return valueA < valueB ? -1 : (valueA === valueA ? 0 : 1);
+        }
+        if (_.isBoolean(valueA)) {
+            if (valueA) {
+                return valueB ? 0 : 1;
+            }
+            return valueB ? -1 : 0;
+        }
+        if (_.isArray(valueA)) {
             for (var i = 0;; i++) {
-                if (i === a.length)
-                    return (i === b.length) ? 0 : -1;
-                if (i === b.length)
+                if (i === valueA.length) {
+                    return (i === valueB.length) ? 0 : -1;
+                }
+                if (i === valueB.length) {
                     return 1;
-                if (a.length !== b.length)
-                    return a.length - b.length;
-                var s = SelectorMatcher.cmp(a[i], b[i]);
-                if (s !== 0)
-                    return s;
+                }
+                if (valueA.length !== valueB.length) {
+                    return valueA.length - valueB.length;
+                }
+                var result = SelectorMatcher.cmp(valueA[i], valueB[i]);
+                if (result !== 0) {
+                    return result;
+                }
             }
         }
-        if (_.isNull(a))
+        if (_.isNull(valueA)) {
             return 0;
-        if (_.isRegExp(a))
-            throw Error("Sorting not supported on regular expression"); // TODO
-        // if (_.isFunction(a)) return {type: 13, order: 100, fnc: _.isFunction};
-        if (_.isPlainObject(a)) {
-            var to_array = function (obj) {
+        }
+        if (_.isRegExp(valueA)) {
+            throw Error("Sorting not supported on regular expression");
+        } // TODO
+        // if (_.isFunction(valueA)) return {type: 13, order: 100, fnc: _.isFunction};
+        if (_.isPlainObject(valueA)) {
+            var toArray = function (obj) {
                 var ret = [];
-                for (var key in obj) {
-                    ret.push(key);
-                    ret.push(obj[key]);
+                try {
+                    for (var _a = __values(Object.keys(obj)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                        var key = _b.value;
+                        ret.push(key);
+                        ret.push(obj[key]);
+                    }
+                }
+                catch (e_8_1) { e_8 = { error: e_8_1 }; }
+                finally {
+                    try {
+                        if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                    }
+                    finally { if (e_8) throw e_8.error; }
                 }
                 return ret;
+                var e_8, _c;
             };
-            return SelectorMatcher.cmp(to_array(a), to_array(b));
+            return SelectorMatcher.cmp(toArray(valueA), toArray(valueB));
         }
         // double
         // if (ta === 1)  return a - b;
@@ -247,44 +367,44 @@ var SelectorMatcher = (function () {
         // if (tb === 2) return a < b ? -1 : (a === b ? 0 : 1);
         // Object
         // if (ta === 3) {
-        //     // this could be much more efficient in the expected case ...
-        //     var to_array = function (obj) {
-        //         var ret = [];
-        //         for (var key in obj) {
-        //             ret.push(key);
-        //             ret.push(obj[key]);
-        //         }
-        //         return ret;
-        //     };
-        //     return Selector._f._cmp(to_array(a), to_array(b));
+        // 	 // this could be much more efficient in the expected case ...
+        // 	 var to_array = function (obj) {
+        // 		 var ret = [];
+        // 		 for (var key in obj) {
+        // 			 ret.push(key);
+        // 			 ret.push(obj[key]);
+        // 		 }
+        // 		 return ret;
+        // 	 };
+        // 	 return Selector._f._cmp(to_array(a), to_array(b));
         // }
         // Array
         // if (ta === 4) {
-        //     for (var i = 0; ; i++) {
-        //         if (i === a.length) return (i === b.length) ? 0 : -1;
-        //         if (i === b.length) return 1;
-        //         if (a.length !== b.length) return a.length - b.length;
-        //         var s = Selector._f._cmp(a[i], b[i]);
-        //         if (s !== 0) return s;
-        //     }
+        // 	 for (var i = 0; ; i++) {
+        // 		 if (i === a.length) return (i === b.length) ? 0 : -1;
+        // 		 if (i === b.length) return 1;
+        // 		 if (a.length !== b.length) return a.length - b.length;
+        // 		 var s = Selector._f._cmp(a[i], b[i]);
+        // 		 if (s !== 0) return s;
+        // 	 }
         // }
         // 5: binary data
         // 7: object id
         // boolean
         // if (ta === 8) {
-        //     if (a) return b ? 0 : 1;
-        //     return b ? -1 : 0;
+        // 	 if (a) return b ? 0 : 1;
+        // 	 return b ? -1 : 0;
         // }
         // 9: date
         // null
         // if (ta === 10) return 0;
         // regexp
         // if (ta === 11) {
-        //     throw Error("Sorting not supported on regular expression"); // TODO
+        // 	 throw Error("Sorting not supported on regular expression"); // TODO
         // }
         // 13: javascript code
         // 14: symbol
-        if (_.isSymbol(a)) {
+        if (_.isSymbol(valueA)) {
             // Currently, Symbols can not be sortered in JS, so we are returning an equality
             return 0;
         }
@@ -296,23 +416,23 @@ var SelectorMatcher = (function () {
         // 127: maxkey
         // javascript code
         // if (ta === 13) {
-        //     throw Error("Sorting not supported on Javascript code"); // TODO
+        // 	 throw Error("Sorting not supported on Javascript code"); // TODO
         // }
     };
     return SelectorMatcher;
 }());
 exports.SelectorMatcher = SelectorMatcher;
-var _testClause = function (clause, val) {
-    jsw_logger_1.JSWLogger.instance.debug("Called _testClause");
+var testClause = function (clause, val) {
+    jsw_logger_1.JSWLogger.instance.debug("Called testClause");
     // var _val = clause.value;
     // if RegExp || $ -> Operator
-    return SelectorMatcher.matches_plus(val, function (_value) {
+    return SelectorMatcher.matches_plus(val, function (value) {
         // TODO object ids, dates, timestamps?
         switch (clause.type) {
             case "null":
                 jsw_logger_1.JSWLogger.instance.debug("test Null equality");
                 // http://www.mongodb.org/display/DOCS/Querying+and+nulls
-                if (_.isNil(_value)) {
+                if (_.isNil(value)) {
                     return true;
                 }
                 else {
@@ -320,33 +440,43 @@ var _testClause = function (clause, val) {
                 }
             case "regexp":
                 jsw_logger_1.JSWLogger.instance.debug("test RegExp equality");
-                return _testOperatorClause(clause, _value);
+                return testOperatorClause(clause, value);
             case "literal_object":
                 jsw_logger_1.JSWLogger.instance.debug("test Literal Object equality");
-                return SelectorMatcher.equal(_value, clause.value);
+                return SelectorMatcher.equal(value, clause.value);
             case "operator_object":
                 jsw_logger_1.JSWLogger.instance.debug("test Operator Object equality");
-                return _testOperatorClause(clause, _value);
+                return testOperatorClause(clause, value);
             case "string":
                 jsw_logger_1.JSWLogger.instance.debug("test String equality");
-                return _.toString(_value) === _.toString(clause.value);
+                return _.toString(value) === _.toString(clause.value);
             case "number":
                 jsw_logger_1.JSWLogger.instance.debug("test Number equality");
-                return _.toNumber(_value) === _.toNumber(clause.value);
+                return _.toNumber(value) === _.toNumber(clause.value);
             case "boolean":
                 jsw_logger_1.JSWLogger.instance.debug("test Boolean equality");
-                return (_.isBoolean(_value) && _.isBoolean(clause.value) && (_value === clause.value));
+                return (_.isBoolean(value) && _.isBoolean(clause.value) && (value === clause.value));
             case "array":
                 jsw_logger_1.JSWLogger.instance.debug("test Boolean equality");
                 // Check type
-                if (_.isArray(_value) && _.isArray(clause.value)) {
+                if (_.isArray(value) && _.isArray(clause.value)) {
                     // Check length
-                    if (_value.length === clause.value.length) {
-                        // Check items
-                        for (var i = 0; i < _value.length; i++) {
-                            if (clause.value.indexOf(_value[i]) === -1) {
-                                return false;
+                    if (value.length === clause.value.length) {
+                        try {
+                            // Check items
+                            for (var value_4 = __values(value), value_4_1 = value_4.next(); !value_4_1.done; value_4_1 = value_4.next()) {
+                                var item = value_4_1.value;
+                                if (clause.value.indexOf(item) === -1) {
+                                    return false;
+                                }
                             }
+                        }
+                        catch (e_9_1) { e_9 = { error: e_9_1 }; }
+                        finally {
+                            try {
+                                if (value_4_1 && !value_4_1.done && (_a = value_4.return)) _a.call(value_4);
+                            }
+                            finally { if (e_9) throw e_9.error; }
                         }
                         return true;
                     }
@@ -360,66 +490,93 @@ var _testClause = function (clause, val) {
             case "function":
                 jsw_logger_1.JSWLogger.instance.debug("test Function equality");
                 jsw_logger_1.JSWLogger.instance.throw("Bad value type in query");
+                break;
             default:
                 jsw_logger_1.JSWLogger.instance.throw("Bad value type in query");
         }
+        var e_9, _a;
     });
 };
-var _testObjectClause = function (clause, doc, key) {
-    jsw_logger_1.JSWLogger.instance.debug("Called _testObjectClause");
+var testObjectClause = function (clause, doc, key) {
+    jsw_logger_1.JSWLogger.instance.debug("Called testObjectClause");
     var val = null;
+    var path = null;
     if (key.length > 0) {
-        var path = key.pop();
+        path = key.pop();
         val = doc[path];
         jsw_logger_1.JSWLogger.instance.debug("check on field " + path);
         // TODO add _.isNumber(val) and treat it as an array
         if (val) {
             jsw_logger_1.JSWLogger.instance.log(val);
             jsw_logger_1.JSWLogger.instance.debug("going deeper");
-            return _testObjectClause(clause, val, key);
+            return testObjectClause(clause, val, key);
         }
     }
     else {
         jsw_logger_1.JSWLogger.instance.debug("lowest path: " + path);
-        return _testClause(clause, doc);
+        return testClause(clause, doc);
     }
 };
-var _testLogicalClause = function (clause, doc, key) {
+var testLogicalClause = function (clause, doc, key) {
     var matches = null;
-    for (var i = 0; i < clause.value.length; i++) {
-        var _matcher = new SelectorMatcher({ clauses: [clause.value[i]] });
-        switch (key) {
-            case "and":
-                // True unless it has one that do not match
-                if (_.isNil(matches))
-                    matches = true;
-                if (!_matcher.test(doc)) {
-                    return false;
-                }
-                break;
-            case "or":
-                // False unless it has one match at least
-                if (_.isNil(matches))
-                    matches = false;
-                if (_matcher.test(doc)) {
-                    return true;
-                }
-                break;
+    try {
+        for (var _a = __values(clause.value), _b = _a.next(); !_b.done; _b = _a.next()) {
+            var clauseValue = _b.value;
+            var matcher = new SelectorMatcher({ clauses: [clauseValue] });
+            switch (key) {
+                case "and":
+                    // True unless it has one that do not match
+                    if (_.isNil(matches)) {
+                        matches = true;
+                    }
+                    if (!matcher.test(doc)) {
+                        return false;
+                    }
+                    break;
+                case "or":
+                    // False unless it has one match at least
+                    if (_.isNil(matches)) {
+                        matches = false;
+                    }
+                    if (matcher.test(doc)) {
+                        return true;
+                    }
+                    break;
+            }
         }
+    }
+    catch (e_10_1) { e_10 = { error: e_10_1 }; }
+    finally {
+        try {
+            if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+        }
+        finally { if (e_10) throw e_10.error; }
     }
     return matches || false;
+    var e_10, _c;
 };
-var _testOperatorClause = function (clause, value) {
-    jsw_logger_1.JSWLogger.instance.debug("Called _testOperatorClause");
-    for (var key in clause.value) {
-        if (!_testOperatorConstraint(key, clause.value[key], clause.value, value, clause)) {
-            return false;
+var testOperatorClause = function (clause, value) {
+    jsw_logger_1.JSWLogger.instance.debug("Called testOperatorClause");
+    try {
+        for (var _a = __values(Object.keys(clause.value)), _b = _a.next(); !_b.done; _b = _a.next()) {
+            var key = _b.value;
+            if (!testOperatorConstraint(key, clause.value[key], clause.value, value, clause)) {
+                return false;
+            }
         }
     }
+    catch (e_11_1) { e_11 = { error: e_11_1 }; }
+    finally {
+        try {
+            if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+        }
+        finally { if (e_11) throw e_11.error; }
+    }
     return true;
+    var e_11, _c;
 };
-var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal, clause) {
-    jsw_logger_1.JSWLogger.instance.debug("Called _testOperatorConstraint");
+var testOperatorConstraint = function (key, operatorValue, clauseValue, docVal, clause) {
+    jsw_logger_1.JSWLogger.instance.debug("Called testOperatorConstraint");
     switch (key) {
         // Comparison Query Operators
         case "$gt":
@@ -459,10 +616,11 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             };
             var _parent = clause.value;
             var _key =
-            return !(_testClause(_clause, docVal));
+            return !(testClause(_clause, docVal));
             */
             // TODO implement
             jsw_logger_1.JSWLogger.instance.throw("$not unimplemented");
+            break;
         // Element Query Operators
         case "$exists":
             jsw_logger_1.JSWLogger.instance.debug("testing operator $exists");
@@ -475,6 +633,7 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             // var Selector._f._type(docVal);
             // return Selector._f._type(docVal).type === operatorValue;
             jsw_logger_1.JSWLogger.instance.throw("$type unimplemented");
+            break;
         // Evaluation Query Operators
         case "$mod":
             jsw_logger_1.JSWLogger.instance.debug("testing operator $mod");
@@ -487,9 +646,9 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             jsw_logger_1.JSWLogger.instance.debug("testing operator $regex");
             var _opt = null;
             if (_.hasIn(clauseValue, "$options")) {
-                _opt = clauseValue["$options"];
+                _opt = clauseValue.$options;
                 if (/[xs]/.test(_opt)) {
-                    //g, i, m, x, s
+                    // g, i, m, x, s
                     // TODO mongo uses PCRE and supports some additional flags: "x" and
                     // "s". javascript doesn"t support them. so this is a divergence
                     // between our behavior and mongo"s behavior. ideally we would
@@ -541,8 +700,8 @@ var _testOperatorConstraint = function (key, operatorValue, clauseValue, docVal,
             jsw_logger_1.JSWLogger.instance.throw("Unrecognized key in selector: " + key);
     }
 };
-var BsonTypes = {
-    _types: [
+var BSON_TYPES = {
+    types: [
         { alias: "minKey", number: -1, order: 1, isType: null },
         { alias: "null", number: 10, order: 2, isType: null },
         { alias: "int", number: 16, order: 3, isType: _.isInteger },
@@ -567,28 +726,48 @@ var BsonTypes = {
         // 		function
     ],
     getByAlias: function (alias) {
-        for (var i = 0; i < this._types.length; i++) {
-            if (this._types[i].alias === alias)
-                return this._types[i];
+        try {
+            for (var _a = __values(this.types), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var type = _b.value;
+                if (type.alias === alias) {
+                    return type;
+                }
+            }
         }
+        catch (e_12_1) { e_12 = { error: e_12_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            }
+            finally { if (e_12) throw e_12.error; }
+        }
+        var e_12, _c;
     },
     getByValue: function (val) {
-        if (_.isNumber(val))
+        if (_.isNumber(val)) {
             return this.getByAlias("double");
-        if (_.isString(val))
+        }
+        if (_.isString(val)) {
             return this.getByAlias("string");
-        if (_.isBoolean(val))
+        }
+        if (_.isBoolean(val)) {
             return this.getByAlias("bool");
-        if (_.isArray(val))
+        }
+        if (_.isArray(val)) {
             return this.getByAlias("array");
-        if (_.isNull(val))
+        }
+        if (_.isNull(val)) {
             return this.getByAlias("null");
-        if (_.isRegExp(val))
+        }
+        if (_.isRegExp(val)) {
             return this.getByAlias("regex");
-        if (_.isPlainObject(val))
+        }
+        if (_.isPlainObject(val)) {
             return this.getByAlias("object");
-        if (_.isSymbol(val))
+        }
+        if (_.isSymbol(val)) {
             return this.getByAlias("symbol");
+        }
         jsw_logger_1.JSWLogger.instance.throw("Unaccepted BSON type");
     }
 };

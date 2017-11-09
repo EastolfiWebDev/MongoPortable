@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
+var _ = require("lodash");
 var index_1 = require("../binary/index");
-/**
+/***
  * Machine id.
  *
  * Create a random 3-byte value (i.e. unique for this
@@ -17,19 +17,21 @@ var MACHINE_ID = parseInt("" + Math.random() * 0xFFFFFF, 10);
 var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 var isValidHexRegExp = function (str, len) {
     if (len === void 0) { len = 24; }
-    if (str.length === len && checkForHexRegExp.test(str))
+    if (str.length === len && checkForHexRegExp.test(str)) {
         return true;
+    }
     return false;
 };
 var pid = Math.floor(Math.random() * 100000);
 try {
-    if (!_.isNil(process))
+    if (!_.isNil(process)) {
         pid = process.pid;
+    }
 }
 catch (e) {
     // "process" does not exists -> keep the value from Math.random
 }
-/**
+/***
  * ObjectId
  *
  * @module ObjectId
@@ -42,10 +44,9 @@ catch (e) {
  *
  * @param {string|number} id - Can be a 24 byte hex string, a 12 byte binary string or a Number.
  */
-var ObjectId = (function () {
+var ObjectId = /** @class */ (function () {
     function ObjectId(id) {
         // if (!(this instanceof ObjectId)) return new ObjectId(id, _hex);
-        this._bsontype = "ObjectId";
         this.logger = jsw_logger_1.JSWLogger.instance;
         this.binaryParser = new index_1.BinaryParser();
         if (_.isNil(id)) {
@@ -77,10 +78,10 @@ var ObjectId = (function () {
             }
         }
         if (ObjectId.cacheHexString) {
-            this.__id = this.toHexString();
+            this.cachedId = this.toHexString();
         }
     }
-    /**
+    /***
      * Return the ObjectId id as a 24 byte hex string representation
      *
      * @method ObjectId#toHexString
@@ -88,24 +89,27 @@ var ObjectId = (function () {
      * @returns {String} The 24 byte hex string representation.
      */
     ObjectId.prototype.toHexString = function () {
-        if (ObjectId.cacheHexString && this.__id)
-            return this.__id;
-        var hexString = "", number, value;
+        if (ObjectId.cacheHexString && this.cachedId) {
+            return this.cachedId;
+        }
+        var hexString = "";
+        var num;
+        var value;
         for (var index = 0, len = this.id.length; index < len; index++) {
-            var char = this.id[index];
-            if (_.isNaN(parseInt(char))) {
-                char = "" + char.charCodeAt(0);
+            var idChar = this.id[index];
+            if (_.isNaN(parseInt(idChar, 10))) {
+                idChar = "" + idChar.charCodeAt(0);
             }
-            value = this.binaryParser.toByte(parseInt(char));
-            number = value <= 15 ? "0" + value.toString(16) : value.toString(16);
-            hexString = hexString + number;
+            value = this.binaryParser.toByte(parseInt(idChar, 10));
+            num = value <= 15 ? "0" + value.toString(16) : value.toString(16);
+            hexString = hexString + num;
         }
         if (ObjectId.cacheHexString) {
-            this.__id = hexString;
+            this.cachedId = hexString;
         }
         return hexString;
     };
-    /**
+    /***
      * Alias for {@link ObjectId#toHexString}
      *
      * @method Cursor#next
@@ -113,7 +117,7 @@ var ObjectId = (function () {
     ObjectId.prototype.toString = function () {
         return this.toHexString();
     };
-    /**
+    /***
      * Alias for {@link ObjectId#toHexString}
      *
      * @method Cursor#next
@@ -121,7 +125,7 @@ var ObjectId = (function () {
     ObjectId.prototype.toJSON = function () {
         return this.toHexString();
     };
-    /**
+    /***
      * Update the ObjectId index used in generating new ObjectId"s on the driver
      *
      * @method ObjectId#get_inc
@@ -138,9 +142,9 @@ var ObjectId = (function () {
         for (var i = 0; i < length; i++) {
             token += abc[Math.floor(Math.random() * abc.length)];
         }
-        return token; //Will return a 32 bit "hash"
+        return token; // Will return a 32 bit "hash"
     };
-    /**
+    /***
      * Generate a 12 byte id string used in ObjectId"s
      *
      * @method ObjectId#generate
@@ -152,7 +156,7 @@ var ObjectId = (function () {
      */
     ObjectId.prototype.generate = function (time) {
         // If is a number string, parse it
-        if (!_.isNil(time) && _.isString(time) && !_.isNaN(parseInt(time))) {
+        if (!_.isNil(time) && _.isString(time) && !_.isNaN(parseInt(time, 10))) {
             time = _.toNumber(time);
         }
         // If its still a non-number, take a new timestamp
@@ -176,17 +180,17 @@ var ObjectId = (function () {
         }
         // // If is a number string, parse it
         // if (!_.isNil(time) && _.isString(time) && !_.isNaN(parseInt(<string>time))) {
-        //     time = <number>_.toNumber(time);
+        // 	 time = <number>_.toNumber(time);
         // }
         // // If its still a non-number, take a new timestamp
         // if (_.isNil(time) || !_.isNumber(time)) {
-        //     let now = _.toString(Date.now());
-        //     let first = now.substr(0, now.length / 2);
-        //     let second = now.substr(now.length / 2, now.length);
-        //     time = parseInt(first, 10) + parseInt(second, 10);
-        //     time = parseInt(`${second}${time}`, 10);
-        //     time = time / 1000;
-        //     // time = Date.now() / 1000;
+        // 	 let now = _.toString(Date.now());
+        // 	 let first = now.substr(0, now.length / 2);
+        // 	 let second = now.substr(now.length / 2, now.length);
+        // 	 time = parseInt(first, 10) + parseInt(second, 10);
+        // 	 time = parseInt(`${second}${time}`, 10);
+        // 	 time = time / 1000;
+        // 	 // time = Date.now() / 1000;
         // }
         // /* for time-based ObjectId the bytes following the time will be zeroed */
         // var time4Bytes = this.binaryParser.encodeInt(<number>time, 32, true, true);
@@ -196,7 +200,7 @@ var ObjectId = (function () {
         // var index3Bytes = this.binaryParser.encodeInt(this.getInc(), 24, false, true);
         // return time4Bytes + machine3Bytes + pid2Bytes + index3Bytes;
     };
-    /**
+    /***
      * Compares the equality of this ObjectId with [otherID].
      *
      * @method ObjectId#equals
@@ -209,7 +213,7 @@ var ObjectId = (function () {
         var id = (otherID instanceof ObjectId || otherID.toHexString) ? otherID.id : ObjectId.createFromHexString(otherID).id;
         return this.id === id;
     };
-    /**
+    /***
      * Returns the generation time in seconds that this ID was generated.
      *
      * @method ObjectId#getTimestamp
@@ -229,14 +233,14 @@ var ObjectId = (function () {
         set: function (value) {
             value = this.binaryParser.encodeInt(value, 32, true, true);
             this.id = value + this.id.substr(4);
-            // delete this.__id;
+            // delete this.cachedId;
             this.toHexString();
         },
         enumerable: true,
         configurable: true
     });
     /* STATIC METHODS */
-    /**
+    /***
      * Creates an ObjectId from a hex string representation of an ObjectId.
      *
      * @method ObjectId#createFromHexString
@@ -247,19 +251,21 @@ var ObjectId = (function () {
      */
     ObjectId.createFromHexString = function (hexString) {
         // Throw an error if it"s not a valid setup
-        if (_.isNil(hexString) || hexString.length != 24) {
+        if (_.isNil(hexString) || hexString.length !== 24) {
             throw new Error("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
         }
         var len = hexString.length;
-        var result = "", string, number;
+        var result = "";
+        var str;
+        var num;
         for (var index = 0; index < len; index += 2) {
-            string = hexString.substr(index, 2);
-            number = parseInt(string, 16);
-            result += new index_1.BinaryParser().fromByte(number);
+            str = hexString.substr(index, 2);
+            num = parseInt(str, 16);
+            result += new index_1.BinaryParser().fromByte(num);
         }
         return new ObjectId(result);
     };
-    /**
+    /***
      * Creates an ObjectId from a second based number, with the rest of the ObjectId zeroed out.
      * Used for comparisons or sorting the ObjectId.
      *
@@ -274,7 +280,7 @@ var ObjectId = (function () {
         var id = binaryParser.encodeInt(time, 32, true, true) + binaryParser.encodeInt(0, 64, true, true);
         return new ObjectId(id);
     };
-    /**
+    /***
      * Creates an ObjectId from a second based number, with the rest of the ObjectId zeroed out. Used for comparisons or sorting the ObjectId.
      *
      * @method ObjectId#createPk

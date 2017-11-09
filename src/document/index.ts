@@ -1,2 +1,2 @@
-export * 		from "./Document";
-export * 		from "./ObjectId";
+export * from "./Document";
+export * from "./ObjectId";

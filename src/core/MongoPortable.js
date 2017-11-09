@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
+/***
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  *
@@ -18,14 +18,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @copyright 2016 Eduardo Astolfi <eastolfi91@gmail.com>
  * @license MIT Licensed
  */
+var jsw_logger_1 = require("jsw-logger");
 var _ = require("lodash");
 var Promise = require("promise");
-var jsw_logger_1 = require("jsw-logger");
-var emitter_1 = require("../emitter");
 var collection_1 = require("../collection");
 var document_1 = require("../document");
+var emitter_1 = require("../emitter");
 var utils_1 = require("../utils");
-/**
+/***
  * MongoPortable
  *
  * @module MongoPortable
@@ -33,18 +33,12 @@ var utils_1 = require("../utils");
  *
  * @classdesc Portable database with persistence and MongoDB-like API
  *
- * @param {string} databaseName - Name of the database.
+ * @param  {string} databaseName - Name of the database.
  */
-var MongoPortable = (function (_super) {
+var MongoPortable = /** @class */ (function (_super) {
     __extends(MongoPortable, _super);
     function MongoPortable(databaseName, options) {
         var _this = _super.call(this, options || { log: {} }) || this;
-        /**
-         * Alias for {@link MongoPortable#collection}
-         *
-         * @method MongoPortable#createCollection
-         */
-        _this.createCollection = _this.collection;
         _this.logger = jsw_logger_1.JSWLogger.instance;
         // If we have already this instance, return it
         if (MongoPortable._connHelper.hasConnection(databaseName)) {
@@ -63,13 +57,13 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.emit = function (name, args) {
         return _super.prototype.emit.call(this, name, args, this._stores);
     };
-    /**
+    /***
      * Middleware functions
      *
      * @param  {String} name - Name of the middleware:
-     *      <ul>
-     *          <li>"store": Add a custom store</li>
-     *      </ul>
+     *	  <ul>
+     *		  <li>"store": Add a custom store</li>
+     *	  </ul>
      * @param  {Object|Function} fn - Function to implement the middleware
      */
     MongoPortable.prototype.use = function (name, obj) {
@@ -79,7 +73,7 @@ var MongoPortable = (function (_super) {
                 break;
         }
     };
-    /**
+    /***
      * Adds a custom stores for remote and local persistence
      *
      * @param {Object|Function} store - The custom store
@@ -87,8 +81,9 @@ var MongoPortable = (function (_super) {
      * @returns {MongoPortable} this - The current Instance
      */
     MongoPortable.prototype.addStore = function (store) {
-        if (_.isNil(store))
+        if (_.isNil(store)) {
             this.logger.throw("missing \"store\" parameter");
+        }
         if (_.isFunction(store)) {
             this._stores.push(new store());
         }
@@ -100,20 +95,7 @@ var MongoPortable = (function (_super) {
         }
         return this;
     };
-    /**
-     * Retrieves the instance of that DDBB name
-     *
-     * @param {String} name - The DDBB name
-     *
-     * @return {MongoPortable} - The DDBB instance
-     */
-    MongoPortable.getInstance = function (name) {
-        if (!_.isNil(name)) {
-            return MongoPortable._connHelper.getConnection(name);
-        }
-        return null;
-    };
-    /**
+    /***
      * Returns a cursor to all the collection information.
      *
      * @param {String} [collectionName=null] - the collection name we wish to retrieve the information from.
@@ -126,7 +108,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.collectionsInfo = function (collectionName, callback) {
         this.logger.throw("Not implemented yet");
     };
-    /**
+    /***
      * Alias for {@link MongoPortable#collections}
      *
      * @method MongoPortable#fetchCollections
@@ -134,7 +116,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.fetchCollections = function (options, callback) {
         return this.collections(options, callback);
     };
-    /**
+    /***
      * Get the list of all collection for the specified db
      *
      * @method MongoPortable#collections
@@ -152,36 +134,38 @@ var MongoPortable = (function (_super) {
         if (_.isNil(callback) && _.isFunction(options)) {
             callback = options;
         }
-        if (_.isNil(options))
+        if (_.isNil(options)) {
             options = {};
+        }
         var self = this;
         var collectionList = [];
-        for (var name in self._collections) {
+        for (var name_1 in self._collections) {
             // Only add the requested collections //TODO Add array type
             if (options.collectionName) {
-                if (name.toLowerCase() === options.collectionName.toLowerCase()) {
+                if (name_1.toLowerCase() === options.collectionName.toLowerCase()) {
                     if (options.namesOnly) {
-                        collectionList.push(name);
+                        collectionList.push(name_1);
                     }
                     else {
-                        collectionList.push(self._collections[name]);
+                        collectionList.push(self._collections[name_1]);
                     }
                 }
             }
             else {
                 if (options.namesOnly) {
-                    collectionList.push(name);
+                    collectionList.push(name_1);
                 }
                 else {
-                    collectionList.push(self._collections[name]);
+                    collectionList.push(self._collections[name_1]);
                 }
             }
         }
-        if (callback)
+        if (callback) {
             callback(collectionList);
+        }
         return collectionList;
     };
-    /**
+    /***
      * Get the list of all collection names for the specified db,
      *  by calling MongoPortable#collections with [options.namesOnly = true]
      *
@@ -201,12 +185,13 @@ var MongoPortable = (function (_super) {
         if (_.isNil(callback) && _.isFunction(options)) {
             callback = options;
         }
-        if (_.isNil(options))
+        if (_.isNil(options)) {
             options = {};
+        }
         options.namesOnly = true;
         return this.collections(options, callback);
     };
-    /**
+    /***
      * Creates a collection on a server pre-allocating space, need to create f.ex capped collections.
      *
      * @method MongoPortable#collection
@@ -215,12 +200,12 @@ var MongoPortable = (function (_super) {
      * @param {Object} [options] - returns option results.
      *
      * @param {Boolean|Object} [options.safe=false] Executes with a getLastError command returning the results of the command on MongoMonglo:
-     *      <ul>
-     *          <li>true</li>
-     *          <li>false</li>
-     *          <li>{ w: {Number}, wtimeout: {Number}}</li>
-     *          <li>{ fsync: true }</li>
-     *      </ul>
+     *	  <ul>
+     *		  <li>true</li>
+     *		  <li>false</li>
+     *		  <li>{ w: {Number}, wtimeout: {Number}}</li>
+     *		  <li>{ fsync: true }</li>
+     *	  </ul>
      * @param {Boolean} [options.serializeFunctions=false] - Serialize functions on the document.
      * @param {Boolean} [options.raw=false] - Perform all operations using raw bson objects.
      * @param {Object} [options.pkFactory=null] - Object overriding the basic ObjectId primary key generation.
@@ -229,13 +214,13 @@ var MongoPortable = (function (_super) {
      * @param {Number} [options.max=500] - The maximum number of documents in the capped collection.
      * @param {Boolean} [options.autoIndexId=false] - Create an index on the _id field of the document, not created automatically on capped collections.
      * @param {String} [options.readPreference=ReadPreference.PRIMARY] - Te prefered read preference:
-     *      <ul>
-     *          <li>ReadPreference.PRIMARY</li>
-     *          <li>ReadPreference.PRIMARY_PREFERRED</li>
-     *          <li>ReadPreference.SECONDARY</li>
-     *          <li>ReadPreference.SECONDARY_PREFERRED</li>
-     *          <li>ReadPreference.NEAREST</li>
-     *      </ul>
+     *	  <ul>
+     *		  <li>ReadPreference.PRIMARY</li>
+     *		  <li>ReadPreference.PRIMARY_PREFERRED</li>
+     *		  <li>ReadPreference.SECONDARY</li>
+     *		  <li>ReadPreference.SECONDARY_PREFERRED</li>
+     *		  <li>ReadPreference.NEAREST</li>
+     *	  </ul>
      *
      * @param {Function} [callback=null] - Callback function to be called at the end with the results
      *
@@ -260,7 +245,7 @@ var MongoPortable = (function (_super) {
                 _this._collections[collectionName] = new collection_1.Collection(_this, collectionName /*, this.pkFactory*/ /*, options*/);
                 existing = false;
             }
-            /**
+            /***
              * "createCollection" event.
              *
              * @event MongoPortable~createCollection
@@ -282,22 +267,32 @@ var MongoPortable = (function (_super) {
                     });
                 }
                 // return self._collections[collectionName];
-                if (callback)
+                if (callback) {
                     callback(null, _this._collections[collectionName]);
+                }
                 resolve(_this._collections[collectionName]);
             }).catch(function (error) {
-                if (callback)
+                if (callback) {
                     callback(error, null);
+                }
                 reject(error);
             });
         });
     };
-    /**
+    /***
+     * Alias for {@link MongoPortable#collection}
+     *
+     * @method MongoPortable#createCollection
+     */
+    MongoPortable.prototype.createCollection = function (collectionName, options, callback) {
+        return this.collection(collectionName, options, callback);
+    };
+    /***
      * Drop a collection from the database, removing it permanently. New accesses will create a new collection.
      *
      * @method MongoPortable#dropCollection
      *
-     * @param {String} collectionName - The name of the collection we wish to drop.
+     * @param  {String} collectionName - The name of the collection we wish to drop.
      * @param {Function} [callback=null] - Callback function to be called at the end with the results
      *
      * @returns {Promise<Boolean>} Promise with "true" if dropped successfully
@@ -312,25 +307,28 @@ var MongoPortable = (function (_super) {
                     collection: _this._collections[collectionName]
                 }).then(function () {
                     delete _this._collections[collectionName];
-                    if (callback && _.isFunction(callback))
+                    if (callback && _.isFunction(callback)) {
                         callback(null, true);
+                    }
                     resolve(true);
                 }).catch(function (error) {
-                    if (callback && _.isFunction(callback))
+                    if (callback && _.isFunction(callback)) {
                         callback(error, false);
+                    }
                     reject(error);
                 });
             }
             else {
                 var error = new Error("No collection found");
                 _this.logger.throw(error);
-                if (callback && _.isFunction(callback))
+                if (callback && _.isFunction(callback)) {
                     callback(error, false);
+                }
                 reject(error);
             }
         });
     };
-    /**
+    /***
      * Rename a collection.
      *
      * @method MongoPortable#renameCollection
@@ -347,8 +345,9 @@ var MongoPortable = (function (_super) {
             if (!_.isString(fromCollection) || !_.isString(toCollection) || fromCollection === toCollection) {
                 var error = new Error("You should pass two different string names");
                 _this.logger.throw(error);
-                if (callback && _.isFunction(callback))
+                if (callback && _.isFunction(callback)) {
                     callback(error, null);
+                }
                 reject(error);
             }
             else {
@@ -365,8 +364,9 @@ var MongoPortable = (function (_super) {
                             // this._collections.renameProperty(fromCollection, toCollection);
                             // this.renameProperty(fromCollection, toCollection);
                             utils_1.Utils.renameObjectProperty(_this, fromCollection, toCollection);
-                            if (callback && _.isFunction(callback))
+                            if (callback && _.isFunction(callback)) {
                                 callback(null, renamed);
+                            }
                             resolve(renamed);
                         }
                         else {
@@ -374,22 +374,24 @@ var MongoPortable = (function (_super) {
                         }
                     }).catch(function (error) {
                         _this.logger.throw(error);
-                        if (callback && _.isFunction(callback))
+                        if (callback && _.isFunction(callback)) {
                             callback(error, null);
+                        }
                         reject(error);
                     });
                 }
                 else {
                     var error = new Error("No collection found");
                     _this.logger.throw(error);
-                    if (callback && _.isFunction(callback))
+                    if (callback && _.isFunction(callback)) {
                         callback(error, null);
+                    }
                     reject(error);
                 }
             }
         });
     };
-    /**
+    /***
      * Creates an index on the collection.
      *
      * @method MongoPortable#createIndex
@@ -399,16 +401,17 @@ var MongoPortable = (function (_super) {
      * @param {Object} [options] - Additional options during update.
      *
      * @param {Boolean|Object} [options.safe=false] Executes with a getLastError command returning the results of the command on MongoMonglo:
-     *      <ul>
-     *          <li>true</li>
-     *          <li>false</li>
-     *          <li>{ w: {Number}, wtimeout: {Number}}</li>
-     *          <li>{ fsync: true }</li>
-     *      </ul>
+     *	  <ul>
+     *		  <li>true</li>
+     *		  <li>false</li>
+     *		  <li>{ w: {Number}, wtimeout: {Number}}</li>
+     *		  <li>{ fsync: true }</li>
+     *	  </ul>
      * @param {Boolean} [options.unique=false] - Creates an unique index
      * @param {Boolean} [options.sparse=false] - Creates a sparse index
      * @param {Boolean} [options.background=false] - Creates the index in the background, yielding whenever possible
-     * @param {Boolean} [options.dropDups=false] - A unique index cannot be created on a key that has pre-existing duplicate values. If you would like to create the index anyway, keeping the first document the database indexes and deleting all subsequent documents that have duplicate value
+     * @param {Boolean} [options.dropDups=false] - A unique index cannot be created on a key that has pre-existing duplicate values.
+     * 		If you would like to create the index anyway, keeping the first document the database indexes and deleting all subsequent documents that have duplicate value
      * @param {Number} [options.min=null] - For geospatial indexes set the lower bound for the co-ordinates
      * @param {Number} [options.max=null] - For geospatial indexes set the high bound for the co-ordinates
      * @param {Number} [options.v=null] - Specify the format version of the indexes
@@ -422,7 +425,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.createIndex = function (collectionName, fieldOrSpec, options, callback) {
         this.logger.throw("Not implemented yet!");
     };
-    /**
+    /***
      * Ensures that an index exists, if it does not it creates it
      *
      * @method MongoPortable#ensureIndex
@@ -432,16 +435,17 @@ var MongoPortable = (function (_super) {
      * @param {Object} [options] - Additional options during update.
      *
      * @param {Boolean|Object} [options.safe=false] - Executes with a getLastError command returning the results of the command on MongoMonglo:
-     *      <ul>
-     *          <li>true</li>
-     *          <li>false</li>
-     *          <li>{ w: {Number}, wtimeout: {Number}}</li>
-     *          <li>{ fsync: true }</li>
-     *      </ul>
+     *	  <ul>
+     *		  <li>true</li>
+     *		  <li>false</li>
+     *		  <li>{ w: {Number}, wtimeout: {Number}}</li>
+     *		  <li>{ fsync: true }</li>
+     *	  </ul>
      * @param {Boolean} [options.unique=false] - Creates an unique index
      * @param {Boolean} [options.sparse=false] - Creates a sparse index
      * @param {Boolean} [options.background=false] - Creates the index in the background, yielding whenever possible
-     * @param {Boolean} [options.dropDups=false] - A unique index cannot be created on a key that has pre-existing duplicate values. If you would like to create the index anyway, keeping the first document the database indexes and deleting all subsequent documents that have duplicate value
+     * @param {Boolean} [options.dropDups=false] - A unique index cannot be created on a key that has pre-existing duplicate values.
+     * 		If you would like to create the index anyway, keeping the first document the database indexes and deleting all subsequent documents that have duplicate value
      * @param {Number} [options.min] - For geospatial indexes set the lower bound for the co-ordinates
      * @param {Number} [options.max] - For geospatial indexes set the high bound for the co-ordinates
      * @param {Number} [options.v] - Specify the format version of the indexes
@@ -455,7 +459,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.ensureIndex = function (collectionName, fieldOrSpec, options, callback) {
         this.logger.throw("Not implemented yet!");
     };
-    /**
+    /***
      * Drop an index on a collection.
      *
      * @method MongoPortable#dropIndex
@@ -469,7 +473,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.dropIndex = function (collectionName, indexName, callback) {
         this.logger.throw("Not implemented yet!");
     };
-    /**
+    /***
      * Reindex all indexes on the collection
      * Warning: "reIndex" is a blocking operation (indexes are rebuilt in the foreground) and will be slow for large collections.
      *
@@ -483,7 +487,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.reIndex = function (collectionName, callback) {
         this.logger.throw("Not implemented yet!");
     };
-    /**
+    /***
      * Retrieves this collections index info.
      *
      * @method MongoPortable#indexInformation
@@ -501,7 +505,7 @@ var MongoPortable = (function (_super) {
     MongoPortable.prototype.indexInformation = function (collectionName, options, callback) {
         this.logger.throw("Not implemented yet!");
     };
-    /**
+    /***
      * Drop the whole database.
      *
      * @method MongoPortable#dropDatabase
@@ -520,21 +524,23 @@ var MongoPortable = (function (_super) {
                     MongoPortable._connHelper.dropConnection(_this._databaseName);
                     _this._collections = [];
                     _this._stores = [];
-                    if (callback && _.isFunction(callback))
+                    if (callback && _.isFunction(callback)) {
                         callback(null, true);
+                    }
                     resolve(true);
                 });
             }
             else {
                 var error = new Error("That database no longer exists");
                 _this.logger.throw(error);
-                if (callback && _.isFunction(callback))
+                if (callback && _.isFunction(callback)) {
                     callback(error, false);
+                }
                 reject(error);
             }
         });
     };
-    /**
+    /***
      * Dereference a dbref, against a db
      *
      * @param {DBRef} dbRef db reference object we wish to resolve.
@@ -552,8 +558,21 @@ var MongoPortable = (function (_super) {
         // // Fetch the collection and find the reference
         // var collection = Monglo.collection(dbRef.namespace);
         // collection.findOne({"_id":dbRef.oid}, function(err, result) {
-        //     callback(err, result);
+        // 	 callback(err, result);
         // });
+    };
+    /***
+     * Retrieves the instance of that DDBB name
+     *
+     * @param {String} name - The DDBB name
+     *
+     * @return {MongoPortable} - The DDBB instance
+     */
+    MongoPortable.getInstance = function (name) {
+        if (!_.isNil(name)) {
+            return MongoPortable._connHelper.getConnection(name);
+        }
+        return null;
     };
     MongoPortable._connHelper = new utils_1.ConnectionHelper();
     return MongoPortable;

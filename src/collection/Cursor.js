@@ -1,25 +1,42 @@
 "use strict";
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
+var _ = require("lodash");
 var selector_1 = require("../selector");
-var Options = (function () {
-    function Options(options) {
-        this.__defaultOptions = {
-            skip: 0,
-            limit: 15,
-            sort: null
-        };
+/*
+class Options {
+    public skip: number;
+    public limit: number;
+    public sort;
+
+    private __defaultOptions = {
+        skip: 0,
+        limit: 15,
+        sort: null
+    };
+
+    constructor(options?: any) {
         if (_.isNil(options)) {
             options = {};
         }
+
         this.skip = (options.skip ? options.skip : this.__defaultOptions.skip);
         this.limit = (options.limit ? options.limit : this.__defaultOptions.limit);
         this.sort = (options.sort ? options.sort : this.__defaultOptions.sort);
     }
-    return Options;
-}());
-/**
+}
+*/
+/***
  * Cursor
  *
  * @module Cursor
@@ -29,8 +46,8 @@ var Options = (function () {
  * @license MIT Licensed
  * @classdesc Cursor class that maps a MongoDB-like cursor
  */
-var Cursor = (function () {
-    /**
+var Cursor = /** @class */ (function () {
+    /***
      * @param {MongoPortable} db - Additional options
      * @param {Array} documents - The list of documents
      * @param {Object|Array|String} [selection={}] - The selection for matching documents
@@ -43,64 +60,90 @@ var Cursor = (function () {
         if (options === void 0) { options = {}; }
         this.sorted = false;
         this.indexes = null;
+        this.defaultOptions = {
+            skip: 0,
+            limit: 15,
+            sort: null
+        };
         this.documents = documents;
         this.selector = selection;
-        var opts = new Options(options);
+        var opts = _.assign({}, this.defaultOptions, options);
         this.skipValue = opts.skip;
         this.limitValue = opts.limit;
         this.sortValue = opts.sort;
         this.logger = jsw_logger_1.JSWLogger.instance;
-        /** ADD IDX **/
+        /**** ADD IDX ****/
         if (selector_1.Selector.isSelectorCompiled(this.selector)) {
-            this.selector_compiled = this.selector;
+            this.selectorCompiled = this.selector;
         }
         else {
-            this.selector_compiled = new selector_1.Selector(this.selector, selector_1.Selector.MATCH_SELECTOR);
+            this.selectorCompiled = new selector_1.Selector(this.selector, selector_1.Selector.MATCH_SELECTOR);
         }
-        for (var i = 0; i < this.selector_compiled.clauses.length; i++) {
-            if (this.selector_compiled.clauses[i].key === "_id") {
-                this.selector_id = this.selector_compiled.clauses[i].value;
-            }
-        }
-        for (var i = 0; i < this.selector_compiled.clauses.length; i++) {
-            if (this.selector_compiled.clauses[i].key === "_id") {
-                var _val = this.selector_compiled.clauses[i].value;
-                if (_.isString(_val) || _.isNumber(_val)) {
-                    this.selector_id = _val;
+        try {
+            for (var _a = __values(this.selectorCompiled.clauses), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var clause = _b.value;
+                if (clause.key === "_id") {
+                    this.selectorId = clause.value;
                 }
             }
         }
-        /** ADD IDX **/
-        this.fetch_mode = Cursor.COLSCAN || Cursor.IDXSCAN;
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            for (var _d = __values(this.selectorCompiled.clauses), _e = _d.next(); !_e.done; _e = _d.next()) {
+                var clause = _e.value;
+                if (clause.key === "_id") {
+                    var val = clause.value;
+                    if (_.isString(val) || _.isNumber(val)) {
+                        this.selectorId = val;
+                    }
+                }
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (_e && !_e.done && (_f = _d.return)) _f.call(_d);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
+        /**** ADD IDX ****/
+        this.fetchMode = Cursor.COLSCAN || Cursor.IDXSCAN;
         // this.indexes = null;//findUsableIndexes();
-        // if (cursor.fetch_mode === Cursor.COLSCAN) {
-        //     // COLSCAN, wi will iterate over all documents
-        //     docs = _.cloneDeep(cursor.collection.docs);
-        // } else if (cursor.fetch_mode === Cursor.IDXSCAN) {
-        //     // IDXSCAN, wi will iterate over all needed documents
-        //     for (let i = 0; i < cursor.indexes.length; i++) {
-        //         let index = cursor.indexes[i];
-        //         for (let i = index.start; i < index.end; i++) {
-        //             let idx_id = cursor.collection.getIndex(index.name)[i];
-        //             docs.push(cursor.collection.docs[idx_id]);
-        //         }
-        //     }
+        // if (cursor.fetchMode === Cursor.COLSCAN) {
+        // 	 // COLSCAN, wi will iterate over all documents
+        // 	 docs = _.cloneDeep(cursor.collection.docs);
+        // } else if (cursor.fetchMode === Cursor.IDXSCAN) {
+        // 	 // IDXSCAN, wi will iterate over all needed documents
+        // 	 for (let i = 0; i < cursor.indexes.length; i++) {
+        // 		 let index = cursor.indexes[i];
+        // 		 for (let i = index.start; i < index.end; i++) {
+        // 			 let idx_id = cursor.collection.getIndex(index.name)[i];
+        // 			 docs.push(cursor.collection.docs[idx_id]);
+        // 		 }
+        // 	 }
         // }
         this.fields = new selector_1.Selector(fields, selector_1.Selector.FIELD_SELECTOR);
-        this.sort_compiled = new selector_1.Selector(this.sortValue, selector_1.Selector.SORT_SELECTOR);
-        this.db_objects = null;
-        this.cursor_pos = 0;
+        this.sortCompiled = new selector_1.Selector(this.sortValue, selector_1.Selector.SORT_SELECTOR);
+        this.dbObjects = null;
+        this.cursorPosition = 0;
+        var e_1, _c, e_2, _f;
     }
-    /**
+    /***
      * Moves a cursor to the begining
      *
      * @method Cursor#rewind
      */
     Cursor.prototype.rewind = function () {
-        this.db_objects = null;
-        this.cursor_pos = 0;
+        this.dbObjects = null;
+        this.cursorPosition = 0;
     };
-    /**
+    /***
      * Iterates over the cursor, calling a callback function
      *
      * @method Cursor#forEach
@@ -109,11 +152,22 @@ var Cursor = (function () {
      */
     Cursor.prototype.forEach = function (callback) {
         var docs = this.fetchAll();
-        for (var i = 0; i < docs.length; i++) {
-            callback(docs[i]);
+        try {
+            for (var docs_1 = __values(docs), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
+                var doc = docs_1_1.value;
+                callback(doc);
+            }
         }
+        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+        finally {
+            try {
+                if (docs_1_1 && !docs_1_1.done && (_a = docs_1.return)) _a.call(docs_1);
+            }
+            finally { if (e_3) throw e_3.error; }
+        }
+        var e_3, _a;
     };
-    /**
+    /***
      * Iterates over the cursor, returning a new array with the documents affected by the callback function
      *
      * @method Cursor#map
@@ -129,7 +183,7 @@ var Cursor = (function () {
         });
         return res;
     };
-    /**
+    /***
      * Checks if the cursor has one document to be fetched
      *
      * @method Cursor#hasNext
@@ -137,9 +191,9 @@ var Cursor = (function () {
      * @returns {Boolean} True if we can fetch one more document
      */
     Cursor.prototype.hasNext = function () {
-        return (this.cursor_pos < this.documents.length);
+        return (this.cursorPosition < this.documents.length);
     };
-    /**
+    /***
      * Alias for {@link Cursor#fetchOne}
      *
      * @method Cursor#next
@@ -147,7 +201,7 @@ var Cursor = (function () {
     Cursor.prototype.next = function () {
         return this.fetchOne();
     };
-    /**
+    /***
      * Alias for {@link Cursor#fetchAll}
      *
      * @method Cursor#fetch
@@ -155,7 +209,7 @@ var Cursor = (function () {
     Cursor.prototype.fetch = function () {
         return this.fetchAll();
     };
-    /**
+    /***
      * Fetch all documents in the cursor
      *
      * @method Cursor#fetchAll
@@ -163,9 +217,9 @@ var Cursor = (function () {
      * @returns {Array} All the documents contained in the cursor
      */
     Cursor.prototype.fetchAll = function () {
-        return _getDocuments(this, false) || [];
+        return getDocuments(this, false) || [];
     };
-    /**
+    /***
      * Retrieves the next document in the cursor
      *
      * @method Cursor#fetchOne
@@ -173,9 +227,9 @@ var Cursor = (function () {
      * @returns {Object} The next document in the cursor
      */
     Cursor.prototype.fetchOne = function () {
-        return _getDocuments(this, true);
+        return getDocuments(this, true);
     };
-    /**
+    /***
      * Obtains the total of documents of the cursor
      *
      * @method Cursor#count
@@ -185,7 +239,7 @@ var Cursor = (function () {
     Cursor.prototype.count = function () {
         return this.fetchAll().length;
     };
-    /**
+    /***
      * Set the sorting of the cursor
      *
      * @method Cursor#sort
@@ -195,15 +249,16 @@ var Cursor = (function () {
      * @returns {Cursor} This instance so it can be chained with other methods
      */
     Cursor.prototype.setSorting = function (spec) {
-        if (_.isNil(spec))
+        if (_.isNil(spec)) {
             this.logger.throw("You need to specify a sorting");
+        }
         if (spec) {
             this.sortValue = spec;
-            this.sort_compiled = (new selector_1.Selector(spec, selector_1.Selector.SORT_SELECTOR));
+            this.sortCompiled = (new selector_1.Selector(spec, selector_1.Selector.SORT_SELECTOR));
         }
         return this;
     };
-    /**
+    /***
      * Applies a sorting on the cursor
      *
      * @method Cursor#sort
@@ -213,13 +268,13 @@ var Cursor = (function () {
      * @returns {Cursor} This instance so it can be chained with other methods
      */
     Cursor.prototype.sort = function (spec) {
-        var _sort = this.sort_compiled || null;
+        var _sort = this.sortCompiled || null;
         if (spec) {
             _sort = new selector_1.Selector(spec, selector_1.Selector.SORT_SELECTOR);
         }
         if (_sort) {
-            if (!_.isNil(this.db_objects) && _.isArray(this.db_objects)) {
-                this.db_objects = this.db_objects.sort(_sort);
+            if (!_.isNil(this.dbObjects) && _.isArray(this.dbObjects)) {
+                this.dbObjects = this.dbObjects.sort(_sort);
                 this.sorted = true;
             }
             else {
@@ -228,7 +283,7 @@ var Cursor = (function () {
         }
         return this;
     };
-    /**
+    /***
      * Set the number of document to skip when fetching the cursor
      *
      * @method Cursor#skip
@@ -238,12 +293,13 @@ var Cursor = (function () {
      * @returns {Cursor} This instance so it can be chained with other methods
      */
     Cursor.prototype.skip = function (skip) {
-        if (_.isNil(skip) || _.isNaN(skip))
+        if (_.isNil(skip) || _.isNaN(skip)) {
             throw new Error("Must pass a number");
+        }
         this.skipValue = skip;
         return this;
     };
-    /**
+    /***
      * Set the max number of document to fetch
      *
      * @method Cursor#limit
@@ -253,153 +309,154 @@ var Cursor = (function () {
      * @returns {Cursor} This instance so it can be chained with other methods
      */
     Cursor.prototype.limit = function (limit) {
-        if (_.isNil(limit) || _.isNaN(limit))
+        if (_.isNil(limit) || _.isNaN(limit)) {
             throw new Error("Must pass a number");
+        }
         this.limitValue = limit;
         return this;
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.batchSize = function () {
         // Controls the number of documents MongoDB will return to the client in a single network message.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.close = function () {
         // Close a cursor and free associated server resources.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.comment = function () {
         // Attaches a comment to the query to allow for traceability in the logs and the system.profile collection.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.explain = function () {
         // Reports on the query execution plan for a cursor.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.hint = function () {
         // Forces MongoDB to use a specific index for a query.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.itcount = function () {
         // Computes the total number of documents in the cursor client-side by fetching and iterating the result set.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.maxScan = function () {
         // Specifies the maximum number of items to scan; documents for collection scans, keys for index scans.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.maxTimeMS = function () {
         // Specifies a cumulative time limit in milliseconds for processing operations on a cursor.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.max = function () {
         // Specifies an exclusive upper index bound for a cursor. For use with cursor.hint()
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.min = function () {
         // Specifies an inclusive lower index bound for a cursor. For use with cursor.hint()
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.noCursorTimeout = function () {
         // Instructs the server to avoid closing a cursor automatically after a period of inactivity.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.objsLeftInBatch = function () {
         // Returns the number of documents left in the current cursor batch.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.pretty = function () {
         // Configures the cursor to display results in an easy-to-read format.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.readConcern = function () {
         // Specifies a read concern for a find() operation.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.readPref = function () {
         // Specifies a read preference to a cursor to control how the client directs queries to a replica set.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.returnKey = function () {
         // Modifies the cursor to return index keys rather than the documents.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.showRecordId = function () {
         // Adds an internal storage engine ID field to each document returned by the cursor.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.size = function () {
         // Returns a count of the documents in the cursor after applying skip() and limit() methods.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.snapshot = function () {
-        // Forces the cursor to use the index on the _id field. Ensures that the cursor returns each document, 
+        // Forces the cursor to use the index on the _id field. Ensures that the cursor returns each document,
         // with regards to the value of the _id field, only once.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.tailable = function () {
         // Marks the cursor as tailable. Only valid for cursors over capped collections.
         throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * @todo Implement
      */
     Cursor.prototype.toArray = function () {
@@ -407,8 +464,10 @@ var Cursor = (function () {
         throw new Error("Not yet implemented");
     };
     Cursor.sort = function (doc, fields) {
+        // Sort the elements of a cursor
+        throw new Error("Not yet implemented");
     };
-    /**
+    /***
      * Projects the fields of one or several documents, changing the output
      *
      * @method Cursor.project
@@ -431,12 +490,12 @@ var Cursor = (function () {
         }
         if (_.isArray(doc)) {
             for (var i = 0; i < doc.length; i++) {
-                doc[i] = _mapFields(doc[i], fields);
+                doc[i] = mapFields(doc[i], fields);
             }
             return doc;
         }
         else {
-            return _mapFields(doc, fields);
+            return mapFields(doc, fields);
         }
     };
     Cursor.COLSCAN = "colscan";
@@ -444,10 +503,11 @@ var Cursor = (function () {
     return Cursor;
 }());
 exports.Cursor = Cursor;
-var _mapFields = function (doc, fields) {
+var mapFields = function (doc, fields) {
     var _doc = _.cloneDeep(doc);
     if (!_.isNil(fields) && _.isPlainObject(fields) && !_.isEqual(fields, {})) {
-        var showId = true, showing = null;
+        var showId = true;
+        var showing = null;
         // Whether if we showing the _id field
         if (_.hasIn(fields, "_id") && fields._id === -1) {
             showId = false;
@@ -466,30 +526,40 @@ var _mapFields = function (doc, fields) {
             }
         }
         var tmp = null;
-        for (var field in fields) {
-            if (tmp === null) {
-                if (showing) {
-                    tmp = {};
+        try {
+            for (var _a = __values(Object.keys(fields)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var field = _b.value;
+                if (tmp === null) {
+                    if (showing) {
+                        tmp = {};
+                    }
+                    else {
+                        tmp = _.cloneDeep(doc);
+                    }
+                }
+                // Add or remove the field
+                if (fields[field] === 1 || fields[field] === -1) {
+                    // Show the field
+                    if (showing) {
+                        tmp[field] = doc[field];
+                    }
+                    else {
+                        // Hide the field
+                        delete tmp[field];
+                    }
                 }
                 else {
-                    tmp = _.cloneDeep(doc);
+                    // Show the new field (rename)
+                    tmp[field] = doc[fields[field]];
                 }
             }
-            // Add or remove the field
-            if (fields[field] === 1 || fields[field] === -1) {
-                // Show the field
-                if (showing) {
-                    tmp[field] = doc[field];
-                }
-                else {
-                    // Hide the field
-                    delete tmp[field];
-                }
+        }
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
             }
-            else {
-                // Show the new field (rename)
-                tmp[field] = doc[fields[field]];
-            }
+            finally { if (e_4) throw e_4.error; }
         }
         // Add or remove the _id field
         if (showId) {
@@ -501,11 +571,12 @@ var _mapFields = function (doc, fields) {
         _doc = tmp;
     }
     return _doc;
+    var e_4, _c;
 };
-/**
+/***
  * Retrieves one or all the documents in the cursor
  *
- * @method _getDocuments
+ * @method getDocuments
  * @private
  *
  * @param {Cursor} cursor - The cursor with the documents
@@ -513,62 +584,75 @@ var _mapFields = function (doc, fields) {
  *
  * @returns {Array|Object} If [justOne=true] returns the next document, otherwise returns all the documents
  */
-var _getDocuments = function (cursor, justOne) {
+var getDocuments = function (cursor, justOne) {
     if (justOne === void 0) { justOne = false; }
     var docs = [];
-    if (cursor.fetch_mode === Cursor.COLSCAN) {
+    if (cursor.fetchMode === Cursor.COLSCAN) {
         // COLSCAN, wi will iterate over all documents
         docs = _.cloneDeep(cursor.documents);
     }
-    else if (cursor.fetch_mode === Cursor.IDXSCAN) {
-        // IDXSCAN, wi will iterate over all needed documents
-        for (var i = 0; i < cursor.indexes.length; i++) {
-            var index = cursor.indexes[i];
-            for (var i_1 = index.start; i_1 < index.end; i_1++) {
-                // let idx_id = cursor.collection.getIndex(index.name)[i];
-                var idx_id = index.index[i_1];
-                docs.push(cursor.documents[idx_id]);
+    else if (cursor.fetchMode === Cursor.IDXSCAN) {
+        try {
+            // IDXSCAN, wi will iterate over all needed documents
+            for (var cursor_1 = __values(cursor), cursor_1_1 = cursor_1.next(); !cursor_1_1.done; cursor_1_1 = cursor_1.next()) {
+                var index = cursor_1_1.value;
+                for (var i = index.start; i < index.end; i++) {
+                    // let idxId = cursor.collection.getIndex(index.name)[i];
+                    var idxId = index.index[i];
+                    docs.push(cursor.documents[idxId]);
+                }
             }
         }
+        catch (e_5_1) { e_5 = { error: e_5_1 }; }
+        finally {
+            try {
+                if (cursor_1_1 && !cursor_1_1.done && (_a = cursor_1.return)) _a.call(cursor_1);
+            }
+            finally { if (e_5) throw e_5.error; }
+        }
     }
-    // if (cursor.selector_id) {
-    //     if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selector_id))) {
-    //         let idx = cursor.collection.doc_indexes[_.toString(cursor.selector_id)];
-    //         return Cursor.project(cursor.collection.docs[idx], cursor.fields);
-    //     } else {
-    //         if (justOne) {
-    //             return null;
-    //         } else {
-    //             return [];
-    //         }
-    //     }
+    // if (cursor.selectorId) {
+    // 	 if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selectorId))) {
+    // 		 let idx = cursor.collection.doc_indexes[_.toString(cursor.selectorId)];
+    // 		 return Cursor.project(cursor.collection.docs[idx], cursor.fields);
+    // 	 } else {
+    // 		 if (justOne) {
+    // 			 return null;
+    // 		 } else {
+    // 			 return [];
+    // 		 }
+    // 	 }
     // }
     // TODO add warning when sort/skip/limit and fetching one
     // TODO add warning when skip/limit without order
     // TODO index
-    while (cursor.cursor_pos < docs.length) {
-        var _doc = docs[cursor.cursor_pos];
-        cursor.cursor_pos++;
-        if (cursor.selector_compiled.test(_doc)) {
-            if (_.isNil(cursor.db_objects))
-                cursor.db_objects = [];
+    while (cursor.cursorPosition < docs.length) {
+        var _doc = docs[cursor.cursorPosition];
+        cursor.cursorPosition++;
+        if (cursor.selectorCompiled.test(_doc)) {
+            if (_.isNil(cursor.dbObjects)) {
+                cursor.dbObjects = [];
+            }
             _doc = Cursor.project(_doc, cursor.fields);
-            cursor.db_objects.push(_doc);
+            cursor.dbObjects.push(_doc);
             if (justOne) {
                 // Add force sort
                 return _doc;
             }
         }
     }
-    if (_.isNil(cursor.db_objects))
+    if (_.isNil(cursor.dbObjects)) {
         return null;
-    if (!cursor.sorted && hasSorting(cursor))
+    }
+    if (!cursor.sorted && hasSorting(cursor)) {
         cursor.sort();
+    }
     var idxFrom = cursor.skipValue;
-    var idxTo = cursor.limitValue !== -1 ? (cursor.limitValue + idxFrom) : cursor.db_objects.length;
-    return cursor.db_objects.slice(idxFrom, idxTo);
+    var idxTo = cursor.limitValue !== -1 ? (cursor.limitValue + idxFrom) : cursor.dbObjects.length;
+    return cursor.dbObjects.slice(idxFrom, idxTo);
+    var e_5, _a;
 };
-/**
+/***
  * Checks if a cursor has a sorting defined
  *
  * @method hasSorting
@@ -579,8 +663,9 @@ var _getDocuments = function (cursor, justOne) {
  * @returns {Boolean} Whether the cursor has sorting or not
  */
 var hasSorting = function (cursor) {
-    if (_.isNil(cursor.sortValue))
+    if (_.isNil(cursor.sortValue)) {
         return false;
+    }
     return true;
 };
 //# sourceMappingURL=Cursor.js.map

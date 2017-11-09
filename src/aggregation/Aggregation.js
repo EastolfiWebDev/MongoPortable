@@ -7,198 +7,274 @@
  * @copyright 2016 Eduardo Astolfi <eduardo.astolfi91@gmail.com>
  * @license MIT Licensed
  */
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var selector_1 = require("../selector");
+var _ = require("lodash");
 var collection_1 = require("../collection");
+var selector_1 = require("../selector");
 var stages = {
-    '$project': true,
-    '$match': true,
-    '$redact': false,
-    '$limit': false,
-    '$skip': false,
-    '$unwind': false,
-    '$group': true,
-    '$sample': false,
-    '$sort': true,
-    '$geoNear': false,
-    '$lookup': false,
-    '$out': false,
-    '$indexStats': false
+    $project: true,
+    $match: true,
+    $redact: false,
+    $limit: false,
+    $skip: false,
+    $unwind: false,
+    $group: true,
+    $sample: false,
+    $sort: true,
+    $geoNear: false,
+    $lookup: false,
+    $out: false,
+    $indexStats: false
 };
-var group_operators = {
-    $sum: function (documents, new_id, new_field, value, isCount) {
-        var new_docs = {};
-        for (var i = 0; i < documents.length; i++) {
-            var doc = documents[i];
-            var val = value;
-            if (!isCount) {
-                val = doc[value.substr(1, value.length)] || 0;
-            }
-            if (_.hasIn(doc, new_id)) {
-                var _id = doc[new_id];
-                if (!_.hasIn(new_docs, _id)) {
-                    new_docs[_id] = (_a = {
-                            _id: _id
-                        },
-                        _a[new_field] = _.toNumber(val),
-                        _a);
+var groupOperators = {
+    $sum: function (documents, newId, newField, value, isCount) {
+        var newDocs = {};
+        try {
+            for (var documents_1 = __values(documents), documents_1_1 = documents_1.next(); !documents_1_1.done; documents_1_1 = documents_1.next()) {
+                var doc = documents_1_1.value;
+                var val = value;
+                if (!isCount) {
+                    val = doc[value.substr(1, value.length)] || 0;
                 }
-                else {
-                    new_docs[_id][new_field] += _.toNumber(val);
-                }
-            }
-        }
-        return new_docs;
-        var _a;
-    },
-    $avg: function (documents, new_id, new_field, value, isCount) {
-        var new_docs = {};
-        for (var i = 0; i < documents.length; i++) {
-            var doc = documents[i];
-            var val = value;
-            if (!isCount) {
-                val = doc[value.substr(1, value.length)] || 0;
-            }
-            if (_.hasIn(doc, new_id) || _.isNull(new_id)) {
-                var _id = doc[new_id] || null;
-                if (!_.hasIn(new_docs, _id)) {
-                    new_docs[_id] = (_a = {
-                            _id: _id
-                        },
-                        _a[new_field] = _.toNumber(val),
-                        _a.__COUNT__ = 1,
-                        _a);
-                }
-                else {
-                    new_docs[_id][new_field] += _.toNumber(val);
-                    new_docs[_id].__COUNT__++;
-                }
-            }
-        }
-        for (var key in new_docs) {
-            new_docs[key][new_field] = new_docs[key][new_field] / new_docs[key].__COUNT__;
-            delete new_docs[key].__COUNT__;
-        }
-        return new_docs;
-        var _a;
-    }
-};
-var do_single_group = function (group_id, group_stage, documents) {
-    // var operators = {};
-    var docs = {};
-    for (var field in group_stage) {
-        if (field !== '_id') {
-            // handle group field
-            // let group_key = key;
-            var group_field = group_stage[field];
-            for (var key in group_field) {
-                if (!_.hasIn(group_operators, key))
-                    this.logger.throw("Unknown accumulator operator \"" + key + "\" for group stage");
-                // loop through all documents
-                // var new_docs = {};
-                // for (let i = 0; i < documents.length; i++) {
-                //     let doc = documents[i];
-                //     if (_.hasIn(doc, group_id)) {
-                //         let _id = doc[group_id];
-                //         if (!_.hasIn(new_docs, _id)) {
-                //             new_docs[_id] = {
-                //                 _id: _id,
-                //                 [new_field]: value
-                //             };
-                //         } else {
-                //             new_docs[_id][new_field] += value;
-                //         }
-                //     }
-                // }
-                // if (!_.hasIn(operators, key)) operators[key] = [];
-                // operators[key].push({
-                //     new_field: field,
-                //     value: group_field[key]
-                // });
-                var count = true;
-                if (_.isString(group_field[key])) {
-                    if (group_field[key].substr(0, 1) !== '$')
-                        this.logger.throw("Field names references in a right side assignement must be preceded by '$'");
-                    if (!_.isFinite(_.toNumber(group_field[key]))) {
-                        count = false;
+                if (_.hasIn(doc, newId)) {
+                    var _id = doc[newId];
+                    if (!_.hasIn(newDocs, _id)) {
+                        newDocs[_id] = (_a = {
+                                _id: _id
+                            },
+                            _a[newField] = _.toNumber(val),
+                            _a);
+                    }
+                    else {
+                        newDocs[_id][newField] += _.toNumber(val);
                     }
                 }
-                var operator = group_operators[key];
-                _.merge(docs, operator(documents, group_id, field, group_field[key], count));
-                break;
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (documents_1_1 && !documents_1_1.done && (_b = documents_1.return)) _b.call(documents_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        return newDocs;
+        var e_1, _b, _a;
+    },
+    $avg: function (documents, newId, newField, value, isCount) {
+        var newDocs = {};
+        try {
+            for (var documents_2 = __values(documents), documents_2_1 = documents_2.next(); !documents_2_1.done; documents_2_1 = documents_2.next()) {
+                var doc = documents_2_1.value;
+                var val = value;
+                if (!isCount) {
+                    val = doc[value.substr(1, value.length)] || 0;
+                }
+                if (_.hasIn(doc, newId) || _.isNull(newId)) {
+                    var _id = doc[newId] || null;
+                    if (!_.hasIn(newDocs, _id)) {
+                        newDocs[_id] = (_a = {
+                                _id: _id
+                            },
+                            _a[newField] = _.toNumber(val),
+                            _a.__COUNT__ = 1,
+                            _a);
+                    }
+                    else {
+                        newDocs[_id][newField] += _.toNumber(val);
+                        newDocs[_id].__COUNT__++;
+                    }
+                }
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (documents_2_1 && !documents_2_1.done && (_b = documents_2.return)) _b.call(documents_2);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
+        try {
+            for (var _c = __values(Object.keys(newDocs)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                var key = _d.value;
+                newDocs[key][newField] = newDocs[key][newField] / newDocs[key].__COUNT__;
+                delete newDocs[key].__COUNT__;
+            }
+        }
+        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+        finally {
+            try {
+                if (_d && !_d.done && (_e = _c.return)) _e.call(_c);
+            }
+            finally { if (e_3) throw e_3.error; }
+        }
+        return newDocs;
+        var e_2, _b, _a, e_3, _e;
+    }
+};
+var doSingleGroup = function (groupId, groupStage, documents) {
+    // var operators = {};
+    var docs = {};
+    for (var field in groupStage) {
+        if (field !== "_id") {
+            // handle group field
+            // let group_key = key;
+            var groupField = groupStage[field];
+            try {
+                for (var _a = __values(Object.keys(groupField)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                    var key = _b.value;
+                    if (!_.hasIn(groupOperators, key)) {
+                        _this.logger.throw("Unknown accumulator operator \"" + key + "\" for group stage");
+                    }
+                    // loop through all documents
+                    // var newDocs = {};
+                    // for (let i = 0; i < documents.length; i++) {
+                    // 	 let doc = documents[i];
+                    // 	 if (_.hasIn(doc, groupId)) {
+                    // 		 let _id = doc[groupId];
+                    // 		 if (!_.hasIn(newDocs, _id)) {
+                    // 			 newDocs[_id] = {
+                    // 				 _id: _id,
+                    // 				 [newField]: value
+                    // 			 };
+                    // 		 } else {
+                    // 			 newDocs[_id][newField] += value;
+                    // 		 }
+                    // 	 }
+                    // }
+                    // if (!_.hasIn(operators, key)) operators[key] = [];
+                    // operators[key].push({
+                    // 	 newField: field,
+                    // 	 value: groupField[key]
+                    // });
+                    var count = true;
+                    if (_.isString(groupField[key])) {
+                        if (groupField[key].substr(0, 1) !== "$") {
+                            _this.logger.throw("Field names references in a right side assignement must be preceded by '$'");
+                        }
+                        if (!_.isFinite(_.toNumber(groupField[key]))) {
+                            count = false;
+                        }
+                    }
+                    var operator = groupOperators[key];
+                    _.merge(docs, operator(documents, groupId, field, groupField[key], count));
+                    break;
+                }
+            }
+            catch (e_4_1) { e_4 = { error: e_4_1 }; }
+            finally {
+                try {
+                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                }
+                finally { if (e_4) throw e_4.error; }
             }
         }
     }
     return _.values(docs);
+    var e_4, _c;
 };
-var do_complex_group = function () {
+var doComplexGroup = function () {
+    // TODO
 };
-var do_sort = function (documents, sort_stage) {
-    return documents.sort(new selector_1.Selector(sort_stage, selector_1.Selector.SORT_SELECTOR));
+var doSort = function (documents, sortStage) {
+    return documents.sort(new selector_1.Selector(sortStage, selector_1.Selector.SORT_SELECTOR));
 };
-var do_match = function (documents, match_stage) {
-    var cursor = new collection_1.Cursor(documents, match_stage);
+var doMatch = function (documents, matchStage) {
+    var cursor = new collection_1.Cursor(documents, matchStage);
     return cursor.fetch();
 };
-var do_group = function (documents, group_stage) {
-    if (!_.hasIn(group_stage, '_id'))
-        this.logger.throw('The field "_id" is required in the "$group" stage');
-    var new_id = group_stage['_id'];
-    if (!_.isNull(new_id)) {
-        if (new_id.substr(0, 1) !== '$') {
-            this.logger.throw("Field names references in a right side assignement must be preceded by '$'");
+var doGroup = function (documents, groupStage) {
+    if (!_.hasIn(groupStage, "_id")) {
+        _this.logger.throw('The field "_id" is required in the "$group" stage');
+    }
+    var newId = groupStage._id;
+    if (!_.isNull(newId)) {
+        if (newId.substr(0, 1) !== "$") {
+            _this.logger.throw("Field names references in a right side assignement must be preceded by '$'");
         }
         else {
-            new_id = new_id.substr(1, new_id.length);
+            newId = newId.substr(1, newId.length);
         }
     }
-    if (_.isPlainObject(new_id)) {
+    if (_.isPlainObject(newId)) {
         // complex_id
-        // do_complex_group();
+        // doComplexGroup();
     }
     else {
         // single_id
-        return do_single_group(new_id, group_stage, documents);
+        return doSingleGroup(newId, groupStage, documents);
     }
 };
-var do_project = function (documents, project_stage) {
-    return collection_1.Cursor.project(documents, project_stage, true);
+var doProject = function (documents, projectStage) {
+    return collection_1.Cursor.project(documents, projectStage, true);
 };
-var Aggregation = (function () {
+var Aggregation = /** @class */ (function () {
     function Aggregation(pipeline) {
         this.logger = jsw_logger_1.JSWLogger.instance;
         this.pipeline = pipeline;
     }
     Aggregation.prototype.aggregate = function (collection) {
         var docs = collection.docs;
-        for (var i = 0; i < this.pipeline.length; i++) {
-            var stage = this.pipeline[i];
-            for (var key in stage) {
-                switch (key) {
-                    case '$project':
-                        docs = do_project(docs, stage[key]);
-                        break;
-                    case '$match':
-                        docs = do_match(docs, stage[key]);
-                        break;
-                    case '$group':
-                        docs = do_group(docs, stage[key]);
-                        break;
-                    case '$sort':
-                        docs = do_sort(docs, stage[key]);
-                        break;
+        try {
+            for (var _a = __values(this.pipeline), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var stage = _b.value;
+                try {
+                    for (var _c = __values(Object.keys(stage)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                        var key = _d.value;
+                        switch (key) {
+                            case "$project":
+                                docs = doProject(docs, stage[key]);
+                                break;
+                            case "$match":
+                                docs = doMatch(docs, stage[key]);
+                                break;
+                            case "$group":
+                                docs = doGroup(docs, stage[key]);
+                                break;
+                            case "$sort":
+                                docs = doSort(docs, stage[key]);
+                                break;
+                        }
+                    }
+                }
+                catch (e_5_1) { e_5 = { error: e_5_1 }; }
+                finally {
+                    try {
+                        if (_d && !_d.done && (_e = _c.return)) _e.call(_c);
+                    }
+                    finally { if (e_5) throw e_5.error; }
                 }
             }
         }
+        catch (e_6_1) { e_6 = { error: e_6_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_f = _a.return)) _f.call(_a);
+            }
+            finally { if (e_6) throw e_6.error; }
+        }
         return docs; // move to cursor
+        var e_6, _f, e_5, _e;
     };
     Aggregation.prototype.validStage = function (stage) {
-        if (!_.hasIn(stages, stage))
+        if (!_.hasIn(stages, stage)) {
             return this.logger.throw("Unknown stage \"" + stage + "\"");
-        if (stages[stage] === false)
+        }
+        if (stages[stage] === false) {
             return this.logger.throw("Unsupported stage \"" + stage + "\"");
+        }
         return true;
     };
     return Aggregation;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
-var Utils = (function () {
+var Utils = /** @class */ (function () {
     function Utils() {
     }
     /*
@@ -14,10 +14,10 @@ var Utils = (function () {
             return newObj;
         }
         // Do nothing if the names are the same
-        if (property == newName) {
+        if (property === newName) {
             return newObj;
         }
-        // Check for the old property name to 
+        // Check for the old property name to
         // avoid a ReferenceError in strict mode.
         if (newObj.hasOwnProperty(property)) {
             newObj[newName] = newObj[property];

@@ -1,3 +1,3 @@
 export class Options {
-    log: Object;
+	public log: object;
 }

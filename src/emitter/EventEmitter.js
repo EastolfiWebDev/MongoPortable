@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var Promise = require("promise");
 var jsw_logger_1 = require("jsw-logger");
-var EventEmitter = (function () {
+var EventEmitter = /** @class */ (function () {
     function EventEmitter(options) {
         if (options === void 0) { options = {}; }
         this.options = {
@@ -40,8 +40,9 @@ var EventEmitter = (function () {
         this.logger.debug(JSON.stringify(args));
         var storesToEmit = stores.length;
         return new Promise(function (resolve, reject) {
-            if (stores.length === 0)
+            if (stores.length === 0) {
                 resolve();
+            }
             var storesEmitted = 0;
             // add to options
             var timeout = setTimeout(function () {

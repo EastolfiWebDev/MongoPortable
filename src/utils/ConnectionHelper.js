@@ -26,25 +26,21 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = require("lodash");
 var jsw_logger_1 = require("jsw-logger");
-var Connection = (function () {
-    function Connection(pName, pId, pInstance) {
-        this.name = pName;
-        this.id = pId;
-        this.instance = pInstance;
-    }
-    return Connection;
-}());
-exports.Connection = Connection;
-var ConnectionHelper = (function () {
+var _ = require("lodash");
+var ConnectionHelper = /** @class */ (function () {
     function ConnectionHelper() {
         // private _pool: Array<{name: string, id: any, instance: MongoPortable}>;
         this._pool = [];
+        // Do nothing
     }
     ConnectionHelper.prototype.addConnection = function (name, id, instance) {
         if (!this.hasConnection(name)) {
-            this._pool.push(new Connection(name, id, instance));
+            this._pool.push({
+                name: name, id: id, instance: instance
+            }
+            // new Connection(name, id, instance)
+            );
         }
     };
     ConnectionHelper.prototype.getConnection = function (name) {
@@ -105,7 +101,7 @@ var ConnectionHelper = (function () {
         return false;
         var e_3, _c;
     };
-    /**
+    /***
      * Validates the database name
      *
      * @method MongoPortable#_validateDatabaseName
@@ -121,13 +117,24 @@ var ConnectionHelper = (function () {
             logger.throw("database name must be a non empty string");
         }
         var invalidChars = [" ", ".", "$", "/", "\\"];
-        for (var i = 0; i < invalidChars.length; i++) {
-            if (name.indexOf(invalidChars[i]) != -1) {
-                logger.throw("database names cannot contain the character \"" + invalidChars[i] + "\"");
-                return false;
+        try {
+            for (var invalidChars_1 = __values(invalidChars), invalidChars_1_1 = invalidChars_1.next(); !invalidChars_1_1.done; invalidChars_1_1 = invalidChars_1.next()) {
+                var invalidChar = invalidChars_1_1.value;
+                if (name.indexOf(invalidChar) !== -1) {
+                    logger.throw("database names cannot contain the character \"" + invalidChar + "\"");
+                    return false;
+                }
             }
         }
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (invalidChars_1_1 && !invalidChars_1_1.done && (_a = invalidChars_1.return)) _a.call(invalidChars_1);
+            }
+            finally { if (e_4) throw e_4.error; }
+        }
         return true;
+        var e_4, _a;
     };
     return ConnectionHelper;
 }());
