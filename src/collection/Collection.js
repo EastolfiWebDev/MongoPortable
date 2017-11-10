@@ -17,14 +17,12 @@ var Cursor_1 = require("./Cursor");
 var aggregation_1 = require("../aggregation");
 var document_1 = require("../document");
 var selector_1 = require("../selector");
-/***
+/**
  * Gets the size of an object.
  *
- * @method Object#size
+ * @param obj - The object
  *
- * @param {Object} obj - The object
- *
- * @returns {Number} The size of the object
+ * @returns The size of the object
  */
 var getObjectSize = function (obj) {
     var size = 0;
@@ -37,7 +35,7 @@ var getObjectSize = function (obj) {
     return size;
 };
 // module.exports = function(Aggregation, Cursor, Selector, SelectorMatcher, ObjectId, EventEmitter, Logger, _) {
-/***
+/**
  * Collection
  *
  * @module Collection
@@ -52,27 +50,22 @@ var getObjectSize = function (obj) {
 var database = null;
 var Collection = /** @class */ (function () {
     // var Collection = function(db, collectionName, options) {
-    /***
-     * @param {MongoPortable} db - Additional options
-     * @param {String} collectionName - The name of the collection
-     * @param {Object} [options] - Database object
-     *
-     * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
+    /**
+     * @param db - Database object
+     * @param collectionName - The name of the collection
+     * @param [options]
      */
     function Collection(db, collectionName /*, options*/) {
         // super(options.log || {});
         // super();
-        /***
+        /**
          * Inserts several documents into the collection
          *
-         * @method Collection#bulkInsert
+         * @param docs - Documents to be inserted
+         * @param options
+         * @param callback - Callback function to be called at the end with the results
          *
-         * @param {Array} docs - Documents to be inserted
-         * @param {Object} [options] - Additional options
-         *
-         * @param {Function} [callback=null] Callback function to be called at the end with the results
-         *
-         * @returns {Promise<Array<Object>>} Returns a promise with the inserted documents
+         * @returns Promise with the inserted documents
          */
         this.bulkInsert = function (docs, options, callback) {
             var self = this;
@@ -155,17 +148,16 @@ var Collection = /** @class */ (function () {
     // (real mongodb does in fact enforce this)
     // TODO possibly enforce that 'undefined' does not appear (we assume
     // this in our handling of null and $exists)
-    /***
+    /**
      * Inserts a document into the collection
      *
-     * @method Collection#insert
+     * @emits [[MongoPortable.insert]]
      *
-     * @param {Object} doc - Document to be inserted
-     * @param {Object} [options] - Additional options
+     * @param doc - Document to be inserted
+     * @param options
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @param {Function} [callback=null] Callback function to be called at the end with the results
-     *
-     * @returns {Promise<Object>} Returns a promise with the inserted document
+     * @returns Promise with the inserted document
      */
     Collection.prototype.insert = function (doc, options, callback) {
         var self = this;
@@ -201,14 +193,6 @@ var Collection = /** @class */ (function () {
             // Reverse
             self.doc_indexes[_.toString(_doc._id)] = self.docs.length;
             self.docs.push(_doc);
-            /***
-             * "insert" event.
-             *
-             * @event MongoPortable~insert
-             *
-             * @param {Object} collection - Information about the collection
-             * @param {Object} doc - Information about the document inserted
-             */
             self.emit("insert", {
                 collection: self,
                 doc: _doc
@@ -226,23 +210,21 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    /***
+    /**
      * Finds all matching documents
      *
-     * @method Collection#find
+     * @fires [[MongoPortable.find]]
      *
-     * @param {Object|Array|String} [selection={}] - The selection for matching documents
-     * @param {Object|Array|String} [fields={}] - The fields of the document to show
-     * @param {Object} [options] - Additional options
+     * @param selection - The selection for matching documents
+     * @param fields - The fields of the document to show
+     * @param options
+     * @param options.skip - Number of documents to be skipped
+     * @param options.limit - Max number of documents to display
+     * @param options.fields - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
+     * @param options.doNotFetch - If set to'"true" returns the cursor not fetched
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @param {Number} [options.skip] - Number of documents to be skipped
-     * @param {Number} [options.limit] - Max number of documents to display
-     * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
-     * @param {Boolean} [options.doNotFetch=false] - If set to'"true" returns the cursor not fetched
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @returns {Promise<Array<Object>|Cursor>} Returns a promise with the documents (or cursor if "options.forceFetch" set to true)
+     * @returns Returns a promise with the documents (or cursor if "options.forceFetch" set to true)
      */
     Collection.prototype.find = function (selection, fields, options, callback) {
         var self = this;
@@ -257,15 +239,6 @@ var Collection = /** @class */ (function () {
             fields = params.fields;
             options = params.options;
             callback = params.callback;
-            /***
-             * "find" event.
-             *
-             * @event MongoPortable~find
-             *
-             * @property {Object} collection - Information about the collection
-             * @property {Object} selector - The selection of the query
-             * @property {Object} fields - The fields showed in the query
-             */
             self.emit("find", {
                 collection: self,
                 selector: selection,
@@ -294,20 +267,19 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    /***
+    /**
      * Finds the first matching document
      *
-     * @method Collection#findOne
+     * @fires [[MongoPortable.findOne]]
      *
-     * @param {Object|Array|String} [selection={}] - The selection for matching documents
-     * @param {Object|Array|String} [fields={}] - The fields of the document to show
-     * @param {Object} [options] - Additional options
+     * @param selection - The selection for matching documents
+     * @param fields - The fields of the document to show
+     * @param options
+     * @param options.skip - Number of documents to be skipped
+     * @param options.limit - Max number of documents to display
+     * @param options.fields - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
      *
-     * @param {Number} [options.skip] - Number of documents to be skipped
-     * @param {Number} [options.limit] - Max number of documents to display
-     * @param {Object|Array|String} [options.fields] - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
+     * @param callback - Callback function to be called at the end with the results
      *
      * @returns {Promise<Object>} Returns a promise with the first matching document of the collection
      */
@@ -324,15 +296,6 @@ var Collection = /** @class */ (function () {
             fields = params.fields;
             options = params.options;
             callback = params.callback;
-            /***
-             * "findOne" event.
-             *
-             * @event MongoPortable~findOne
-             *
-             * @property {Object} collection - Information about the collection
-             * @property {Object} selector - The selection of the query
-             * @property {Object} fields - The fields showed in the query
-             */
             self.emit("findOne", {
                 collection: self,
                 selector: selection,
@@ -355,35 +318,21 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    /***
+    /**
      * Updates one or many documents
      *
-     * @method Collection#update
+     * @fires [[MongoPortable.update]]
      *
-     * @param {Object|Array|String} [selection={}] - The selection for matching documents
-     * @param {Object} [update={}] - The update operation
-     * @param {Object} [options] - Additional options
+     * @param selection - The selection for matching documents
+     * @param update - The update operation
+     * @param options
+     * @param options.updateAsMongo - By default:
+     * @param options.override - Replaces the whole document (only apllies when [updateAsMongo=false])
+     * @param options.upsert - Creates a new document when no document matches the query criteria
+     * @param options.multi - Updates multiple documents that meet the criteria
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @param {Number} [options.updateAsMongo=true] - By default:
-     *	  If the [update] object contains update operator modifiers, such as those using the "$set" modifier, then:
-     *		  <ul>
-     *			  <li>The [update] object must contain only update operator expressions</li>
-     *			  <li>The Collection#update method updates only the corresponding fields in the document</li>
-     *		  <ul>
-     *	  If the [update] object contains only "field: value" expressions, then:
-     *		  <ul>
-     *			  <li>The Collection#update method replaces the matching document with the [update] object. The Collection#update method does not replace the "_id" value</li>
-     *			  <li>Collection#update cannot update multiple documents</li>
-     *		  <ul>
-     *
-     * @param {Number} [options.override=false] - Replaces the whole document (only apllies when [updateAsMongo=false])
-     * @param {Number} [options.upsert=false] - Creates a new document when no document matches the query criteria
-     * @param {Number} [options.multi=false] - Updates multiple documents that meet the criteria
-     * @param {Object} [options.writeConcern=null] - An object expressing the write concern
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @returns {Promise<Object>} Returns a promise with the update/insert (if upsert=true) information
+     * @returns Returns a promise with the update/insert (if upsert=true) information
      */
     Collection.prototype.update = function (selection, update, options, callback) {
         var self = this;
@@ -584,16 +533,6 @@ var Collection = /** @class */ (function () {
                         var idx = self.doc_indexes[_docUpdate._id];
                         self.docs[idx] = _docUpdate;
                     }
-                    /***
-                     * "update" event.
-                     *
-                     * @event MongoPortable~update
-                     *
-                     * @property {Object} collection - Information about the collection
-                     * @property {Object} selector - The selection of the query
-                     * @property {Object} modifier - The modifier used in the query
-                     * @property {Object} docs - The updated/inserted documents information
-                     */
                     self.emit("update", {
                         collection: self,
                         selector: selection,
@@ -642,20 +581,18 @@ var Collection = /** @class */ (function () {
             }
         });
     };
-    /***
+    /**
      * Removes one or many documents
      *
-     * @method Collection#remove
+     * @fires [[MongoPortable.remove]]
      *
-     * @param {Object|Array|String} [selection={}] - The selection for matching documents
-     * @param {Object} [options] - Additional options
+     * @param selection - The selection for matching documents
+     * @param options
+     * @param options.justOne - Deletes the first occurrence of the selection
      *
-     * @param {Number} [options.justOne=false] - Deletes the first occurrence of the selection
-     * @param {Object} [options.writeConcern=null] - An object expressing the write concern
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @returns {Promise<Array<Obejct>>} Promise with the deleted documents
+     * @returns Promise with the deleted documents
      */
     Collection.prototype.remove = function (selection, options, callback) {
         var self = this;
@@ -707,15 +644,6 @@ var Collection = /** @class */ (function () {
                         }
                         finally { if (e_5) throw e_5.error; }
                     }
-                    /***
-                     * "remove" event.
-                     *
-                     * @event MongoPortable~remove
-                     *
-                     * @property {Object} collection - Information about the collection
-                     * @property {Object} selector - The selection of the query
-                     * @property {Object} docs - The deleted documents information
-                     */
                     self.emit("remove", {
                         collection: self,
                         selector: selection,
@@ -741,35 +669,26 @@ var Collection = /** @class */ (function () {
             });
         }
     };
-    /***
-     * Alias for {@link Collection#remove}
-     *
-     * @method Collection#delete
+    /**
+     * Alias for [[Collection.remove]]
      */
     Collection.prototype.delete = function (selection, options, callback) {
         return this.remove(selection, options, callback);
     };
-    /***
-    * Alias for {@link Collection#remove}
-    *
-    * @method Collection#destroy
-    */
+    /**
+     * Alias for [[Collection.remove]]
+     */
     Collection.prototype.destroy = function (selection, options, callback) {
         return this.remove(selection, options, callback);
     };
-    /***
+    /**
      * Drops a collection
      *
-     * @method Collection#drop
+     * @param options
+     * @param options.dropIndexes - True if we want to drop the indexes too
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @param {Object} [  options] - Additional options
-     *
-     * @param {Number} [options.dropIndexes=false] - True if we want to drop the indexes too
-     * @param {Object} [options.writeConcern=null] - An object expressing the write concern
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @returns {Promise<Object[]>} Promise with the deleted documents
+     * @returns Promise with the deleted documents
      */
     Collection.prototype.drop = function (options, callback) {
         var self = this;
@@ -812,19 +731,15 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    /***
+    /**
      * Insert or update a document. If the document has an "_id" is an update (with upsert), if not is an insert.
      *
-     * @method Collection#save
+     * @param doc - Document to be inserted/updated
+     * @param options
+     * @param options.dropIndexes - True if we want to drop the indexes too
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @param   {Object} doc - Document to be inserted/updated
-     *
-     * @param {Number} [options.dropIndexes=false] - True if we want to drop the indexes too
-     * @param {Object} [options.writeConcern=null] - An object expressing the write concern
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @returns {Promise<Object>} Returns a promise with the inserted document or the update information
+     * @returns Returns a promise with the inserted document or the update information
      */
     Collection.prototype.save = function (doc, options, callback) {
         if (_.isNil(doc) || _.isFunction(doc)) {
@@ -845,9 +760,6 @@ var Collection = /** @class */ (function () {
             return this.insert(doc, options, callback);
         }
     };
-    /***
-     * @ignore
-     */
     Collection.prototype.ensureIndex = function () {
         // TODO Implement EnsureIndex
         this.logger.throw("Collection#ensureIndex unimplemented by driver");
@@ -855,9 +767,6 @@ var Collection = /** @class */ (function () {
     // TODO document (at some point)
     // TODO test
     // TODO obviously this particular implementation will not be very efficient
-    /***
-     * @ignore
-     */
     Collection.prototype.backup = function (backupID, callback) {
         var self = this;
         return new Promise(function (resolve, reject) {
@@ -890,9 +799,8 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    // Lists available Backups
-    /***
-     * @ignore
+    /**
+     * Lists available Backups
      */
     Collection.prototype.backups = function () {
         // if (!_.isNil(callback) && !_.isFunction(callback)) this.logger.throw("callback must be a function");
@@ -914,10 +822,6 @@ var Collection = /** @class */ (function () {
         return backups;
         var e_6, _c;
     };
-    // Lists available Backups
-    /***
-     * @ignore
-     */
     Collection.prototype.removeBackup = function (backupID /*, callback*/) {
         // if (_.isFunction(backupID)) {
         // 	 callback = backupID;
@@ -938,12 +842,14 @@ var Collection = /** @class */ (function () {
         // if (callback) callback(null, result);
         return result;
     };
+    /**
+     * @TO-DO
+     */
     Collection.prototype.clearBackups = function () {
         // TODO
     };
-    // Restore the snapshot. If no snapshot exists, raise an exception;
-    /***
-     * @ignore
+    /**
+     * Restore the snapshot. If no snapshot exists, raise an exception;
      */
     Collection.prototype.restore = function (backupID, callback) {
         var self = this;
@@ -1006,17 +912,14 @@ var Collection = /** @class */ (function () {
             var e_7, _c;
         });
     };
-    /***
+    /**
      * Calculates aggregate values for the data in a collection
      *
-     * @method Collection#aggregate
+     * @param pipeline - A sequence of data aggregation operations or stages
+     * @param options
+     * @param options.forceFetch - If set to'"true" returns the array of documents already fetched
      *
-     * @param {Array} pipeline - A sequence of data aggregation operations or stages
-     * @param {Object} [options] - Additional options
-     *
-     * @param {Boolean} [options.forceFetch=false] - If set to'"true" returns the array of documents already fetched
-     *
-     * @returns {Array|Cursor} If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
+     * @returns If "options.forceFetch" set to true returns the array of documents, otherwise returns a cursor
      */
     Collection.prototype.aggregate = function (pipeline, options) {
         if (options === void 0) { options = { forceFetch: false }; }
@@ -1059,9 +962,6 @@ var Collection = /** @class */ (function () {
         return result; // change to cursor
         var e_9, _d, e_8, _c;
     };
-    /***
-     * @ignore
-     */
     Collection.prototype.rename = function (newName) {
         if (_.isString(newName)) {
             if (this.name !== newName) {
@@ -1077,9 +977,6 @@ var Collection = /** @class */ (function () {
             return null;
         }
     };
-    /***
-     * @ignore
-     */
     Collection.checkCollectionName = function (collectionName) {
         if (!_.isString(collectionName)) {
             jsw_logger_1.JSWLogger.instance.throw("collection name must be a String");
@@ -1097,9 +994,6 @@ var Collection = /** @class */ (function () {
             jsw_logger_1.JSWLogger.instance.throw("collection names must not start or end with '.'");
         }
     };
-    /***
-     * @ignore
-     */
     Collection._noCreateModifiers = {
         $unset: true,
         $pop: true,
@@ -1185,9 +1079,6 @@ var modify = function (document, keyparts, value, key, level) {
         }
     }
 };
-/***
- * @ignore
- */
 var modifiers = {
     $inc: function (target, field, arg) {
         if (!_.isNumber(arg)) {
