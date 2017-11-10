@@ -53,7 +53,6 @@ var Collection = /** @class */ (function () {
     /**
      * @param db - Database object
      * @param collectionName - The name of the collection
-     * @param [options]
      */
     function Collection(db, collectionName /*, options*/) {
         // super(options.log || {});
@@ -221,24 +220,30 @@ var Collection = /** @class */ (function () {
      * @param options.skip - Number of documents to be skipped
      * @param options.limit - Max number of documents to display
      * @param options.fields - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
-     * @param options.doNotFetch - If set to'"true" returns the cursor not fetched
+     * @param options.doNotFetch - If set to "true" returns the cursor not fetched
      * @param callback - Callback function to be called at the end with the results
      *
      * @returns Returns a promise with the documents (or cursor if "options.forceFetch" set to true)
      */
     Collection.prototype.find = function (selection, fields, options, callback) {
+        if (options === void 0) { options = {
+            doNotFecth: false
+        }; }
         var self = this;
         return new Promise(function (resolve, reject) {
-            var params = ensureFindParams({
-                selection: selection,
-                fields: fields,
-                options: options,
-                callback: callback
+            /*
+            { selection, fields, options, callback } = ensureFindParams({
+                selection,
+                fields,
+                options,
+                callback
             });
+
             selection = params.selection;
             fields = params.fields;
             options = params.options;
             callback = params.callback;
+            */
             self.emit("find", {
                 collection: self,
                 selector: selection,
@@ -372,7 +377,7 @@ var Collection = /** @class */ (function () {
             // var docs = null;
             if (options.multi) {
                 // docs = self.find(selection, null, { forceFetch: true });
-                self.find(selection, null, { forceFetch: true })
+                self.find(selection, null /*, { forceFetch: true }*/)
                     .then(onDocsFound)
                     .catch(doReject);
             }
@@ -691,14 +696,15 @@ var Collection = /** @class */ (function () {
      * @returns Promise with the deleted documents
      */
     Collection.prototype.drop = function (options, callback) {
+        if (options === void 0) { options = { dropIndexes: false }; }
         var self = this;
         return new Promise(function (resolve, reject) {
             if (_.isNil(options)) {
-                options = {};
+                options = { dropIndexes: false };
             }
             if (_.isFunction(options)) {
                 callback = options;
-                options = {};
+                options = { dropIndexes: false };
             }
             if (!_.isNil(callback) && !_.isFunction(callback)) {
                 self.logger.throw("callback must be a function");

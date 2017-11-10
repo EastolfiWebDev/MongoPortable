@@ -70,7 +70,6 @@ export class Collection /*extends EventEmitter*/ {
 	/**
 	 * @param db - Database object
 	 * @param collectionName - The name of the collection
-	 * @param [options]
 	 */
 	constructor(db, collectionName/*, options*/) {
 		// super(options.log || {});
@@ -233,28 +232,23 @@ export class Collection /*extends EventEmitter*/ {
 	 * @param options
 	 * @param options.skip - Number of documents to be skipped
 	 * @param options.limit - Max number of documents to display
-	 * @param options.fields - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
-	 * @param options.doNotFetch - If set to'"true" returns the cursor not fetched
+	 * @param options.doNotFetch - If set to "true" returns the cursor not fetched
 	 * @param callback - Callback function to be called at the end with the results
 	 *
 	 * @returns Returns a promise with the documents (or cursor if "options.forceFetch" set to true)
 	 */
-	public find(selection, fields, options, callback?): Promise<object[] | Cursor> {
+	public find(
+		selection: object, fields: object,
+		options: {
+			skip?: number, limit?: number, /*fields: object, */doNotFecth?: boolean
+		} = {
+			doNotFecth: false
+		},
+		callback?: ((error: Error, result: object[]) => void)
+	): Promise<object[] | Cursor> {
 		const self = this;
 
 		return new Promise((resolve, reject) => {
-			const params = ensureFindParams({
-				selection,
-				fields,
-				options,
-				callback
-			});
-
-			selection = params.selection;
-			fields = params.fields;
-			options = params.options;
-			callback = params.callback;
-
 			self.emit("find", {
 				collection: self,
 				selector: selection,
@@ -298,11 +292,19 @@ export class Collection /*extends EventEmitter*/ {
 	 *
 	 * @returns {Promise<Object>} Returns a promise with the first matching document of the collection
 	 */
-	public findOne(selection, fields, options, callback?): Promise<any> {
+	public findOne(
+		selection: object, fields: object,
+		options: {
+			skip?: number, limit?: number, /*fields: object, */doNotFecth?: boolean
+		} = {
+			doNotFecth: false
+		},
+		callback?: ((error: Error, result: object) => void)
+	): Promise<object> {
 		const self = this;
 
 		return new Promise((resolve, reject) => {
-			const params = ensureFindParams({
+			/*const params = ensureFindParams({
 				selection,
 				fields,
 				options,
@@ -312,7 +314,7 @@ export class Collection /*extends EventEmitter*/ {
 			selection = params.selection;
 			fields = params.fields;
 			options = params.options;
-			callback = params.callback;
+			callback = params.callback;*/
 
 			self.emit("findOne", {
 				collection: self,
@@ -354,11 +356,21 @@ export class Collection /*extends EventEmitter*/ {
 	 *
 	 * @returns Returns a promise with the update/insert (if upsert=true) information
 	 */
-	public update(selection, update, options, callback?): Promise<any> {
+	public update(
+		selection: any, update: any,
+		options: {
+			updateAsMongo?: boolean, override?: boolean, upsert?: boolean,
+			multi?: boolean, skip?: number, limit?: number
+		} = {
+			updateAsMongo: false, override: false, upsert: false,
+			multi: false
+		},
+		callback?: ((error: Error, result: object) => void)
+	): Promise<any> {
 		const self = this;
 
 		return new Promise((resolve, reject) => {
-			if (_.isNil(selection)) { selection = {}; }
+			/*if (_.isNil(selection)) { selection = {}; }
 
 			if (_.isNil(update)) { self.logger.throw("You must specify the update operation"); }
 
@@ -376,7 +388,10 @@ export class Collection /*extends EventEmitter*/ {
 			if (_.isFunction(options)) {
 				callback = options;
 				options = {};
-			}
+			}*/
+
+			// Force to fetch the results
+			options.doNotFecth = false;
 
 			// Check special case where we are using an objectId
 			if (selection instanceof ObjectId) {
@@ -392,12 +407,12 @@ export class Collection /*extends EventEmitter*/ {
 			// var docs = null;
 			if (options.multi) {
 				// docs = self.find(selection, null, { forceFetch: true });
-				self.find(selection, null, { forceFetch: true })
+				self.find(selection, null/*, { forceFetch: true }*/)
 					.then(onDocsFound)
 					.catch(doReject);
 			} else {
 				// docs = self.findOne(selection);
-				self.findOne(selection, null, null, callback)
+				self.findOne(selection, null, options, null/*callback*/)
 					.then(onDocsFound)
 					.catch(doReject);
 			}
@@ -413,7 +428,7 @@ export class Collection /*extends EventEmitter*/ {
 
 				if ((docs as object[]).length === 0) {
 					if (options.upsert) {
-						self.insert(update, null, callback)
+						self.insert(update, null, null/*callback*/)
 							.then((inserted) => {
 								doResolve({
 									updated: {
@@ -681,15 +696,17 @@ export class Collection /*extends EventEmitter*/ {
 	 *
 	 * @returns Promise with the deleted documents
 	 */
-	public drop(options, callback?): Promise<object[]> {
+	public drop(options: { dropIndexes: boolean } = { dropIndexes: false }, callback?): Promise<object[]> {
 		const self = this;
 
 		return new Promise((resolve, reject) => {
-			if (_.isNil(options)) { options = {}; }
+			if (_.isNil(options)) {
+				options = { dropIndexes: false };
+			}
 
 			if (_.isFunction(options)) {
 				callback = options;
-				options = {};
+				options = { dropIndexes: false };
 			}
 
 			if (!_.isNil(callback) && !_.isFunction(callback)) {
