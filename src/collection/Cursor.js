@@ -203,7 +203,7 @@ var Cursor = /** @class */ (function () {
      * @returns All the documents contained in the cursor
      */
     Cursor.prototype.fetchAll = function () {
-        return getDocuments(this, false) || [];
+        return (getDocuments(this, false) || []);
     };
     /**
      * Retrieves the next document in the cursor

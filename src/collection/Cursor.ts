@@ -140,7 +140,7 @@ export class Cursor {
 	/**
 	 * Moves a cursor to the begining
 	 */
-	public rewind() {
+	public rewind(): void {
 		this.dbObjects = null;
 		this.cursorPosition = 0;
 	}
@@ -150,7 +150,7 @@ export class Cursor {
 	 *
 	 * @param callback - Callback function to be called for each document
 	 */
-	public forEach(callback: ((doc: object) => void)) {
+	public forEach(callback: ((doc: object) => void)): void {
 		const docs = this.fetchAll();
 
 		for (const doc of docs) {
@@ -165,7 +165,7 @@ export class Cursor {
 	 *
 	 * @returns The documents after being affected with the callback function
 	 */
-	public map(callback: ((doc: object) => void)) {
+	public map(callback: ((doc: object) => void)): object[] {
 		const res = [];
 
 		this.forEach((doc) => {
@@ -180,21 +180,21 @@ export class Cursor {
 	 *
 	 * @returns True if we can fetch one more document
 	 */
-	public hasNext() {
+	public hasNext(): boolean {
 		return (this.cursorPosition < this.documents.length);
 	}
 
 	/**
 	 * Alias for {@link Cursor#fetchOne}
 	 */
-	public next() {
+	public next(): object {
 		return this.fetchOne();
 	}
 
 	/**
 	 * Alias for {@link Cursor#fetchAll}
 	 */
-	public fetch() {
+	public fetch(): object[] {
 		return this.fetchAll();
 	}
 
@@ -203,8 +203,8 @@ export class Cursor {
 	 *
 	 * @returns All the documents contained in the cursor
 	 */
-	public fetchAll() {
-		return getDocuments(this, false) || [];
+	public fetchAll(): object[] {
+		return (getDocuments(this, false) || []) as object[];
 	}
 
 	/**
@@ -212,7 +212,7 @@ export class Cursor {
 	 *
 	 * @returns The next document in the cursor
 	 */
-	public fetchOne() {
+	public fetchOne(): object {
 		return getDocuments(this, true);
 	}
 
@@ -221,7 +221,7 @@ export class Cursor {
 	 *
 	 * @returns The total of documents in the cursor
 	 */
-	public count() {
+	public count(): number {
 		return this.fetchAll().length;
 	}
 
@@ -232,7 +232,7 @@ export class Cursor {
 	 *
 	 * @returns This instance so it can be chained with other methods
 	 */
-	public setSorting(spec: object) {
+	public setSorting(spec: object): Cursor {
 		if (_.isNil(spec)) { this.logger.throw("You need to specify a sorting"); }
 
 		if (spec) {
@@ -250,7 +250,7 @@ export class Cursor {
 	 *
 	 * @returns This instance so it can be chained with other methods
 	 */
-	public sort(spec?: object) {
+	public sort(spec?: object): Cursor {
 		let _sort = this.sortCompiled || null;
 
 		if (spec) {
@@ -276,7 +276,7 @@ export class Cursor {
 	 *
 	 * @returns This instance so it can be chained with other methods
 	 */
-	public skip(skip: number) {
+	public skip(skip: number): Cursor {
 		if (_.isNil(skip) || _.isNaN(skip)) { throw new Error("Must pass a number"); }
 
 		this.skipValue = skip;
@@ -291,7 +291,7 @@ export class Cursor {
 	 *
 	 * @returns This instance so it can be chained with other methods
 	 */
-	public limit(limit: number) {
+	public limit(limit: number): Cursor {
 		if (_.isNil(limit) || _.isNaN(limit)) { throw new Error("Must pass a number"); }
 
 		this.limitValue = limit;
@@ -418,7 +418,7 @@ export class Cursor {
 	 *
 	 * @returns The document/s after the projection
 	 */
-	public static project(doc: object|object[], spec: object, aggregation: boolean = false) {
+	public static project(doc: object|object[], spec: object, aggregation: boolean = false): object|object[] {
 		// if (_.isNil(doc)) this.logger.throw("doc param required");
 		// if (_.isNil(spec)) this.logger.throw("spec param required");
 
@@ -441,7 +441,7 @@ export class Cursor {
 	}
 }
 
-const mapFields = (doc: any, fields: any) => {
+const mapFields = (doc: any, fields: any): object => {
 	let docClonned = _.cloneDeep(doc);
 
 	if (!_.isNil(fields) && _.isPlainObject(fields) && !_.isEqual(fields, {})) {
@@ -513,7 +513,7 @@ const mapFields = (doc: any, fields: any) => {
  *
  * @returns If `justOne = true` returns the next document, otherwise returns all the documents
  */
-const getDocuments = (cursor: Cursor, justOne: boolean = false) => {
+const getDocuments = (cursor: Cursor, justOne: boolean = false): object|object[] => {
 	let docs = [];
 
 	if (cursor.fetchMode === Cursor.COLSCAN) {
@@ -586,7 +586,7 @@ const getDocuments = (cursor: Cursor, justOne: boolean = false) => {
  *
  * @returns Whether the cursor has sorting or not
  */
-const hasSorting = (cursor: Cursor) => {
+const hasSorting = (cursor: Cursor): boolean => {
 	if (_.isNil(cursor.sortValue)) { return false; }
 
 	return true;
