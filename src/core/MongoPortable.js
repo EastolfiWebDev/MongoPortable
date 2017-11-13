@@ -123,9 +123,9 @@ var MongoPortable = /** @class */ (function (_super) {
      *
      * @method MongoPortable#fetchCollections
      */
-    MongoPortable.prototype.fetchCollections = function (options, callback) {
-        if (options === void 0) { options = {}; }
-        return this.collections(options, callback);
+    MongoPortable.prototype.fetchCollections = function (options /*, callback?: ((collections: Collection[]) => void)*/) {
+        if (options === void 0) { options = {}; } /*, callback?: ((collections: Collection[]) => void)*/
+        return this.collections(options /*, callback*/);
     };
     /***
      * Get the list of all collection for the specified db
@@ -141,16 +141,15 @@ var MongoPortable = /** @class */ (function (_super) {
      *
      * @return {Array}
      */
-    MongoPortable.prototype.collections = function (options, callback) {
-        if (options === void 0) { options = {}; }
+    MongoPortable.prototype.collections = function (options /*, callback?: ((collections: Collection[]) => void)*/) {
         // Review type check
-        if (_.isNil(callback) && _.isFunction(options)) {
-            callback = options;
+        /*if (_.isNil(callback) && _.isFunction(options)) {
+            callback = options as ((collections: Collection[]) => void);
             options = null;
         }
-        if (_.isNil(options)) {
-            options = {};
-        }
+
+        if (_.isNil(options)) { options = {}; }*/
+        if (options === void 0) { options = {}; } /*, callback?: ((collections: Collection[]) => void)*/
         var collectionList = [];
         try {
             for (var _a = __values(Object.keys(this._collections)), _b = _a.next(); !_b.done; _b = _a.next()) {
@@ -183,9 +182,7 @@ var MongoPortable = /** @class */ (function (_super) {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        if (callback) {
-            callback(collectionList);
-        }
+        // if (callback) { callback(collectionList); }
         return collectionList;
         var e_1, _c;
     };
@@ -205,18 +202,17 @@ var MongoPortable = /** @class */ (function (_super) {
      *
      * {@link MongoPortable#collections}
      */
-    MongoPortable.prototype.collectionNames = function (options, callback) {
-        if (options === void 0) { options = { namesOnly: true }; }
+    MongoPortable.prototype.collectionNames = function (options /*, callback?: ((collections: Collection[]) => void)*/) {
         // Review type check
-        if (_.isNil(callback) && _.isFunction(options)) {
-            callback = options;
+        /*if (_.isNil(callback) && _.isFunction(options)) {
+            callback = options as ((collections: Collection[]) => void);
             options = null;
         }
-        if (_.isNil(options)) {
-            options = {};
-        }
+
+        if (_.isNil(options)) { options = {}; }*/
+        if (options === void 0) { options = { namesOnly: true }; } /*, callback?: ((collections: Collection[]) => void)*/
         options.namesOnly = true;
-        return this.collections(options, callback);
+        return this.collections(options /*, callback*/);
     };
     /***
      * Creates a collection on a server pre-allocating space, need to create f.ex capped collections.

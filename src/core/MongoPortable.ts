@@ -121,8 +121,8 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @method MongoPortable#fetchCollections
 	 */
-	public fetchCollections(options: { collectionName?: string, namesOnly?: boolean } = {}, callback?: ((collections: Collection[]) => void)): Collection[] {
-		return this.collections(options, callback);
+	public fetchCollections(options: { collectionName?: string, namesOnly?: boolean } = {}/*, callback?: ((collections: Collection[]) => void)*/): Collection[] {
+		return this.collections(options/*, callback*/);
 	}
 
 	/***
@@ -139,14 +139,14 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @return {Array}
 	 */
-	public collections(options: { collectionName?: string, namesOnly?: boolean } = {}, callback?: ((collections: Collection[]) => void)): Collection[] {
+	public collections(options: { collectionName?: string, namesOnly?: boolean } = {}/*, callback?: ((collections: Collection[]) => void)*/): Collection[] {
 		// Review type check
-		if (_.isNil(callback) && _.isFunction(options)) {
+		/*if (_.isNil(callback) && _.isFunction(options)) {
 			callback = options as ((collections: Collection[]) => void);
 			options = null;
 		}
 
-		if (_.isNil(options)) { options = {}; }
+		if (_.isNil(options)) { options = {}; }*/
 
 		const collectionList = [];
 		for (const name of Object.keys(this._collections)) {
@@ -168,7 +168,7 @@ export class MongoPortable extends EventEmitter {
 			}
 		}
 
-		if (callback) { callback(collectionList); }
+		// if (callback) { callback(collectionList); }
 
 		return collectionList;
 	}
@@ -189,18 +189,18 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * {@link MongoPortable#collections}
 	 */
-	public collectionNames(options: { collectionName?: string, namesOnly?: boolean } = { namesOnly: true }, callback?: ((collections: Collection[]) => void)): Collection[] {
+	public collectionNames(options: { collectionName?: string, namesOnly?: boolean } = { namesOnly: true }/*, callback?: ((collections: Collection[]) => void)*/): Collection[] {
 		// Review type check
-		if (_.isNil(callback) && _.isFunction(options)) {
+		/*if (_.isNil(callback) && _.isFunction(options)) {
 			callback = options as ((collections: Collection[]) => void);
 			options = null;
 		}
 
-		if (_.isNil(options)) { options = {}; }
+		if (_.isNil(options)) { options = {}; }*/
 
 		options.namesOnly = true;
 
-		return this.collections(options, callback);
+		return this.collections(options/*, callback*/);
 	}
 
 	/***

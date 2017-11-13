@@ -111,7 +111,7 @@ describe("MongoPortable", function() {
         });
         
         describe("- Obtaining", function() {
-            it("should be able to obtain all the collections", function(done) {
+            it("should be able to obtain all the collections", function(/*done*/) {
                 // Returning value
                 db.collection(TEST_COLL).then(coll => {
                     var collections = db.collections();
@@ -124,14 +124,14 @@ describe("MongoPortable", function() {
                     
                     expect(collections).to.exist;
                     expect(collections[0]).to.be.equal(TEST_COLL);
-                    
+                    /*
                     // Callback
                     db.collections((cols) => {
                         expect(cols).to.exist;
                         expect(cols[0].name).to.be.equal(TEST_COLL);
 
                         done();
-                    });
+                    });*/
                 });
             });
             /*
@@ -498,18 +498,17 @@ describe("MongoPortable", function() {
         //     });
         // });
         
-        it("should control MongoPortable#collectionNames parameters", function(done) {
+        it("should control MongoPortable#collectionNames parameters", function(/*done*/) {
             db.collection("testing").then(coll => {
-                db.collectionNames((names) => {
-                    
-                    expect(names).to.exist;
-                    
-                    expect(names).to.be.instanceof(Array);
-                    expect(names).to.have.length(1);
-                    expect(names[0]).to.be.equal("testing");
-                    
-                    done();
-                });
+                const names = db.collectionNames();
+                
+                expect(names).to.exist;
+                
+                expect(names).to.be.instanceof(Array);
+                expect(names).to.have.length(1);
+                expect(names[0]).to.be.equal("testing");
+                
+                // done();
             });
             
         });
