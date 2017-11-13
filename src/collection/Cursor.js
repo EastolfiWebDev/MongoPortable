@@ -504,7 +504,7 @@ var Cursor = /** @class */ (function () {
 }());
 exports.Cursor = Cursor;
 var mapFields = function (doc, fields) {
-    var _doc = _.cloneDeep(doc);
+    var docClonned = _.cloneDeep(doc);
     if (!_.isNil(fields) && _.isPlainObject(fields) && !_.isEqual(fields, {})) {
         var showId = true;
         var showing = null;
@@ -568,9 +568,9 @@ var mapFields = function (doc, fields) {
         else {
             delete tmp._id;
         }
-        _doc = tmp;
+        docClonned = tmp;
     }
-    return _doc;
+    return docClonned;
     var e_4, _c;
 };
 /***
@@ -592,24 +592,17 @@ var getDocuments = function (cursor, justOne) {
         docs = _.cloneDeep(cursor.documents);
     }
     else if (cursor.fetchMode === Cursor.IDXSCAN) {
-        try {
-            // IDXSCAN, wi will iterate over all needed documents
-            for (var cursor_1 = __values(cursor), cursor_1_1 = cursor_1.next(); !cursor_1_1.done; cursor_1_1 = cursor_1.next()) {
-                var index = cursor_1_1.value;
-                for (var i = index.start; i < index.end; i++) {
-                    // let idxId = cursor.collection.getIndex(index.name)[i];
-                    var idxId = index.index[i];
-                    docs.push(cursor.documents[idxId]);
-                }
+        // IDXSCAN, wi will iterate over all needed documents
+        /*
+        for (const index of cursor) {
+            for (let i = index.start; i < index.end; i++) {
+                // let idxId = cursor.collection.getIndex(index.name)[i];
+                const idxId = index.index[i];
+
+                docs.push(cursor.documents[idxId]);
             }
         }
-        catch (e_5_1) { e_5 = { error: e_5_1 }; }
-        finally {
-            try {
-                if (cursor_1_1 && !cursor_1_1.done && (_a = cursor_1.return)) _a.call(cursor_1);
-            }
-            finally { if (e_5) throw e_5.error; }
-        }
+        */
     }
     // if (cursor.selectorId) {
     // 	 if (_.hasIn(cursor.collection.doc_indexes, _.toString(cursor.selectorId))) {
@@ -650,7 +643,6 @@ var getDocuments = function (cursor, justOne) {
     var idxFrom = cursor.skipValue;
     var idxTo = cursor.limitValue !== -1 ? (cursor.limitValue + idxFrom) : cursor.dbObjects.length;
     return cursor.dbObjects.slice(idxFrom, idxTo);
-    var e_5, _a;
 };
 /***
  * Checks if a cursor has a sorting defined

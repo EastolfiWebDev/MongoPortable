@@ -73,7 +73,7 @@ export class Cursor {
 	 *
 	 * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
 	 */
-	constructor(documents, selection, fields?, options: object = {}) {
+	constructor(documents: object[], selection: object, fields?: object, options: { skip?: number, limit?: number, sortValue?: object } = { }) {
 		this.documents = documents;
 		this.selector = selection;
 
@@ -154,7 +154,7 @@ export class Cursor {
 	 *
 	 * @param {Function} [callback=null] - Callback function to be called for each document
 	 */
-	public forEach(callback) {
+	public forEach(callback: ((doc: object) => void)) {
 		const docs = this.fetchAll();
 
 		for (const doc of docs) {
@@ -171,7 +171,7 @@ export class Cursor {
 	 *
 	 * @returns {Array} The documents after being affected with the callback function
 	 */
-	public map(callback) {
+	public map(callback: ((doc: object) => void)) {
 		const res = [];
 
 		this.forEach((doc) => {
@@ -252,7 +252,7 @@ export class Cursor {
 	 *
 	 * @returns {Cursor} This instance so it can be chained with other methods
 	 */
-	public setSorting(spec) {
+	public setSorting(spec: object) {
 		if (_.isNil(spec)) { this.logger.throw("You need to specify a sorting"); }
 
 		if (spec) {
@@ -272,7 +272,7 @@ export class Cursor {
 	 *
 	 * @returns {Cursor} This instance so it can be chained with other methods
 	 */
-	public sort(spec) {
+	public sort(spec?: object) {
 		let _sort = this.sortCompiled || null;
 
 		if (spec) {
@@ -300,7 +300,7 @@ export class Cursor {
 	 *
 	 * @returns {Cursor} This instance so it can be chained with other methods
 	 */
-	public skip(skip) {
+	public skip(skip: number) {
 		if (_.isNil(skip) || _.isNaN(skip)) { throw new Error("Must pass a number"); }
 
 		this.skipValue = skip;
@@ -317,7 +317,7 @@ export class Cursor {
 	 *
 	 * @returns {Cursor} This instance so it can be chained with other methods
 	 */
-	public limit(limit) {
+	public limit(limit: number) {
 		if (_.isNil(limit) || _.isNaN(limit)) { throw new Error("Must pass a number"); }
 
 		this.limitValue = limit;
@@ -509,7 +509,7 @@ export class Cursor {
 	 *
 	 * @returns {Array|Object} The document/s after the projection
 	 */
-	public static project(doc, spec, aggregation = false) {
+	public static project(doc: object|object[], spec: object, aggregation: boolean = false) {
 		// if (_.isNil(doc)) this.logger.throw("doc param required");
 		// if (_.isNil(spec)) this.logger.throw("spec param required");
 
@@ -532,8 +532,8 @@ export class Cursor {
 	}
 }
 
-const mapFields = (doc, fields) => {
-	let _doc = _.cloneDeep(doc);
+const mapFields = (doc: any, fields: any) => {
+	let docClonned = _.cloneDeep(doc);
 
 	if (!_.isNil(fields) && _.isPlainObject(fields) && !_.isEqual(fields, {})) {
 		let showId = true;
@@ -590,10 +590,10 @@ const mapFields = (doc, fields) => {
 			delete tmp._id;
 		}
 
-		_doc = tmp;
+		docClonned = tmp;
 	}
 
-	return _doc;
+	return docClonned;
 };
 
 /***
@@ -607,7 +607,7 @@ const mapFields = (doc, fields) => {
  *
  * @returns {Array|Object} If [justOne=true] returns the next document, otherwise returns all the documents
  */
-const getDocuments = (cursor, justOne = false) => {
+const getDocuments = (cursor: Cursor, justOne: boolean = false) => {
 	let docs = [];
 
 	if (cursor.fetchMode === Cursor.COLSCAN) {
@@ -615,6 +615,7 @@ const getDocuments = (cursor, justOne = false) => {
 		docs = _.cloneDeep(cursor.documents);
 	} else if (cursor.fetchMode === Cursor.IDXSCAN) {
 		// IDXSCAN, wi will iterate over all needed documents
+		/*
 		for (const index of cursor) {
 			for (let i = index.start; i < index.end; i++) {
 				// let idxId = cursor.collection.getIndex(index.name)[i];
@@ -623,6 +624,7 @@ const getDocuments = (cursor, justOne = false) => {
 				docs.push(cursor.documents[idxId]);
 			}
 		}
+		*/
 	}
 
 	// if (cursor.selectorId) {
@@ -681,7 +683,7 @@ const getDocuments = (cursor, justOne = false) => {
  *
  * @returns {Boolean} Whether the cursor has sorting or not
  */
-const hasSorting = (cursor) => {
+const hasSorting = (cursor: Cursor) => {
 	if (_.isNil(cursor.sortValue)) { return false; }
 
 	return true;
