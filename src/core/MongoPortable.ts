@@ -15,7 +15,7 @@ import { Options } from "./Options";
 import { Collection } from "../collection";
 import { ObjectId } from "../document";
 import { EventEmitter } from "../emitter";
-import { ConnectionHelper, Utils } from "../utils";
+import { ConnectionHelper, IConnection, Utils } from "../utils";
 
 /***
  * MongoPortable
@@ -73,7 +73,7 @@ export class MongoPortable extends EventEmitter {
 	 *	  </ul>
 	 * @param  {Object|Function} fn - Function to implement the middleware
 	 */
-	public use(name, obj) {
+	public use(name: string, obj: any): void {
 		switch (name) {
 			case "store":
 				this._stores.push(obj);
@@ -88,11 +88,11 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @returns {MongoPortable} this - The current Instance
 	 */
-	public addStore(store) {
+	public addStore(store: object|(() => object)): MongoPortable {
 		if (_.isNil(store)) { this.logger.throw("missing \"store\" parameter"); }
 
 		if (_.isFunction(store)) {
-			this._stores.push(new store());
+			this._stores.push(store());
 		} else if (_.isObject(store)) {
 			this._stores.push(store);
 		} else {
@@ -121,7 +121,7 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @method MongoPortable#fetchCollections
 	 */
-	public fetchCollections(options, callback?) {
+	public fetchCollections(options: { collectionName?: string, namesOnly?: boolean } = {}, callback?: ((collections: Collection[]) => void)): Collection[] {
 		return this.collections(options, callback);
 	}
 
@@ -139,31 +139,31 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @return {Array}
 	 */
-	public collections(options, callback?) {
+	public collections(options: { collectionName?: string, namesOnly?: boolean } = {}, callback?: ((collections: Collection[]) => void)): Collection[] {
+		// Review type check
 		if (_.isNil(callback) && _.isFunction(options)) {
-			callback = options;
+			callback = options as ((collections: Collection[]) => void);
+			options = null;
 		}
 
 		if (_.isNil(options)) { options = {}; }
 
-		const self = this;
-
 		const collectionList = [];
-		for (const name in self._collections) {
+		for (const name of Object.keys(this._collections)) {
 			// Only add the requested collections //TODO Add array type
 			if (options.collectionName) {
 				if (name.toLowerCase() === options.collectionName.toLowerCase()) {
 					if (options.namesOnly) {
 						collectionList.push(name);
 					} else {
-						collectionList.push(self._collections[name]);
+						collectionList.push(this._collections[name]);
 					}
 				}
 			} else {
 				if (options.namesOnly) {
 					collectionList.push(name);
 				} else {
-					collectionList.push(self._collections[name]);
+					collectionList.push(this._collections[name]);
 				}
 			}
 		}
@@ -189,9 +189,11 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * {@link MongoPortable#collections}
 	 */
-	public collectionNames(options, callback?) {
+	public collectionNames(options: { collectionName?: string, namesOnly?: boolean } = { namesOnly: true }, callback?: ((collections: Collection[]) => void)): Collection[] {
+		// Review type check
 		if (_.isNil(callback) && _.isFunction(options)) {
-			callback = options;
+			callback = options as ((collections: Collection[]) => void);
+			options = null;
 		}
 
 		if (_.isNil(options)) { options = {}; }
@@ -238,18 +240,18 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @returns {Promise<Collection>}
 	 */
-	public collection(collectionName, options, callback?): Promise<Collection> {
+	public collection(collectionName: string, options: {} = {}, callback?: ((error: Error, collection: Collection) => void)): Promise<Collection> {
 		return new Promise((resolve, reject) => {
 			let existing = true;
 			// var collection;
 			// var collectionFullName =  self.databaseName + "." + collectionName;
-
+			/*
 			if (_.isFunction(options)) {
 				callback = options;
 				options = {};
 			} else {
 				options = options || {};
-			}
+			}*/
 
 			if (!this._collections[collectionName]) {
 				this._collections[collectionName] = new Collection(this, collectionName/*, this.pkFactory*//*, options*/);
@@ -296,7 +298,7 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @method MongoPortable#createCollection
 	 */
-	public createCollection(collectionName, options, callback?): Promise<Collection> {
+	public createCollection(collectionName: string, options: {} = {}, callback?: ((error: Error, collection: Collection) => void)): Promise<Collection> {
 		return this.collection(collectionName, options, callback);
 	}
 
@@ -310,7 +312,7 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @returns {Promise<Boolean>} Promise with "true" if dropped successfully
 	 */
-	public dropCollection(collectionName, callback?): Promise<boolean> {
+	public dropCollection(collectionName: string, callback?: ((error: Error, dropped: boolean) => void)): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			if (this._collections[collectionName]) {
 				// Drop the collection
@@ -352,7 +354,7 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @returns {Promise<Collection>} Promise with the renamed collection
 	 */
-	public renameCollection(fromCollection, toCollection, callback?): Promise<Collection> {
+	public renameCollection(fromCollection: string, toCollection: string, callback?: ((error: Error, collection: Collection) => void)): Promise<Collection> {
 		return new Promise((resolve, reject) => {
 			if (!_.isString(fromCollection) || !_.isString(toCollection) || fromCollection === toCollection) {
 				const error = new Error("You should pass two different string names");
@@ -533,7 +535,7 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @return {Promise<Boolean>} Promise with "true" if dropped successfully
 	 */
-	public dropDatabase(callback?): Promise<boolean> {
+	public dropDatabase(callback?: ((error: Error, dropped: boolean) => void)): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			if (MongoPortable._connHelper.hasConnection(this._databaseName)) {
 				this.emit("dropDatabase", {
@@ -592,7 +594,7 @@ export class MongoPortable extends EventEmitter {
 	 *
 	 * @return {MongoPortable} - The DDBB instance
 	 */
-	public static getInstance(name: string) {
+	public static getInstance(name: string): IConnection {
 		if (!_.isNil(name)) {
 			return MongoPortable._connHelper.getConnection(name);
 		}

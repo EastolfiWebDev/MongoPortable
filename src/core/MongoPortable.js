@@ -9,6 +9,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /***
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
@@ -85,7 +95,7 @@ var MongoPortable = /** @class */ (function (_super) {
             this.logger.throw("missing \"store\" parameter");
         }
         if (_.isFunction(store)) {
-            this._stores.push(new store());
+            this._stores.push(store());
         }
         else if (_.isObject(store)) {
             this._stores.push(store);
@@ -114,6 +124,7 @@ var MongoPortable = /** @class */ (function (_super) {
      * @method MongoPortable#fetchCollections
      */
     MongoPortable.prototype.fetchCollections = function (options, callback) {
+        if (options === void 0) { options = {}; }
         return this.collections(options, callback);
     };
     /***
@@ -131,39 +142,52 @@ var MongoPortable = /** @class */ (function (_super) {
      * @return {Array}
      */
     MongoPortable.prototype.collections = function (options, callback) {
+        if (options === void 0) { options = {}; }
+        // Review type check
         if (_.isNil(callback) && _.isFunction(options)) {
             callback = options;
+            options = null;
         }
         if (_.isNil(options)) {
             options = {};
         }
-        var self = this;
         var collectionList = [];
-        for (var name_1 in self._collections) {
-            // Only add the requested collections //TODO Add array type
-            if (options.collectionName) {
-                if (name_1.toLowerCase() === options.collectionName.toLowerCase()) {
+        try {
+            for (var _a = __values(Object.keys(this._collections)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var name_1 = _b.value;
+                // Only add the requested collections //TODO Add array type
+                if (options.collectionName) {
+                    if (name_1.toLowerCase() === options.collectionName.toLowerCase()) {
+                        if (options.namesOnly) {
+                            collectionList.push(name_1);
+                        }
+                        else {
+                            collectionList.push(this._collections[name_1]);
+                        }
+                    }
+                }
+                else {
                     if (options.namesOnly) {
                         collectionList.push(name_1);
                     }
                     else {
-                        collectionList.push(self._collections[name_1]);
+                        collectionList.push(this._collections[name_1]);
                     }
                 }
             }
-            else {
-                if (options.namesOnly) {
-                    collectionList.push(name_1);
-                }
-                else {
-                    collectionList.push(self._collections[name_1]);
-                }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
             }
+            finally { if (e_1) throw e_1.error; }
         }
         if (callback) {
             callback(collectionList);
         }
         return collectionList;
+        var e_1, _c;
     };
     /***
      * Get the list of all collection names for the specified db,
@@ -182,8 +206,11 @@ var MongoPortable = /** @class */ (function (_super) {
      * {@link MongoPortable#collections}
      */
     MongoPortable.prototype.collectionNames = function (options, callback) {
+        if (options === void 0) { options = { namesOnly: true }; }
+        // Review type check
         if (_.isNil(callback) && _.isFunction(options)) {
             callback = options;
+            options = null;
         }
         if (_.isNil(options)) {
             options = {};
@@ -230,17 +257,18 @@ var MongoPortable = /** @class */ (function (_super) {
      */
     MongoPortable.prototype.collection = function (collectionName, options, callback) {
         var _this = this;
+        if (options === void 0) { options = {}; }
         return new Promise(function (resolve, reject) {
             var existing = true;
             // var collection;
             // var collectionFullName =  self.databaseName + "." + collectionName;
+            /*
             if (_.isFunction(options)) {
                 callback = options;
                 options = {};
-            }
-            else {
+            } else {
                 options = options || {};
-            }
+            }*/
             if (!_this._collections[collectionName]) {
                 _this._collections[collectionName] = new collection_1.Collection(_this, collectionName /*, this.pkFactory*/ /*, options*/);
                 existing = false;
@@ -285,6 +313,7 @@ var MongoPortable = /** @class */ (function (_super) {
      * @method MongoPortable#createCollection
      */
     MongoPortable.prototype.createCollection = function (collectionName, options, callback) {
+        if (options === void 0) { options = {}; }
         return this.collection(collectionName, options, callback);
     };
     /***
