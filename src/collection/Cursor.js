@@ -36,7 +36,7 @@ class Options {
     }
 }
 */
-/***
+/**
  * Cursor
  *
  * @module Cursor
@@ -47,14 +47,14 @@ class Options {
  * @classdesc Cursor class that maps a MongoDB-like cursor
  */
 var Cursor = /** @class */ (function () {
-    /***
-     * @param {MongoPortable} db - Additional options
-     * @param {Array} documents - The list of documents
-     * @param {Object|Array|String} [selection={}] - The selection for matching documents
-     * @param {Object|Array|String} [fields={}] - The fields of the document to show
-     * @param {Object} [options] - Database object
-     *
-     * @param {Object} [options.pkFactory=null] - Object overriding the basic "ObjectId" primary key generation.
+    /**
+     * @param documents - The list of documents
+     * @param selection - The selection for matching documents
+     * @param fields - The fields of the document to show
+     * @param options
+     * @param options.skip - Number of documents to be skipped
+     * @param options.limit - Max number of documents to display
+     * @param options.sortValue - Options to sort the cursor
      */
     function Cursor(documents, selection, fields, options) {
         if (options === void 0) { options = {}; }
@@ -134,21 +134,17 @@ var Cursor = /** @class */ (function () {
         this.cursorPosition = 0;
         var e_1, _c, e_2, _f;
     }
-    /***
+    /**
      * Moves a cursor to the begining
-     *
-     * @method Cursor#rewind
      */
     Cursor.prototype.rewind = function () {
         this.dbObjects = null;
         this.cursorPosition = 0;
     };
-    /***
+    /**
      * Iterates over the cursor, calling a callback function
      *
-     * @method Cursor#forEach
-     *
-     * @param {Function} [callback=null] - Callback function to be called for each document
+     * @param callback - Callback function to be called for each document
      */
     Cursor.prototype.forEach = function (callback) {
         var docs = this.fetchAll();
@@ -167,14 +163,12 @@ var Cursor = /** @class */ (function () {
         }
         var e_3, _a;
     };
-    /***
+    /**
      * Iterates over the cursor, returning a new array with the documents affected by the callback function
      *
-     * @method Cursor#map
+     * @param callback - Callback function to be called for each document
      *
-     * @param {Function} [callback=null] - Callback function to be called for each document
-     *
-     * @returns {Array} The documents after being affected with the callback function
+     * @returns The documents after being affected with the callback function
      */
     Cursor.prototype.map = function (callback) {
         var res = [];
@@ -183,70 +177,56 @@ var Cursor = /** @class */ (function () {
         });
         return res;
     };
-    /***
+    /**
      * Checks if the cursor has one document to be fetched
      *
-     * @method Cursor#hasNext
-     *
-     * @returns {Boolean} True if we can fetch one more document
+     * @returns True if we can fetch one more document
      */
     Cursor.prototype.hasNext = function () {
         return (this.cursorPosition < this.documents.length);
     };
-    /***
+    /**
      * Alias for {@link Cursor#fetchOne}
-     *
-     * @method Cursor#next
      */
     Cursor.prototype.next = function () {
         return this.fetchOne();
     };
-    /***
+    /**
      * Alias for {@link Cursor#fetchAll}
-     *
-     * @method Cursor#fetch
      */
     Cursor.prototype.fetch = function () {
         return this.fetchAll();
     };
-    /***
+    /**
      * Fetch all documents in the cursor
      *
-     * @method Cursor#fetchAll
-     *
-     * @returns {Array} All the documents contained in the cursor
+     * @returns All the documents contained in the cursor
      */
     Cursor.prototype.fetchAll = function () {
         return getDocuments(this, false) || [];
     };
-    /***
+    /**
      * Retrieves the next document in the cursor
      *
-     * @method Cursor#fetchOne
-     *
-     * @returns {Object} The next document in the cursor
+     * @returns The next document in the cursor
      */
     Cursor.prototype.fetchOne = function () {
         return getDocuments(this, true);
     };
-    /***
+    /**
      * Obtains the total of documents of the cursor
      *
-     * @method Cursor#count
-     *
-     * @returns {Number} The total of documents in the cursor
+     * @returns The total of documents in the cursor
      */
     Cursor.prototype.count = function () {
         return this.fetchAll().length;
     };
-    /***
+    /**
      * Set the sorting of the cursor
      *
-     * @method Cursor#sort
+     * @param spec - The sorting specification
      *
-     * @param {Object|Array|String} spec - The sorting specification
-     *
-     * @returns {Cursor} This instance so it can be chained with other methods
+     * @returns This instance so it can be chained with other methods
      */
     Cursor.prototype.setSorting = function (spec) {
         if (_.isNil(spec)) {
@@ -258,14 +238,12 @@ var Cursor = /** @class */ (function () {
         }
         return this;
     };
-    /***
+    /**
      * Applies a sorting on the cursor
      *
-     * @method Cursor#sort
+     * @param spec - The sorting specification
      *
-     * @param {Object|Array|String} spec - The sorting specification
-     *
-     * @returns {Cursor} This instance so it can be chained with other methods
+     * @returns This instance so it can be chained with other methods
      */
     Cursor.prototype.sort = function (spec) {
         var _sort = this.sortCompiled || null;
@@ -283,14 +261,12 @@ var Cursor = /** @class */ (function () {
         }
         return this;
     };
-    /***
+    /**
      * Set the number of document to skip when fetching the cursor
      *
-     * @method Cursor#skip
+     * @param skip - The number of documents to skip
      *
-     * @param {Number} skip - The number of documents to skip
-     *
-     * @returns {Cursor} This instance so it can be chained with other methods
+     * @returns This instance so it can be chained with other methods
      */
     Cursor.prototype.skip = function (skip) {
         if (_.isNil(skip) || _.isNaN(skip)) {
@@ -299,14 +275,12 @@ var Cursor = /** @class */ (function () {
         this.skipValue = skip;
         return this;
     };
-    /***
+    /**
      * Set the max number of document to fetch
      *
-     * @method Cursor#limit
+     * @param limit - The max number of documents
      *
-     * @param {Number} limit - The max number of documents
-     *
-     * @returns {Cursor} This instance so it can be chained with other methods
+     * @returns This instance so it can be chained with other methods
      */
     Cursor.prototype.limit = function (limit) {
         if (_.isNil(limit) || _.isNaN(limit)) {
@@ -315,150 +289,87 @@ var Cursor = /** @class */ (function () {
         this.limitValue = limit;
         return this;
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.batchSize = function () {
         // Controls the number of documents MongoDB will return to the client in a single network message.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.close = function () {
         // Close a cursor and free associated server resources.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.comment = function () {
         // Attaches a comment to the query to allow for traceability in the logs and the system.profile collection.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.explain = function () {
         // Reports on the query execution plan for a cursor.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.hint = function () {
         // Forces MongoDB to use a specific index for a query.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.itcount = function () {
         // Computes the total number of documents in the cursor client-side by fetching and iterating the result set.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.maxScan = function () {
         // Specifies the maximum number of items to scan; documents for collection scans, keys for index scans.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.maxTimeMS = function () {
         // Specifies a cumulative time limit in milliseconds for processing operations on a cursor.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.max = function () {
         // Specifies an exclusive upper index bound for a cursor. For use with cursor.hint()
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.min = function () {
         // Specifies an inclusive lower index bound for a cursor. For use with cursor.hint()
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.noCursorTimeout = function () {
         // Instructs the server to avoid closing a cursor automatically after a period of inactivity.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.objsLeftInBatch = function () {
         // Returns the number of documents left in the current cursor batch.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.pretty = function () {
         // Configures the cursor to display results in an easy-to-read format.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.readConcern = function () {
         // Specifies a read concern for a find() operation.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.readPref = function () {
         // Specifies a read preference to a cursor to control how the client directs queries to a replica set.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.returnKey = function () {
         // Modifies the cursor to return index keys rather than the documents.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.showRecordId = function () {
         // Adds an internal storage engine ID field to each document returned by the cursor.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.size = function () {
         // Returns a count of the documents in the cursor after applying skip() and limit() methods.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.snapshot = function () {
         // Forces the cursor to use the index on the _id field. Ensures that the cursor returns each document,
         // with regards to the value of the _id field, only once.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.tailable = function () {
         // Marks the cursor as tailable. Only valid for cursors over capped collections.
         throw new Error("Not yet implemented");
     };
-    /***
-     * @todo Implement
-     */
     Cursor.prototype.toArray = function () {
         // Returns an array that contains all documents returned by the cursor.
         throw new Error("Not yet implemented");
@@ -467,15 +378,13 @@ var Cursor = /** @class */ (function () {
         // Sort the elements of a cursor
         throw new Error("Not yet implemented");
     };
-    /***
+    /**
      * Projects the fields of one or several documents, changing the output
      *
-     * @method Cursor.project
+     * @param doc - The document/s that will be projected
+     * @param spec - Fields projection specification. Can be an space/comma separated list, an array, or an object
      *
-     * @param {Array|Object} doc - The document/s that will be projected
-     * @param {String|Array|Object} spec - Fields projection specification. Can be an space/comma separated list, an array, or an object
-     *
-     * @returns {Array|Object} The document/s after the projection
+     * @returns The document/s after the projection
      */
     Cursor.project = function (doc, spec, aggregation) {
         // if (_.isNil(doc)) this.logger.throw("doc param required");
@@ -573,16 +482,13 @@ var mapFields = function (doc, fields) {
     return docClonned;
     var e_4, _c;
 };
-/***
+/**
  * Retrieves one or all the documents in the cursor
  *
- * @method getDocuments
- * @private
+ * @param cursor - The cursor with the documents
+ * @param justOne - Whether it retrieves one or all the documents
  *
- * @param {Cursor} cursor - The cursor with the documents
- * @param {Boolean} [justOne=false] - Whether it retrieves one or all the documents
- *
- * @returns {Array|Object} If [justOne=true] returns the next document, otherwise returns all the documents
+ * @returns If `justOne = true` returns the next document, otherwise returns all the documents
  */
 var getDocuments = function (cursor, justOne) {
     if (justOne === void 0) { justOne = false; }
@@ -644,15 +550,12 @@ var getDocuments = function (cursor, justOne) {
     var idxTo = cursor.limitValue !== -1 ? (cursor.limitValue + idxFrom) : cursor.dbObjects.length;
     return cursor.dbObjects.slice(idxFrom, idxTo);
 };
-/***
+/**
  * Checks if a cursor has a sorting defined
  *
- * @method hasSorting
- * @private
+ * @param cursor - The cursor
  *
- * @param {Cursor} cursor - The cursor
- *
- * @returns {Boolean} Whether the cursor has sorting or not
+ * @returns Whether the cursor has sorting or not
  */
 var hasSorting = function (cursor) {
     if (_.isNil(cursor.sortValue)) {
