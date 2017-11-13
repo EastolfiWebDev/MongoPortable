@@ -18,6 +18,9 @@ var Selector = /** @class */ (function () {
     function Selector(selector, type) {
         if (type === void 0) { type = Selector.MATCH_SELECTOR; }
         this.logger = jsw_logger_1.JSWLogger.instance;
+        if (selector instanceof index_1.ObjectId) {
+            selector = { _id: selector };
+        }
         this.selectorCompiled = null;
         if (type === Selector.MATCH_SELECTOR) {
             this.selectorCompiled = this.compile(selector);

@@ -132,7 +132,7 @@ describe("Collection", function() {
         describe(" - Read", function() {
             it("should be able to read the first document", function(done) {
                 db.collection(TEST_COLL).then(coll => {
-                    coll.findOne(function(error, doc) {
+                    coll.findOne((doc) => {
                         expect(doc).to.exist;
                         
                         expect(doc._id).to.exist;
@@ -141,49 +141,86 @@ describe("Collection", function() {
                         
                         done();
                     });
-                })
-                
+                });
             });
                 
             it("should be able to read a document", function(done) {
                 db.collection(TEST_COLL).then(coll => {
-                    coll.findOne({stringField: "yes"}, {_id: -1, numberField: 1}, { fields: { numberField: 1 }})
-                    .then(doc => {
-                        expect(doc).to.exist;
+                    Promise.all([
+                        coll.findOne({ stringField: "yes" }, { _id: -1, numberField: 1 }),
+                        coll.findOne({ _id: 123456789 }),
+                        coll.findOne(TEST_DOC._id)/*,
+                        coll.findOne({ _id: TEST_DOC._id })*/
+                    ])
+                    .then(docs => {
+                        let doc;
+                        
+                        doc = docs[0];
                         
                         expect(doc._id).to.not.exist;
                         expect(doc.stringField).to.not.exist;
                         expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
                         
-                        coll.findOne({_id: 123456789}, null, { fields: { numberField: 1 }})
-                        .then(doc => {
-                            expect(doc).to.not.exist;
-                            
-                            coll.findOne(TEST_DOC._id)
-                            .then(doc => {
-                                expect(doc).to.exist;
+                        doc = docs[1];
+                        
+                        expect(doc).to.not.exist;
+                        
+                        doc = docs[2];
+                        
+                        expect(doc).to.exist;
                                 
-                                expect(doc._id).to.exist;
-                                expect(doc.stringField).to.be.equal(TEST_DOC.stringField);
-                                expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
-                                
-                                // doc = coll.findOne({_id: new ObjectId()});
-                                
-                                // expect(doc).to.not.exist;
-                                
-                                coll.findOne({_id: TEST_DOC._id}, function(error, doc) {
-                                    expect(doc).to.exist;
+                        expect(doc._id).to.exist;
+                        expect(doc.stringField).to.be.equal(TEST_DOC.stringField);
+                        expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
+                        /*
+                        doc = docs[3];
+                        
+                        expect(doc).to.exist;
                                     
-                                    expect(doc._id).to.exist;
-                                    expect(doc.stringField).to.exist;
-                                    expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
-                                    
-                                    done();
-                                });
-                            })
+                        expect(doc._id).to.exist;
+                        expect(doc.stringField).to.exist;
+                        expect(doc.numberField).to.be.equal(TEST_DOC.numberField);*/
+                        
+                        done();
+                    }).catch(error => console.log(error));
+                    // coll.findOne({stringField: "yes"}, {_id: -1, numberField: 1}/*, { fields: { numberField: 1 }*/})
+                    // .then(doc => {
+                    //     console.log(doc);
+                    //     expect(doc).to.exist;
+                        
+                    //     expect(doc._id).to.not.exist;
+                    //     expect(doc.stringField).to.not.exist;
+                    //     expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
+                        
+                    //     coll.findOne({_id: 123456789}, null, { fields: { numberField: 1 }})
+                    //     .then(doc => {
+                    //         expect(doc).to.not.exist;
                             
-                        });
-                    });
+                    //         coll.findOne(TEST_DOC._id)
+                    //         .then(doc => {
+                    //             expect(doc).to.exist;
+                                
+                    //             expect(doc._id).to.exist;
+                    //             expect(doc.stringField).to.be.equal(TEST_DOC.stringField);
+                    //             expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
+                                
+                    //             // doc = coll.findOne({_id: new ObjectId()});
+                                
+                    //             // expect(doc).to.not.exist;
+                                
+                    //             coll.findOne({_id: TEST_DOC._id}, function(error, doc) {
+                    //                 expect(doc).to.exist;
+                                    
+                    //                 expect(doc._id).to.exist;
+                    //                 expect(doc.stringField).to.exist;
+                    //                 expect(doc.numberField).to.be.equal(TEST_DOC.numberField);
+                                    
+                    //                 done();
+                    //             });
+                    //         })
+                            
+                    //     });
+                    // });
                 });
             });
             

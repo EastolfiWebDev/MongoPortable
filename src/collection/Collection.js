@@ -219,7 +219,6 @@ var Collection = /** @class */ (function () {
      * @param options
      * @param options.skip - Number of documents to be skipped
      * @param options.limit - Max number of documents to display
-     * @param options.fields - Same as "fields" parameter (if both passed, "options.fields" will be ignored)
      * @param options.doNotFetch - If set to "true" returns the cursor not fetched
      * @param callback - Callback function to be called at the end with the results
      *
@@ -231,19 +230,6 @@ var Collection = /** @class */ (function () {
         }; }
         var self = this;
         return new Promise(function (resolve, reject) {
-            /*
-            { selection, fields, options, callback } = ensureFindParams({
-                selection,
-                fields,
-                options,
-                callback
-            });
-
-            selection = params.selection;
-            fields = params.fields;
-            options = params.options;
-            callback = params.callback;
-            */
             self.emit("find", {
                 collection: self,
                 selector: selection,
@@ -289,18 +275,22 @@ var Collection = /** @class */ (function () {
      * @returns {Promise<Object>} Returns a promise with the first matching document of the collection
      */
     Collection.prototype.findOne = function (selection, fields, options, callback) {
+        if (options === void 0) { options = {
+            doNotFecth: false
+        }; }
         var self = this;
         return new Promise(function (resolve, reject) {
-            var params = ensureFindParams({
-                selection: selection,
-                fields: fields,
-                options: options,
-                callback: callback
+            /*const params = ensureFindParams({
+                selection,
+                fields,
+                options,
+                callback
             });
+
             selection = params.selection;
             fields = params.fields;
             options = params.options;
-            callback = params.callback;
+            callback = params.callback;*/
             self.emit("findOne", {
                 collection: self,
                 selector: selection,
@@ -340,30 +330,33 @@ var Collection = /** @class */ (function () {
      * @returns Returns a promise with the update/insert (if upsert=true) information
      */
     Collection.prototype.update = function (selection, update, options, callback) {
+        if (options === void 0) { options = {
+            updateAsMongo: false, override: false, upsert: false,
+            multi: false
+        }; }
         var self = this;
         return new Promise(function (resolve, reject) {
-            if (_.isNil(selection)) {
-                selection = {};
-            }
-            if (_.isNil(update)) {
-                self.logger.throw("You must specify the update operation");
-            }
+            /*if (_.isNil(selection)) { selection = {}; }
+
+            if (_.isNil(update)) { self.logger.throw("You must specify the update operation"); }
+
             if (_.isNil(options)) {
                 options = {
                     skip: 0,
-                    limit: 15 // for no limit pass [options.limit = -1]
+                    limit: 15   // for no limit pass [options.limit = -1]
                 };
             }
-            if (_.isFunction(selection)) {
-                self.logger.throw("You must specify the update operation");
-            }
-            if (_.isFunction(update)) {
-                self.logger.throw("You must specify the update operation");
-            }
+
+            if (_.isFunction(selection)) { self.logger.throw("You must specify the update operation"); }
+
+            if (_.isFunction(update)) { self.logger.throw("You must specify the update operation"); }
+
             if (_.isFunction(options)) {
                 callback = options;
                 options = {};
-            }
+            }*/
+            // Force to fetch the results
+            var findOptions = _.assign({}, options, { doNotFecth: false });
             // Check special case where we are using an objectId
             if (selection instanceof document_1.ObjectId) {
                 selection = {
@@ -377,13 +370,13 @@ var Collection = /** @class */ (function () {
             // var docs = null;
             if (options.multi) {
                 // docs = self.find(selection, null, { forceFetch: true });
-                self.find(selection, null /*, { forceFetch: true }*/)
+                self.find(selection, null, findOptions /*, { forceFetch: true }*/)
                     .then(onDocsFound)
                     .catch(doReject);
             }
             else {
                 // docs = self.findOne(selection);
-                self.findOne(selection, null, null, callback)
+                self.findOne(selection, null, findOptions, null /*callback*/)
                     .then(onDocsFound)
                     .catch(doReject);
             }
@@ -396,7 +389,7 @@ var Collection = /** @class */ (function () {
                 }
                 if (docs.length === 0) {
                     if (options.upsert) {
-                        self.insert(update, null, callback)
+                        self.insert(update, null, null /*callback*/)
                             .then(function (inserted) {
                             doResolve({
                                 updated: {

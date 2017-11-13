@@ -244,7 +244,7 @@ export class Collection /*extends EventEmitter*/ {
 		} = {
 			doNotFecth: false
 		},
-		callback?: ((error: Error, result: object[]) => void)
+		callback?: ((error: Error, result: Cursor|object[]) => void)
 	): Promise<object[] | Cursor> {
 		const self = this;
 
@@ -391,7 +391,7 @@ export class Collection /*extends EventEmitter*/ {
 			}*/
 
 			// Force to fetch the results
-			options.doNotFecth = false;
+			const findOptions = _.assign({}, options, { doNotFecth: false });
 
 			// Check special case where we are using an objectId
 			if (selection instanceof ObjectId) {
@@ -407,12 +407,12 @@ export class Collection /*extends EventEmitter*/ {
 			// var docs = null;
 			if (options.multi) {
 				// docs = self.find(selection, null, { forceFetch: true });
-				self.find(selection, null/*, { forceFetch: true }*/)
+				self.find(selection, null, findOptions/*, { forceFetch: true }*/)
 					.then(onDocsFound)
 					.catch(doReject);
 			} else {
 				// docs = self.findOne(selection);
-				self.findOne(selection, null, options, null/*callback*/)
+				self.findOne(selection, null, findOptions, null/*callback*/)
 					.then(onDocsFound)
 					.catch(doReject);
 			}

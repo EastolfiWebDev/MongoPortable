@@ -26,6 +26,10 @@ export class Selector {
 	constructor(selector, type = Selector.MATCH_SELECTOR) {
 		this.logger = JSWLogger.instance;
 
+		if (selector instanceof ObjectId) {
+			selector = { _id: selector };
+		}
+
 		this.selectorCompiled = null;
 
 		if (type === Selector.MATCH_SELECTOR) {
