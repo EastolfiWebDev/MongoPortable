@@ -1,4 +1,4 @@
-/***
+/**
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  *
@@ -17,15 +17,13 @@ import { ObjectId } from "../document";
 import { EventEmitter } from "../emitter";
 import { ConnectionHelper, IConnection, Utils } from "../utils";
 
-/***
+/**
  * MongoPortable
  *
  * @module MongoPortable
  * @since 0.0.1
  *
  * @classdesc Portable database with persistence and MongoDB-like API
- *
- * @param  {string} databaseName - Name of the database.
  */
 export class MongoPortable extends EventEmitter {
 	private static _connHelper: ConnectionHelper = new ConnectionHelper();
@@ -39,6 +37,9 @@ export class MongoPortable extends EventEmitter {
 	private _stores: Array<object | (() => object)>;
 	private _databaseName: string;
 
+	/**
+	 * databaseName - Name of the database
+	 */
 	constructor(databaseName: string, options: any) {
 		super(options || { log: {} });
 
@@ -64,14 +65,11 @@ export class MongoPortable extends EventEmitter {
 		return super.emit(name, args, this._stores);
 	}
 
-	/***
+	/**
 	 * Middleware functions
 	 *
-	 * @param  {String} name - Name of the middleware:
-	 *	  <ul>
-	 *		  <li>"store": Add a custom store</li>
-	 *	  </ul>
-	 * @param  {Object|Function} fn - Function to implement the middleware
+	 * @param name - Name of the middleware:
+	 * @param func - Function to implement the middleware
 	 */
 	public use(name: string, obj: any): void {
 		switch (name) {
@@ -81,14 +79,14 @@ export class MongoPortable extends EventEmitter {
 		}
 	}
 
-	/***
+	/**
 	 * Adds a custom stores for remote and local persistence
 	 *
-	 * @param {Object|Function} store - The custom store
+	 * @param store - The custom store
 	 *
-	 * @returns {MongoPortable} this - The current Instance
+	 * @returns The current Instance
 	 */
-	public addStore(store: object|(() => object)): MongoPortable {
+	public addStore(store: object | (() => object)): MongoPortable {
 		if (_.isNil(store)) { this.logger.throw("missing \"store\" parameter"); }
 
 		if (_.isFunction(store)) {
@@ -102,42 +100,33 @@ export class MongoPortable extends EventEmitter {
 		return this;
 	}
 
-	/***
+	/**
 	 * Returns a cursor to all the collection information.
 	 *
-	 * @param {String} [collectionName=null] - the collection name we wish to retrieve the information from.
-	 * @param {Function} [callback=null] - Callback function to be called at the end with the results
+	 * @param collectionName - The collection name we wish to retrieve the information from.
+	 * @param callback - Callback function to be called at the end with the results
 	 *
-	 * @returns {Array}
-	 *
-	 * @todo Implement
+	 * @returns The collection information
 	 */
 	public collectionsInfo(collectionName, callback?) {
 		this.logger.throw("Not implemented yet");
 	}
 
-	/***
+	/**
 	 * Alias for {@link MongoPortable#collections}
-	 *
-	 * @method MongoPortable#fetchCollections
 	 */
 	public fetchCollections(options: { collectionName?: string, namesOnly?: boolean } = {}/*, callback?: ((collections: Collection[]) => void)*/): Collection[] {
 		return this.collections(options/*, callback*/);
 	}
 
-	/***
+	/**
 	 * Get the list of all collection for the specified db
 	 *
-	 * @method MongoPortable#collections
+	 * @param options
+	 * @param options.namesOnly - Return only the collections names
+	 * @param options.collectionName - The collection name we wish to filter by
 	 *
-	 * @param {Object} [options] - Additional options
-	 *
-	 * @param {Boolean} [options.namesOnly=false] - Return only the collections names
-	 * @param {String|Array} [options.collectionName=null] - The collection name we wish to filter by
-	 *
-	 * @param {Function} [callback=null] - Callback function to be called at the end with the results
-	 *
-	 * @return {Array}
+	 * @return The list of collections
 	 */
 	public collections(options: { collectionName?: string, namesOnly?: boolean } = {}/*, callback?: ((collections: Collection[]) => void)*/): Collection[] {
 		// Review type check
@@ -173,21 +162,14 @@ export class MongoPortable extends EventEmitter {
 		return collectionList;
 	}
 
-	/***
+	/**
 	 * Get the list of all collection names for the specified db,
 	 *  by calling MongoPortable#collections with [options.namesOnly = true]
 	 *
-	 * @method MongoPortable#collectionNames
+	 * @param options - Additional options.
+	 * @param options.collectionName - The collection name we wish to filter by.
 	 *
-	 * @param {Object} [options] - Additional options.
-	 *
-	 * @param {String|Array} [options.collectionName=null] - The collection name we wish to filter by.
-	 *
-	 * @param {Function} [callback=null] - Callback function to be called at the end with the results
-	 *
-	 * @return {Array}
-	 *
-	 * {@link MongoPortable#collections}
+	 * @return The list of collection names
 	 */
 	public collectionNames(options: { collectionName?: string, namesOnly?: boolean } = { namesOnly: true }/*, callback?: ((collections: Collection[]) => void)*/): Collection[] {
 		// Review type check

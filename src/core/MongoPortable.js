@@ -20,7 +20,7 @@ var __values = (this && this.__values) || function (o) {
     };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/***
+/**
  * @file MongoPortable.js - based on Monglo ({@link https://github.com/Monglo}) by Christian Sullivan <cs@euforic.co> | Copyright (c) 2012
  * @version 1.0.0
  *
@@ -35,18 +35,19 @@ var collection_1 = require("../collection");
 var document_1 = require("../document");
 var emitter_1 = require("../emitter");
 var utils_1 = require("../utils");
-/***
+/**
  * MongoPortable
  *
  * @module MongoPortable
  * @since 0.0.1
  *
  * @classdesc Portable database with persistence and MongoDB-like API
- *
- * @param  {string} databaseName - Name of the database.
  */
 var MongoPortable = /** @class */ (function (_super) {
     __extends(MongoPortable, _super);
+    /**
+     * databaseName - Name of the database
+     */
     function MongoPortable(databaseName, options) {
         var _this = _super.call(this, options || { log: {} }) || this;
         _this.logger = jsw_logger_1.JSWLogger.instance;
@@ -67,14 +68,11 @@ var MongoPortable = /** @class */ (function (_super) {
     MongoPortable.prototype.emit = function (name, args) {
         return _super.prototype.emit.call(this, name, args, this._stores);
     };
-    /***
+    /**
      * Middleware functions
      *
-     * @param  {String} name - Name of the middleware:
-     *	  <ul>
-     *		  <li>"store": Add a custom store</li>
-     *	  </ul>
-     * @param  {Object|Function} fn - Function to implement the middleware
+     * @param name - Name of the middleware:
+     * @param func - Function to implement the middleware
      */
     MongoPortable.prototype.use = function (name, obj) {
         switch (name) {
@@ -83,12 +81,12 @@ var MongoPortable = /** @class */ (function (_super) {
                 break;
         }
     };
-    /***
+    /**
      * Adds a custom stores for remote and local persistence
      *
-     * @param {Object|Function} store - The custom store
+     * @param store - The custom store
      *
-     * @returns {MongoPortable} this - The current Instance
+     * @returns The current Instance
      */
     MongoPortable.prototype.addStore = function (store) {
         if (_.isNil(store)) {
@@ -105,41 +103,32 @@ var MongoPortable = /** @class */ (function (_super) {
         }
         return this;
     };
-    /***
+    /**
      * Returns a cursor to all the collection information.
      *
-     * @param {String} [collectionName=null] - the collection name we wish to retrieve the information from.
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
+     * @param collectionName - The collection name we wish to retrieve the information from.
+     * @param callback - Callback function to be called at the end with the results
      *
-     * @returns {Array}
-     *
-     * @todo Implement
+     * @returns The collection information
      */
     MongoPortable.prototype.collectionsInfo = function (collectionName, callback) {
         this.logger.throw("Not implemented yet");
     };
-    /***
+    /**
      * Alias for {@link MongoPortable#collections}
-     *
-     * @method MongoPortable#fetchCollections
      */
     MongoPortable.prototype.fetchCollections = function (options /*, callback?: ((collections: Collection[]) => void)*/) {
         if (options === void 0) { options = {}; } /*, callback?: ((collections: Collection[]) => void)*/
         return this.collections(options /*, callback*/);
     };
-    /***
+    /**
      * Get the list of all collection for the specified db
      *
-     * @method MongoPortable#collections
+     * @param options
+     * @param options.namesOnly - Return only the collections names
+     * @param options.collectionName - The collection name we wish to filter by
      *
-     * @param {Object} [options] - Additional options
-     *
-     * @param {Boolean} [options.namesOnly=false] - Return only the collections names
-     * @param {String|Array} [options.collectionName=null] - The collection name we wish to filter by
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @return {Array}
+     * @return The list of collections
      */
     MongoPortable.prototype.collections = function (options /*, callback?: ((collections: Collection[]) => void)*/) {
         // Review type check
@@ -186,21 +175,14 @@ var MongoPortable = /** @class */ (function (_super) {
         return collectionList;
         var e_1, _c;
     };
-    /***
+    /**
      * Get the list of all collection names for the specified db,
      *  by calling MongoPortable#collections with [options.namesOnly = true]
      *
-     * @method MongoPortable#collectionNames
+     * @param options - Additional options.
+     * @param options.collectionName - The collection name we wish to filter by.
      *
-     * @param {Object} [options] - Additional options.
-     *
-     * @param {String|Array} [options.collectionName=null] - The collection name we wish to filter by.
-     *
-     * @param {Function} [callback=null] - Callback function to be called at the end with the results
-     *
-     * @return {Array}
-     *
-     * {@link MongoPortable#collections}
+     * @return The list of collection names
      */
     MongoPortable.prototype.collectionNames = function (options /*, callback?: ((collections: Collection[]) => void)*/) {
         // Review type check
