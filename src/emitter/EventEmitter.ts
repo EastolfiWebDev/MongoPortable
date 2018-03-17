@@ -5,14 +5,14 @@ import { JSWLogger } from "jsw-logger";
 
 export class EventEmitter {
 	public options: any = {
-		log: {}
+		log: {},
+		autoRejectTimeout: 60000
 	};
 
 	protected logger: JSWLogger;
 
 	constructor(options: any = {}) {
-
-		this.options.autoRejectTimeout = options.autoRejectTimeout || 60000;
+		this.options = Object.assign({}, this.options, options);
 
 		this.logger = JSWLogger.getInstance(this.options.log);
 	}
