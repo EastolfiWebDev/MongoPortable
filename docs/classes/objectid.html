@@ -77,10 +77,10 @@
 						<dd><p>0.0.1</p>
 						</dd>
 						<dt>author</dt>
-						<dd><p>Eduardo Astolfi <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#101;&#97;&#x73;&#116;&#111;&#x6c;&#102;&#x69;&#57;&#x31;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#101;&#97;&#x73;&#116;&#111;&#x6c;&#102;&#x69;&#57;&#x31;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
+						<dd><p>Eduardo Astolfi <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#x65;&#x61;&#x73;&#116;&#111;&#x6c;&#x66;&#x69;&#x39;&#x31;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x65;&#x61;&#x73;&#116;&#111;&#x6c;&#x66;&#x69;&#x39;&#x31;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></p>
 						</dd>
 						<dt>copyright</dt>
-						<dd><p>2016 Eduardo Astolfi <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#101;&#97;&#x73;&#x74;&#111;&#x6c;&#x66;&#105;&#x39;&#49;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;">&#101;&#97;&#x73;&#x74;&#111;&#x6c;&#x66;&#105;&#x39;&#49;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;</a></p>
+						<dd><p>2016 Eduardo Astolfi <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#101;&#97;&#x73;&#116;&#x6f;&#x6c;&#102;&#x69;&#57;&#49;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#101;&#97;&#x73;&#116;&#x6f;&#x6c;&#102;&#x69;&#57;&#49;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
 						</dd>
 						<dt>license</dt>
 						<dd><p>MIT Licensed</p>
@@ -115,9 +115,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="objectid.html#___id" class="tsd-kind-icon">___id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="objectid.html#_bsontype" class="tsd-kind-icon">_bsontype</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="objectid.html#binaryparser" class="tsd-kind-icon">binary<wbr>Parser</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="objectid.html#cachedid" class="tsd-kind-icon">cached<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="objectid.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="objectid.html#logger" class="tsd-kind-icon">logger</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="objectid.html#cachehexstring" class="tsd-kind-icon">cache<wbr>Hex<wbr>String</a></li>
@@ -161,7 +160,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L56">document/ObjectId.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L57">document/ObjectId.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -177,33 +176,23 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="___id" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> ___id</h3>
-					<div class="tsd-signature tsd-kind-icon">___id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L53">document/ObjectId.ts:53</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_bsontype" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _bsontype</h3>
-					<div class="tsd-signature tsd-kind-icon">_bsontype<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;ObjectId&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L52">document/ObjectId.ts:52</a></li>
-						</ul>
-					</aside>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="binaryparser" class="tsd-anchor"></a>
 					<h3>binary<wbr>Parser</h3>
 					<div class="tsd-signature tsd-kind-icon">binary<wbr>Parser<span class="tsd-signature-symbol">:</span> <a href="binaryparser.html" class="tsd-signature-type">BinaryParser</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L55">document/ObjectId.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L51">document/ObjectId.ts:51</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="cachedid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> cached<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">cached<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L57">document/ObjectId.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -213,7 +202,7 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L56">document/ObjectId.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L52">document/ObjectId.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -223,7 +212,7 @@
 					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JSWLogger</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L47">document/ObjectId.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L54">document/ObjectId.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -233,7 +222,7 @@
 					<div class="tsd-signature tsd-kind-icon">cache<wbr>Hex<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L49">document/ObjectId.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L49">document/ObjectId.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -243,7 +232,7 @@
 					<div class="tsd-signature tsd-kind-icon">index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L50">document/ObjectId.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L47">document/ObjectId.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -261,7 +250,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L263">document/ObjectId.ts:263</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L264">document/ObjectId.ts:264</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
@@ -272,7 +261,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L267">document/ObjectId.ts:267</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L268">document/ObjectId.ts:268</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -298,7 +287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L241">document/ObjectId.ts:241</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L242">document/ObjectId.ts:242</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -335,7 +324,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L178">document/ObjectId.ts:178</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L179">document/ObjectId.ts:179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -369,7 +358,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L153">document/ObjectId.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L154">document/ObjectId.ts:154</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,7 +386,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L254">document/ObjectId.ts:254</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L255">document/ObjectId.ts:255</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -425,7 +414,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L157">document/ObjectId.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L158">document/ObjectId.ts:158</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -448,7 +437,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L100">document/ObjectId.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L101">document/ObjectId.ts:101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -476,7 +465,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L141">document/ObjectId.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L142">document/ObjectId.ts:142</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -503,7 +492,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L132">document/ObjectId.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L133">document/ObjectId.ts:133</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -530,7 +519,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L286">document/ObjectId.ts:286</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L287">document/ObjectId.ts:287</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -567,7 +556,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L318">document/ObjectId.ts:318</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L319">document/ObjectId.ts:319</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -605,7 +594,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/document/ObjectId.ts#L333">document/ObjectId.ts:333</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/document/ObjectId.ts#L334">document/ObjectId.ts:334</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -643,14 +632,11 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="objectid.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="objectid.html#___id" class="tsd-kind-icon">___id</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="objectid.html#_bsontype" class="tsd-kind-icon">_bsontype</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="objectid.html#binaryparser" class="tsd-kind-icon">binary<wbr>Parser</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="objectid.html#cachedid" class="tsd-kind-icon">cached<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="objectid.html#id" class="tsd-kind-icon">id</a>

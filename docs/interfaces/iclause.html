@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Connection | Mongo Portable</title>
+	<title>IClause | Mongo Portable</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="connection.html">Connection</a>
+					<a href="iclause.html">IClause</a>
 				</li>
 			</ul>
-			<h1>Class Connection</h1>
+			<h1>Interface IClause</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Connection</span>
+						<span class="target">IClause</span>
 					</li>
 				</ul>
 			</section>
@@ -76,84 +76,57 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="connection.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connection.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connection.html#instance" class="tsd-kind-icon">instance</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connection.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="iclause.html#key" class="tsd-kind-icon">key</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="iclause.html#kind" class="tsd-kind-icon">kind</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="iclause.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="iclause.html#value" class="tsd-kind-icon">value</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Connection<span class="tsd-signature-symbol">(</span>pName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, pId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, pInstance<span class="tsd-signature-symbol">: </span><a href="mongoportable.html" class="tsd-signature-type">MongoPortable</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connection.html" class="tsd-signature-type">Connection</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/utils/ConnectionHelper.ts#L9">utils/ConnectionHelper.ts:9</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>pName: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>pId: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>pInstance: <a href="mongoportable.html" class="tsd-signature-type">MongoPortable</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="connection.html" class="tsd-signature-type">Connection</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="id" class="tsd-anchor"></a>
-					<h3>id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="key" class="tsd-anchor"></a>
+					<h3>key</h3>
+					<div class="tsd-signature tsd-kind-icon">key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/utils/ConnectionHelper.ts#L8">utils/ConnectionHelper.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/selector/Selector.ts#L9">selector/Selector.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="instance" class="tsd-anchor"></a>
-					<h3>instance</h3>
-					<div class="tsd-signature tsd-kind-icon">instance<span class="tsd-signature-symbol">:</span> <a href="mongoportable.html" class="tsd-signature-type">MongoPortable</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="kind" class="tsd-anchor"></a>
+					<h3>kind</h3>
+					<div class="tsd-signature tsd-kind-icon">kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/utils/ConnectionHelper.ts#L9">utils/ConnectionHelper.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/selector/Selector.ts#L10">selector/Selector.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/utils/ConnectionHelper.ts#L7">utils/ConnectionHelper.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/selector/Selector.ts#L11">selector/Selector.ts:11</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="value" class="tsd-anchor"></a>
+					<h3>value</h3>
+					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/selector/Selector.ts#L12">selector/Selector.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,20 +144,20 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="connection.html" class="tsd-kind-icon">Connection</a>
+					<li class="current tsd-kind-interface tsd-is-not-exported">
+						<a href="iclause.html" class="tsd-kind-icon">IClause</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="connection.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="iclause.html#key" class="tsd-kind-icon">key</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="connection.html#id" class="tsd-kind-icon">id</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="iclause.html#kind" class="tsd-kind-icon">kind</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="connection.html#instance" class="tsd-kind-icon">instance</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="iclause.html#type" class="tsd-kind-icon">type</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="connection.html#name" class="tsd-kind-icon">name</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="iclause.html#value" class="tsd-kind-icon">value</a>
 							</li>
 						</ul>
 					</li>

@@ -120,7 +120,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L9">emitter/EventEmitter.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L12">emitter/EventEmitter.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -142,7 +142,7 @@
 					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JSWLogger</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L6">emitter/EventEmitter.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L12">emitter/EventEmitter.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -153,13 +153,13 @@
 					<a name="emit" class="tsd-anchor"></a>
 					<h3>emit</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">emit<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span>, stores<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">emit<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, stores<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L18">emitter/EventEmitter.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L20">emitter/EventEmitter.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -168,10 +168,10 @@
 									<h5>event: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>args: <span class="tsd-signature-type">Object</span></h5>
+									<h5>args: <span class="tsd-signature-type">object</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> stores: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> stores: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -187,16 +187,26 @@
 					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L7">emitter/EventEmitter.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L7">emitter/EventEmitter.ts:7</a></li>
 						</ul>
 					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="options.autorejecttimeout" class="tsd-anchor"></a>
+						<h3>auto<wbr>Reject<wbr>Timeout</h3>
+						<div class="tsd-signature tsd-kind-icon">auto<wbr>Reject<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;60000</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L9">emitter/EventEmitter.ts:9</a></li>
+							</ul>
+						</aside>
+					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="options.log" class="tsd-anchor"></a>
 						<h3>log</h3>
 						<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L8">emitter/EventEmitter.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L8">emitter/EventEmitter.ts:8</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">

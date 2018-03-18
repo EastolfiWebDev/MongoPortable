@@ -114,7 +114,6 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="mongoportable.html#_collections" class="tsd-kind-icon">_collections</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="mongoportable.html#_databasename" class="tsd-kind-icon">_database<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="mongoportable.html#_stores" class="tsd-kind-icon">_stores</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="mongoportable.html#createcollection" class="tsd-kind-icon">create<wbr>Collection</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="mongoportable.html#logger" class="tsd-kind-icon">logger</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="mongoportable.html#pkfactory" class="tsd-kind-icon">pk<wbr>Factory</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="mongoportable.html#_connhelper" class="tsd-kind-icon">_conn<wbr>Helper</a></li>
@@ -128,6 +127,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#collectionnames" class="tsd-kind-icon">collection<wbr>Names</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#collections" class="tsd-kind-icon">collections</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#collectionsinfo" class="tsd-kind-icon">collections<wbr>Info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#createcollection" class="tsd-kind-icon">create<wbr>Collection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#createindex" class="tsd-kind-icon">create<wbr>Index</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#dereference" class="tsd-kind-icon">dereference</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="mongoportable.html#dropcollection" class="tsd-kind-icon">drop<wbr>Collection</a></li>
@@ -165,7 +165,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L40">core/MongoPortable.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L40">core/MongoPortable.ts:40</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -190,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">_collections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">__type</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L33">core/MongoPortable.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L38">core/MongoPortable.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -200,39 +200,19 @@
 					<div class="tsd-signature tsd-kind-icon">_database<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L35">core/MongoPortable.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L40">core/MongoPortable.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_stores" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _stores</h3>
-					<div class="tsd-signature tsd-kind-icon">_stores<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">_stores<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L34">core/MongoPortable.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L39">core/MongoPortable.ts:39</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="createcollection" class="tsd-anchor"></a>
-					<h3>create<wbr>Collection</h3>
-					<div class="tsd-signature tsd-kind-icon">create<wbr>Collection<span class="tsd-signature-symbol">:</span> <a href="mongoportable.html#collection" class="tsd-signature-type">collection</a><span class="tsd-signature-symbol"> =&nbsp;this.collection</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L314">core/MongoPortable.ts:314</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Alias for {@link MongoPortable#collection}</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>method</dt>
-							<dd><p>MongoPortable#createCollection</p>
-							</dd>
-						</dl>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="logger" class="tsd-anchor"></a>
@@ -241,7 +221,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#logger">logger</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L31">core/MongoPortable.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L36">core/MongoPortable.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -251,7 +231,7 @@
 					<div class="tsd-signature tsd-kind-icon">pk<wbr>Factory<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L40">core/MongoPortable.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L34">core/MongoPortable.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -261,7 +241,7 @@
 					<div class="tsd-signature tsd-kind-icon">_conn<wbr>Helper<span class="tsd-signature-symbol">:</span> <a href="connectionhelper.html" class="tsd-signature-type">ConnectionHelper</a><span class="tsd-signature-symbol"> =&nbsp;new ConnectionHelper()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L37">core/MongoPortable.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L31">core/MongoPortable.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -278,7 +258,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L91">core/MongoPortable.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L91">core/MongoPortable.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -310,7 +290,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L256">core/MongoPortable.ts:256</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L241">core/MongoPortable.ts:241</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -349,13 +329,13 @@
 					<a name="collectionnames" class="tsd-anchor"></a>
 					<h3>collection<wbr>Names</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">collection<wbr>Names<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">collection<wbr>Names<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L207">core/MongoPortable.ts:207</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L192">core/MongoPortable.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -378,7 +358,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
 							<p>{@link MongoPortable#collections}</p>
 						</li>
 					</ul>
@@ -387,13 +367,13 @@
 					<a name="collections" class="tsd-anchor"></a>
 					<h3>collections</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">collections<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">collections<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L157">core/MongoPortable.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L142">core/MongoPortable.ts:142</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -415,7 +395,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -429,7 +409,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L130">core/MongoPortable.ts:130</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L115">core/MongoPortable.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -456,6 +436,45 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="createcollection" class="tsd-anchor"></a>
+					<h3>create<wbr>Collection</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Collection<span class="tsd-signature-symbol">(</span>collectionName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="collection.html" class="tsd-signature-type">Collection</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L299">core/MongoPortable.ts:299</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Alias for {@link MongoPortable#collection}</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>method</dt>
+									<dd><p>MongoPortable#createCollection</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>collectionName: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="collection.html" class="tsd-signature-type">Collection</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="createindex" class="tsd-anchor"></a>
 					<h3>create<wbr>Index</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -465,7 +484,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L452">core/MongoPortable.ts:452</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L439">core/MongoPortable.ts:439</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -516,7 +535,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L585">core/MongoPortable.ts:585</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L573">core/MongoPortable.ts:573</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -551,13 +570,13 @@
 					<a name="dropcollection" class="tsd-anchor"></a>
 					<h3>drop<wbr>Collection</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">drop<wbr>Collection<span class="tsd-signature-symbol">(</span>collectionName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">drop<wbr>Collection<span class="tsd-signature-symbol">(</span>collectionName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L326">core/MongoPortable.ts:326</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L313">core/MongoPortable.ts:313</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -582,7 +601,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>Promise with &quot;true&quot; if dropped successfully</p>
 						</li>
 					</ul>
@@ -591,13 +610,13 @@
 					<a name="dropdatabase" class="tsd-anchor"></a>
 					<h3>drop<wbr>Database</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">drop<wbr>Database<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">drop<wbr>Database<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L548">core/MongoPortable.ts:548</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L536">core/MongoPortable.ts:536</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -616,7 +635,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>Promise with &quot;true&quot; if dropped successfully</p>
 						</li>
 					</ul>
@@ -631,7 +650,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L501">core/MongoPortable.ts:501</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L489">core/MongoPortable.ts:489</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -673,14 +692,14 @@
 					<a name="emit" class="tsd-anchor"></a>
 					<h3>emit</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">emit<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">emit<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#emit">emit</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L63">core/MongoPortable.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L63">core/MongoPortable.ts:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -689,7 +708,7 @@
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>args: <span class="tsd-signature-type">Object</span></h5>
+									<h5>args: <span class="tsd-signature-type">object</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -706,7 +725,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L486">core/MongoPortable.ts:486</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L474">core/MongoPortable.ts:474</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -751,13 +770,13 @@
 					<a name="fetchcollections" class="tsd-anchor"></a>
 					<h3>fetch<wbr>Collections</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Collections<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Collections<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L139">core/MongoPortable.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L124">core/MongoPortable.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -779,7 +798,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -793,7 +812,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L535">core/MongoPortable.ts:535</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L523">core/MongoPortable.ts:523</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -838,7 +857,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L516">core/MongoPortable.ts:516</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L504">core/MongoPortable.ts:504</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -881,7 +900,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L369">core/MongoPortable.ts:369</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L355">core/MongoPortable.ts:355</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -927,7 +946,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L76">core/MongoPortable.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L76">core/MongoPortable.ts:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -958,13 +977,13 @@
 					<a name="getinstance" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Instance</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Instance<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connection.html" class="tsd-signature-type">Connection</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Instance<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/iconnection.html" class="tsd-signature-type">IConnection</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/core/MongoPortable.ts#L112">core/MongoPortable.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/core/MongoPortable.ts#L595">core/MongoPortable.ts:595</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -981,7 +1000,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="connection.html" class="tsd-signature-type">Connection</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/iconnection.html" class="tsd-signature-type">IConnection</a></h4>
 							<ul>
 								<li>The DDBB instance</li>
 							</ul>
@@ -998,16 +1017,26 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#options">options</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L7">emitter/EventEmitter.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L7">emitter/EventEmitter.ts:7</a></li>
 						</ul>
 					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="options.autorejecttimeout" class="tsd-anchor"></a>
+						<h3>auto<wbr>Reject<wbr>Timeout</h3>
+						<div class="tsd-signature tsd-kind-icon">auto<wbr>Reject<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;60000</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L9">emitter/EventEmitter.ts:9</a></li>
+							</ul>
+						</aside>
+					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="options.log" class="tsd-anchor"></a>
 						<h3>log</h3>
 						<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/EastolfiWebDev/MongoPortable/blob/ef97780/src/emitter/EventEmitter.ts#L8">emitter/EventEmitter.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/eastolfi/MongoPortable/blob/ee5395b/src/emitter/EventEmitter.ts#L8">emitter/EventEmitter.ts:8</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -1046,9 +1075,6 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="mongoportable.html#_stores" class="tsd-kind-icon">_stores</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="mongoportable.html#createcollection" class="tsd-kind-icon">create<wbr>Collection</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="mongoportable.html#logger" class="tsd-kind-icon">logger</a>
 							</li>
@@ -1072,6 +1098,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="mongoportable.html#collectionsinfo" class="tsd-kind-icon">collections<wbr>Info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="mongoportable.html#createcollection" class="tsd-kind-icon">create<wbr>Collection</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="mongoportable.html#createindex" class="tsd-kind-icon">create<wbr>Index</a>
