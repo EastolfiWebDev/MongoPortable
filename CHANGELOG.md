@@ -1,5 +1,20 @@
-<a name="Unreleased"></a>
-# Unreleased (2017-11-02)
+<a name="2.0.2"></a>
+## [2.0.2](https://github.com/EastolfiWebDev/MongoPortable/compare/2.0.1...2.0.2) (2018-03-18)
+
+
+### Bug Fixes
+
+* Fix the logging option ([55a3392](https://github.com/EastolfiWebDev/MongoPortable/commit/55a3392))
+
+
+
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/EastolfiWebDev/MongoPortable/compare/2.0.0...2.0.1) (2017-12-29)
+
+
+### Features
+
+* Add a cli-command to know the version used ([38a1907](https://github.com/EastolfiWebDev/MongoPortable/commit/38a1907))
 
 
 
