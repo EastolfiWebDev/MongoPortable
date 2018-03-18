@@ -45892,9 +45892,10 @@ var EventEmitter = /** @class */ (function () {
     function EventEmitter(options) {
         if (options === void 0) { options = {}; }
         this.options = {
-            log: {}
+            log: {},
+            autoRejectTimeout: 60000
         };
-        this.options.autoRejectTimeout = options.autoRejectTimeout || 60000;
+        this.options = Object.assign({}, this.options, options);
         this.logger = jsw_logger_1.JSWLogger.getInstance(this.options.log);
     }
     EventEmitter.prototype.emit = function (event, args, stores) {
