@@ -1,6 +1,6 @@
 {
   "name": "mongo-portable",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Portable Pure JS MongoDB - Based on Monglodb (https://github.com/euforic/monglodb.git) by Christian Sullivan (http://RogueSynaptics.com)",
   "author": "Eduardo Astolfi <eastolfi91@gmail.com>",
   "keywords": [
